@@ -7,6 +7,7 @@
 ## C'est quoi ?
 
 > Pour commencer ce README est en Français, étonant non ?
+> 
 > WordLab c'est un moyen de Classifier des données textuelles dans la langue de Molière...
 
 ## Comment ça fonctionne ?
@@ -19,6 +20,14 @@
 >    - Donne moi les textes les plus proches d'une recherche par mots clés
 >    - Liste moi les textes par ordre de similitude
 >    - Et beaucoup d'autres trucs plutôt cool dont nous parlerons sur https://bige-start.web.app
+
+> Le principal UseCase de WordLab c'est d'orienter des contenus selon le contexte d'utillisateurs
+> En somme ça permet de déplacer des vecteurs et de connaître leurs positionnement dans un espace 3D
+> Donc on peu avec WordLab créer différents contexts de façon à toujours répondre de façon pertinente 
+> Et sans appels réseau surtout, WordLab ça sert à savoir quoi afficher à quel moment et pour qui...
+
+> Pour plus d'infos je suis en train d'écrire un article sur WordLab ici :
+> [LIRE L'ARTICLE](https://bige-start.web.app/feeds/wordlab-la-base-de-donnee-vectorielle-cree-specialement-pour-bige)
 
 ## installation
 
@@ -37,15 +46,15 @@ const articles = [
     {
         "id": 1,
         "label": "Nom de ton premier article",
-        "short_deescription: "description courte de ton permier article",
-        "intro": "Long texte d'introduction de ton premier article,
+        "short_deescription": "description courte de ton permier article",
+        "intro": "Long texte d'introduction de ton premier article",
         "categorie": "Ta catégorie 1"
     },
     {
         "id": 2,
         "label": "Nom de ton second article",
-        "short_deescription: "description courte de ton second article",
-        "intro": "Long texte d'introduction de ton second article,
+        "short_deescription": "description courte de ton second article",
+        "intro": "Long texte d'introduction de ton second article",
         "categorie": "Ta catégorie 2"
     },
     ...
@@ -97,8 +106,6 @@ let order = DB.search("second");
 > C'est tout, WordLab te retourne tes articles classés par ID ordonancés par distance et poids de l'index
 > Forcément ici on a que deux articles donc on a des poids marqués à l'extrême 0 ou 100...
 
-> Pour plus d'infos je suis en train d'écrire un article sur WordLab ici :
-> [LIRE L'ARTICLE](https://bige-start.web.app/feeds/wordlab-la-base-de-donnee-vectorielle-cree-specialement-pour-bige)
 
-> Author : Simon Delamarre
-> License : MIT
+Author : Simon Delamarre
+License : MIT
