@@ -96,3 +96,9 @@ let order = DB.search("second");
 
 > C'est tout, WordLab te retourne tes articles classés par ID ordonancés par distance et poids de l'index
 > Forcément ici on a que deux articles donc on a des poids marqués à l'extrême 0 ou 100...
+
+> Pour plus d'infos je suis en train d'écrire un article sur WordLab ici :
+> [LIRE L'ARTICLE](https://bige-start.web.app/feeds/wordlab-la-base-de-donnee-vectorielle-cree-specialement-pour-bige)
+
+> Author : Simon Delamarre
+> License : MIT
