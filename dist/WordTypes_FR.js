@@ -55,14 +55,12 @@ module.exports.nomCommunsFeminins = "abside - absinthe - acné - acoustique - ac
  */
 module.exports.interjections = "Ah ! - Adieu ! - Ah ! - Ah, çà ! - Ah mais ! - Aie ! - Alerte ! - Allez ! - Allons ! - Assez ! - Allô ! - Arrière ! - Atchoum ! - Attention ! - Bah ! - Au secours ! - Barbe ! - Basta ! - Bernique ! - Bigre ! - Bis ! - Bof ! - Bon ! - Bougre ! - Boum ! - Bravissimo ! - Bravo ! - Brrr ! - Çà ! - Chic ! - Chiche ! - Chouette ! - Chut ! - Ciao ! - Ciel ! - Clic !  - Comment ! - Corbleu ! - Coucou ! - Courage ! - Crac ! - Cric ! - Da ! - Dame ! - Damnation ! - Debout ! - Diable ! - Dia ! - Diantre ! - Dieu ! - Diantre ! - Ding ! - Dommage ! - Drelin - Dring ! - Eh ! - Eh bien ! - Enfin! - Euh ! - Euréka ! - Fi ! - Fichtre ! - Fixe - Flac - Floc ! - Flûte ! - Foin ! - Fouchtra ! - Funérailles ! - Gai ! - Gare !  - Gare à vous ! - Grâce ! - Ha ! - Haïe ! - Hallali ! - Halte ! - Halte-là ! - Han ! - Hardi ! - Haro ! - Hé ! - Hein ! - Hélas ! - Hello ! - Hem ! - Hep ! - Eh quoi ! - Heu ! - Ho ! - Holà ! - Hop ! - Hosanna ! - Hou ! - Houp ! - Hourra ! - Hue ! - Hum ! - Hurrah ! - Idiot ! - Là ! - Las ! - Malheur ! - Merci ! - Miam-miam ! - Minute ! - Mince !  - Morbleu ! - Motus ! - Na ! - Ô ! - Oh ! - Ohé ! - Olé ! - Ouais ! - Ouf ! - Ouïe ! - Ouille ! - Oust ! - Ouste ! - Paf ! - Paix ! - Pan ! - Parbleu ! - Pardi ! - Pardieu ! - Patapouf ! - Patatras ! - Pécaïre ! - Pechère ! - Peuchère ! - Peuh ! - Pff ! - Pfft ! - Pfut ! - Pif ! - Pin-pon ! - Ploc ! - Plouf ! - Pouah ! - Pouf ! - Présent ! - Psitt !  - Pst ! - Quoi ! - Rataplan ! - Rantanplan ! - Sacrebleu ! - Sacredieu ! - Sacristi ! - Salut ! - Saperlipopette ! - Saperlotte ! - Sapristi ! - Scrogneugneu ! - Silence ! - Sniff ! - Stop ! - Suffit ! - Tac ! - Taïaut ! - Taratata ! - Tayaut ! - Tchao ! - Tintin ! - Toc ! - Tonnerre ! - Tudieu ! - Turlututu ! - Ventrebleu ! - Vertubleu ! - Vertuchou ! - Vertudieu ! - Vite ! - Vivat ! - Vive ! - Vlan ! - Zou ! - Zut ! Locutions interjectives  - À d'autres ! - À la bonne heure ! - Ah ! là! là ! - A la tienne ! - Allons donc ! - Alors quoi ! - A quoi bon ! - Bon courage ! - Bonne Mère ! - Bon sang !	- Bon sang ! - Bonté de Dieu ! - Bonté divine ! - Bonté du ciel ! - Ça suffit ! - C'en est assez ! - C'est assez ! - Dis donc ! - Eh bien ! - Enfer et damnation !	- En avant ! - En voilà assez ! - Et tac ! - Et toc ! - Fi donc ! - Fouette cocher ! - Gare à la bombe ! - Grand Dieu ! - Hé bien !	- Hé là ! - Hop là ! - Juste ciel ! - Là, là ! - La ferme ! - La paix ! - Ma foi ! - Ma parole ! - Mon Dieu ! - Nom d'une pipe !	- Nom d'un chien ! - Nom d'un petit bonhomme ! - Par exe2mple ! - Tant pis ! - Tchin-tchin ! - Tonnerre de Dieu ! - Tu vois ! - Vogue la galère !";
 
-
 /**
  * TEST POUR LES COEF 4 et 5
  */
 module.exports.properName = (str) => /[A-Z]/.test(str[0]); // True if the next word begin with cap ! Like Simon -> Do not test it at the begining of paragraph cause Capital is mostly probably the begin of paragraph so -> only inner ...
 module.exports.properFullName = (str, next) => /[A-Z]/.test(str[0]) && /[A-Z]/.test(next[0]); // True if the next word has caps too ! Like Simon Delamarre
 module.exports.feelImportant = (str) => str[0].match(/[A-Z]/g) > 1; // test important words like name or classname like WordLab return two caps indexs...
-
 
 /**
  * TEST ALL
@@ -75,4 +73,5 @@ module.exports.getCoefficient = (str, next) => {
     if (this.nomCommunsFeminins(str)) return 3;
     if (this.nomCommunsMasculins(str)) return 3;
     if (this.adverbes(str)) return 1;
+    return 1;
 }
