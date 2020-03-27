@@ -1,0 +1,28 @@
+{
+  "name": "wordlabtest",
+  "version": "1.0.0",
+  "description": "test, class, wordlab, dataset,  vector3D, KNN",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simondelamarre/WordLab.git"
+  },
+  "keywords": [
+    "Wordlab",
+    "KNN",
+    "fromscratch",
+    "text",
+    "classificcation",
+    "search",
+    "engine"
+  ],
+  "author": "Simon Delamarre",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/simondelamarre/WordLab/issues"
+  },
+  "homepage": "https://github.com/simondelamarre/WordLab#readme"
+}

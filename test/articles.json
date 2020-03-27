@@ -1,0 +1,16 @@
+[
+    {
+        "id": 1,
+        "label": "Nom de ton premier article",
+        "short_deescription": "description courte de ton permier article",
+        "intro": "Long texte d'introduction de ton premier article",
+        "categorie": "Ta catégorie 1"
+    },
+    {
+        "id": 2,
+        "label": "Nom de ton second article",
+        "short_deescription": "description courte de ton second article",
+        "intro": "Long texte d'introduction de ton second article",
+        "categorie": "Ta catégorie 2"
+    }
+]
