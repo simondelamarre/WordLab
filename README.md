@@ -24,8 +24,7 @@
 
 > Classique tu ajoute le package à ton projet
 ```
-# Ce paskage n'est pas encore disponible donc aucun risque que ça s'intalle pour le moment...
-npm i WordLab --save
+npm i @landscape/wordlab --save
 ```
 
 ## Exemple

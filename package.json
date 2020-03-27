@@ -1,8 +1,11 @@
 {
-  "name": "wordlabtest",
+  "name": "@landscape/wordlab",
   "version": "1.0.0",
-  "description": "test, class, wordlab, dataset,  vector3D, KNN",
+  "description": "Wordlab is a vector3D text classifier that allow you to sort indexs by distance writted for French",
   "main": "index.js",
+  "directories": {
+    "test": "node test/index.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -11,13 +14,13 @@
     "url": "git+https://github.com/simondelamarre/WordLab.git"
   },
   "keywords": [
-    "Wordlab",
+    "WordLab",
     "KNN",
-    "fromscratch",
+    "classifier",
     "text",
-    "classificcation",
-    "search",
-    "engine"
+    "vector3D",
+    "nearest",
+    "neighbors"
   ],
   "author": "Simon Delamarre",
   "license": "MIT",
