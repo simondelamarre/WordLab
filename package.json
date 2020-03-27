@@ -1,13 +1,15 @@
 {
   "name": "@landscape/wordlab",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Wordlab is a vector3D text classifier that allow you to sort indexs by distance writted for French",
-  "main": "index.js",
+  "main": "dist/WordLab.js",
   "directories": {
-    "test": "node test/index.js"
+    "lib": "lib",
+    "test": "test",
+    "bin": "bin"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --experimental-modules test/"
   },
   "repository": {
     "type": "git",
@@ -27,5 +29,10 @@
   "bugs": {
     "url": "https://github.com/simondelamarre/WordLab/issues"
   },
-  "homepage": "https://github.com/simondelamarre/WordLab#readme"
+  "homepage": "https://github.com/simondelamarre/WordLab#readme",
+  "devDependencies": {
+    "@babel/core": "^7.6.0",
+    "babel-loader": "^8.0.6",
+    "webpack-cli": "^3.3.8"
+  }
 }

@@ -1,0 +1,263 @@
+[
+    {
+        "markdown": "<div class=\"container\">\n<div class=\"row\">\n<div class=\"col\">\n\n## Pourquoi écrire WordLab ?\n<br/>\n\n### ok, pas trop de blabla (quand même un chouilla...)\n<br/>\n\n> En résumé, nous allons parler d'un petit problème de quotas sur une version gratuite de firebase (plutôt firestore et realtime) ainsi que de l'incapacité pour firestore de faire des aggregations de données propres comme le feraient Postgres, Maria, Elastic ou encore MongoDB pour ne citer qu'elles.\n>\n>Du coup je vous présente WordLab, une base de donnée sans récurrences qui s'execute côté serveur et/ou côté client sans délais d'apprentissage ni contraintes de format d'entrée si ce n'est le typage car elle s'occupe uniquement de traiter des jeux d'entrées et de sortie de type String (format texte).\n>\n>Si vous connaissez Word2Vec, le fonctionnement de WordLab en prend un certain héritage du moins d'un point de vue philosophique, l'idée semblable de ces deux concepts étant de créer des vecteurs tridimensionnels pour définir des relations entre les mots et objets de façon à les requêter par distance et non par relations dîtes classiques comme une date ou un contain (ok j'en passe sinon personne ne va lire encore... ).\n\nSi je devais résumer WordLab en une phrase ce serait :\n>\n> <b>\"Un réseau de vectrices qui vous veut du bien.\"</b>\n</div>\n<div class=\"col\">\n\n>TODO : create and embed image  here\n</div>\n</div>",
+        "category": "technology",
+        "tags": [
+            "données",
+            "  vecteurs",
+            " 3D",
+            " moteur de  recherche",
+            " classificateur"
+        ],
+        "intro": "En avançant sur <b>Bige</b>, je me suis posé beaucoup de questions :\n- Quelle technologie utiliser ?\n- Pourquoi je  l'utiliserais ?\n- Qui l'utilise ?\n- Pour combien  de temps ?\n- Qu'offre t-elle exactement ?\n- Est-elle payante (premium, freemium...) ?\n- J'en passe (...), sinon personne va lire  ;-)\n\nAu regard des différentes opportunité qui  m'étaient offertes sur une multitude de cloud j'ai choisi Firebase, je ne vous dirais pas  pourquoi dans cet article désolé.\nallez Hop! <b>Assez de blabla..</b>",
+        "publication": "2020-03-21",
+        "short_description": "En avançant sur Bige, je me suis posé beaucoup de questions, quelle techno, pourquoi la choisir, qui l'utilise, pour combien de temps...\nDans cet article j'introduit WordLab,  la première base de  donnée côté  client qui évolue  dans un contexte privé ...",
+        "author": {
+            "id": "yb6jqdCJaBYIgKW4tGrtdI5RVB92",
+            "name": "simon delamarre",
+            "avatar": "https://lh3.googleusercontent.com/a-/AOh14GiVBIBh-OcI59MJFyakSpxEB6qq_w51G0F4blQx"
+        },
+        "label": "WordLab, la base de donnée vectorielle crée spécialement pour Bige!",
+        "url": "wordlab-la-base-de-donnee-vectorielle-cree-specialement-pour-bige",
+        "picture": "https://i.pinimg.com/564x/5a/d2/2f/5ad22fb76a259c50b958f6570a471dcc.jpg",
+        "id": "E9FegGEQ3QkGsEQoOS1z"
+    },
+    {
+        "category": "design",
+        "tags": [
+            "design",
+            "system",
+            "graphisme"
+        ],
+        "intro": "L'écriture d'un design system, ça peut prendre des plombes et on a toujours peur de demain quand on le crée du coup  et comme personne n'arrive jamais à se mettre d'équerre sur les principes de base, généralement on en fait pas  et <b>après c'est le drame plus personne ne sait comment ou encore moins quoi faire...</b>\n\nDans cet article, nous allons parler de Design System parce que j'ai souvent vécu des projets ou tout est parti d'une bonne intention puis des stagiaires se sont mis à répondre à des demandes sans être orientés et ont créé des éléments graphiques s'éloignants de  plus en plus de la source du concept ou produit. L'écriture d'un  design system est un bon moyen  de  palier ce problème, il consiste à en définir le fonctionnement...\n\n[cet  article est  en  cours d'écriture, ce  texte me sert à tester wordLab, le traitement de donnée  sur bige]",
+        "publication": "2020-03-21",
+        "short_description": "Dans cet article,  nous allons parler de Design System j'ai souvent vécu des projets ou tout est parti d'une bonne intention puis des stagiaires se sont mis à répondre à des demandes sans. être orientés et ont créé des élèments s'éloignants de  plus en...",
+        "author": {
+            "name": "simon delamarre",
+            "avatar": "https://lh3.googleusercontent.com/a-/AOh14GiVBIBh-OcI59MJFyakSpxEB6qq_w51G0F4blQx",
+            "id": "yb6jqdCJaBYIgKW4tGrtdI5RVB92"
+        },
+        "label": "Un Design System pour bige, recherche graphique et traitement de style",
+        "url": "un-design-system-pour-bige-recherche-graphique-et-traitement-de-style",
+        "picture": "https://i.pinimg.com/564x/96/eb/eb/96ebeb05c08fc1eb9e67b021ff83f935.jpg",
+        "markdown": "<div class=\"container\">\n\n## Comment c'est que c'est fait Billy ?\n\n> Et bien comme d'hab et comme chaque graphiste qui se respecte, pour créer un design system (ici pour des icônes) on part d'un format, dans le cas présent je suis parti d'un  256*256px et ce n'est pas anodin car savoir se servir de l'outil plume et faire une icône c'est une chose et savoir la décliner à l'infini sans ne plus jamais se poser la question de sa validité rapport au reste de ta charte en est une autre.\n\n>\n> Pour résumer sur la taille 256 est un multiple de 8 (ça doit te parler...)  et un  truc dingue avec les multiples c'est que lorsqu'on les divise ils restent entiers ! wOUHAOUU  !\n>\n> Maintenant, reste à comprendre la figure ci-dessous, encore une fois c'est la base de réflexion de Bige et ce n'est pas une fin en sois, le meilleur design system j'espère bien y travailler un jour avec des clients autour d'un café dans une session de design thinking...\n\n<div class=\"row\">\n<div class=\"col\">\n<div style=\"text-align:center\">\n<img src=\"https://i.pinimg.com/564x/8a/7b/c3/8a7bc39e66589d80e7ace64e794d802b.jpg\"/>\n</div>\n</div>\n\n<div class=\"col\">\n\n### Quelques explications :\n   - Figure #1:  ce n'est qu'une découpe en 16 blocks de notre grille de  256\n   - Figure #2: cette  subdivision en tangente va  nous permettre de définir les fond perdus, si tu  ne le sais pas tes icônes ne doivent  jamais occuper 100% de l'espace poour plusieurs bonnes raisons dont je te parlerais plus tard... \n   - Figure #3: on trace  un cercle de 256 lui aussi et on en  déduit l'espace perdu.\n   - Figure #4:  l'atttraction ou la déduction du point d'impulsion, ton regard doit toujours accrocher ce point et ne pas se détourner avant d'en avoir compris son sens...\n   - Figure #5: elle est spécifique à Bige, son  idée c'est de placer les formes pures et logiques du design system.\n   - Figure #6: un rappel des bords perdus\n   - Figure #7: le carré parfait pour toutes tailles d'icônes\n   - Figure #8: le centre d'intérêt\n   - Figure #9: l'isocèle parfait\n   - Figure #10: la répartition magique des formes dans l'espace\n   - Figure #11: confirmation du concept\n</div>\n</div>\n\n<div class=\"row\">\n<div class=\"col\">\n\n## Quelques exemples en image\n\n> OK, c'est pas le tout de blablater pendant des plombes mais des images c'est mieux.\n>\n> Donc tu verras une image avec quelques exemples appliqués et comme j'ai besoin de textes pour faire travailler WordLab (le réseau de vecteurs de Bige) et bien je ne vais pas me géner pour papoter ici...\n\n> Si on résume rapidement on a travaillé un design system destiné à savoir identifier et créer un langage iconographique propre à Bige et dans l'image sur ta droite ou en dessous si t'as un. smartphone tu peux voir différents cas appliqués.\n\n> sur ces figures il ne reste que quelques principes de base à appliquer :\n   - #1 : toujours utiliser. nos trois shapes\n   - #2 :  ne jamais les. déformer ni les agrandir car elles occupent au maximum 37.5% de l'espace et rappelle toi c'est la température normale e ton corps hors COVID19\n   - #3 : quand tu crée une illus ou une icône, ton tracé doit toujours être en 8pt  ce qui te  fera 1pt en réduction de 256 vers 32px donc il restera lisible.\n   - #4 : fais un break et regarde ton icône de loin ou en plissant les yeux, si la  masse ne convient pas à la lecture comme l'icône \"pause\" ou la 10eme en partant du haut si tu lis le latin alors change tes masses ou recommence.\n   - #5 : tu as parfois besoin de nature, donc ce qui est vivant doit-être dessiné à trackpad levé, voir les mains dans l'image car je ne pouvais pas tout mettre.\n   - #6 : les objets physiques seront toujours rigides dans l'ordre des choses...\n   - #7 : ne jamais fermer un tracé sauf  exception  sinon ce serait trop simple (vois la loupe)\n   - #8 : fait ce qu'il te plaît mais arrange toi pour que tes interlocuteurs soient d'accord avec tes  propositions et ne balance pas une icône sans en avoir parlé avant. \n\n</div>\n<div class=\"col\">\n<img src=\"https://i.pinimg.com/564x/59/dd/07/59dd075a6892054beffed931f8994e5b.jpg\" style=\"max-width:550px;\"/>\n</div>\n</div>\n\n<div class=\"container\" style=\"text-align:center;\">\n\n## conclusion\n\n> j'ai essayé d'écrire un article sur un truc que je maîtrise parfaitement et je n'y suis pas parvenu donc je vais le ré-écrire jusqu'à trouver le vocabulaire pas trop pompeux ni trop personnel pour pouvoir écrire plus facilement.\n\n> Note pour la ré-écriture de l'article: parler du postit, de l'action, de la forme et remettre le sens de l'article au centre à savoir (c'est quoi un design  system)...\n\n> ici c'est trop long et on entre pas dans le sujet (...)\n</div>",
+        "id": "vj6OXpG6WLQnR6uPOlSc"
+    },
+    {
+        "category": "uiux",
+        "tags": [
+            "illustration",
+            " charte graphique",
+            " création"
+        ],
+        "intro": "Aujourd'hui je me suis posé cette question : \"c'est quoi une illustration Bige ?\"\n\nAutrement dit, selon l'impulsion souhaitée lors de l'écriture de la charte graphique à savoir définir un univers fédérateur et accessible, proche des utilisateurs d\"un point de vu ethnologique, comment je fais. pour rendre ça possible visuellement ?\n\nCe sujet je pourrais en parler pendant des heures donc je vais essayer d'être concis et je dois bien avouer que j'ai une flemme incommensurable déjà en commençant à écrire donc si tu préfère prendre un café avec moi pour en parler, ça me va !\n\ndonc voici une première recherche,  ce n'est pas une fin en sois seulement ça me permet de mieux pressentir ce que sera ce site demain...",
+        "publication": "2020-03-21",
+        "short_description": "Aujourd'hui je me suis posé cette question : \"c'est quoi une illustration Bige ?\"\nAutrement dit, selon l'impulsion souhaitée lors de l'écriture de la charte graphique à savoir définir un univers fédérateur, accessible et proche des utilisateurs...",
+        "author": {
+            "avatar": "https://lh3.googleusercontent.com/a-/AOh14GiVBIBh-OcI59MJFyakSpxEB6qq_w51G0F4blQx",
+            "id": "yb6jqdCJaBYIgKW4tGrtdI5RVB92",
+            "name": "simon delamarre"
+        },
+        "url": "recherche-graphique-cest-quoi-des-humains-pour-bige",
+        "label": "Recherche graphique, c'est quoi des humains pour Bige?",
+        "picture": "https://i.pinimg.com/564x/09/50/27/095027fd6487b77ceee888491ab364d7.jpg",
+        "markdown": "<div class=\"container\">\n\n##  Les humains / Bige.\n\n> Dans mes objectifs, je dois créer de l’empathie dans une approche design qui  respire la technologie tout en la rendant simple et accessible à tous. c’est pour cette raison que je vais avoir besoin d’illustrer à moindre coût. Forcément rien  de mieux que  la photo pour créer l’empathie et il est difficile de faire en sorte que chacun s’y retrouve  donc voici la première approche.\n\n### Jeu des 7 différences :\n<div class=\"row\">\n<div class=\"col col-sm-12 col-md-6\">\n<div style=\"text-align:center\">\n<img src=\"https://i.pinimg.com/originals/58/8f/40/588f408050d87849a27bd69ab2787f6f.jpg\" width=\"100%\" style=\"max-width:550px; left:0; right:0; margin:auto\"/>\n</div>\n\n> <b>Problème:</b> \n>\n> Sur cette illustration, on vois <b>un couple hétéro blanc</b> saluant à une amie blanche rentrant chez elle à vélo après le dernier apéro juste avant la quarantaine du COVID 19 probablement en Irlande si on prend compte de leur couleur de cheveux ;-)\n\nl’équilibre et l’approche n’est pas si mal pour un premier jet et je me dis «en 4 couleurs comment intégrer une approche plus hétérogène dans cette circonstance sans casser le rythme ?\n</div>\n<div class=\"col\">\n<div style=\"text-align:center\">\n<img src=\"https://i.pinimg.com/564x/45/e0/68/45e0687de639d71cb6affc37c43a27fc.jpg\" width=\"100%\" style=\"max-width:550px; left:0; right:0; margin:auto\"/>\n</div>\n\n> <b>Qu’observons nous à présent:</b>\n>\n> Un couple hétérogène résident probablement en ville compte tenu du graffiti prrésent sur leur domicile, saluant des amies l’une créant  l’ampathie en prenant le temps de saluer ses hôtes, à potentiel gay puisque roulant en tandem l’une étant de façon subjective et à fort potentiel la soeur de notre hôte ce qui crée un lien familial et renforce le réalisme de cette scenette.\n\nL’équilibre des masse n’est pas rompu pour autant et j’en profite pour intégrer les masses de soutiens comme le point bleu sous le visage de notre pilote de tandem.\n</div>\n</div>\n</div>",
+        "id": "5fIkxkhwHQorp5aiUINL"
+    },
+    {
+        "author": {
+            "name": "simon delamarre",
+            "avatar": "https://lh3.googleusercontent.com/a-/AOh14GiVBIBh-OcI59MJFyakSpxEB6qq_w51G0F4blQx",
+            "id": "yb6jqdCJaBYIgKW4tGrtdI5RVB92"
+        },
+        "url": "poser-une-premiere-brique--pas-evident-billy",
+        "label": "Poser une première brique (...) pas évident Billy",
+        "picture": "https://i.pinimg.com/564x/7c/fb/19/7cfb191e095c598b444bf01a2a2be122.jpg",
+        "markdown": "<div class=\"container\">\n\n### Ici on va parler de numérique et de comment y mettre ou y remettre du sens.\n\n- Pourquoi tu code avec tes pieds ?\n- Pourquoi tu design avec tes pieds ?\n- Pourquoi tu pense avec tes pieds ?\n\nAutant de sujets que nous allons aborder sur Bige avec le temps !\n</div>",
+        "category": "divers",
+        "tags": [
+            "Bige",
+            " brick",
+            " premier article"
+        ],
+        "intro": "En réalité Bige c'est super intentionnel, c'est comme l'extension de mon trackpad vers tes yeux, ça doit péter dans ton ciboulot comme le civet que t'as oublié en matant pornhub ou le kebab de ton stagiaire vient d'avaler deux jours plus tard sans le foutre au frigo.\n\nPoser la première brique sans rien avoir à raconter, c'est pas simple donc je vais te raconter pourquoi cet article existe.\n\nje viens de terminer un fragment d'API qui consiste à poster des articles et je pensais que ça m'aurait prit deux heures à tout casser mais non c'était sans compter sur la chianlie de Firebase et ses multitudes de recoins tout aussi désagréables les uns les autres...\n\n",
+        "publication": "2020-03-21",
+        "short_description": "Difficile de rester professionnel et de palier mon franc langage pour ce premier article sur Bige. Ceci dit, pas le choix va falloir trouver un compromis entre ma réalité et le travail et c'est pour cette raison que ce premier article sera trashy...",
+        "id": "PJ2Lmyibja5oXtRm01kf"
+    },
+    {
+        "markdown": "",
+        "category": "r&d",
+        "tags": [
+            "registar",
+            "hébergeur",
+            "stockage",
+            "médias",
+            "image",
+            "video",
+            "texte",
+            "animations"
+        ],
+        "intro": "Salut les ouf !\nAujourd'hui on va se poser la question suivante : \"ou héberger les médias ?\"\n\nÇa peut paraître anodin seulement tout blogger et pas seulement s'est déjà posé la  question en observant la facture de son hébergeur...\n\nAvant tout, je me suis posé une tonne de questions que  vous vous êtes probablement déjà posé seulement voici les principales :\n- C'est quoi un média ?\n- À quel moment doit-il exister ?\n- C'est gratuit ?\n- Est-ce  que c'est vraiment util ?\n- Où est-ce que je vais le mettre ?\n- Quel est son impact pour mon activité ?\n- Quels sont  mes opportunités en terme de Stockage ?\n- J'ai besoin de quoi comme espace ?\n- Doivent-ils être tous au même endroit ?\n- Pourquoi payer du stockage en 2020 avec tous ces branques qui m'hébergent gratos ?\n- (...)\n\nBref, pour répondre à ces questions, nous allons parler de visible client et uniquement de visible client et uniquement pour un besoin correspondant à celui de Bige dans le domaine.",
+        "publication": "2020-03-23",
+        "short_description": "Aujourd'hui je me suis posé la question \"le stockage c'est important mais c'est ou ?\"\nUne question que tout blogger (et pas seulement) a dû se poser un jour et voici le raisonnement de cette question : - J'ai un  nom de domaine et un registar - J'ai u...",
+        "author": {
+            "id": "yb6jqdCJaBYIgKW4tGrtdI5RVB92",
+            "name": "simon delamarre",
+            "avatar": "https://lh3.googleusercontent.com/a-/AOh14GiVBIBh-OcI59MJFyakSpxEB6qq_w51G0F4blQx"
+        },
+        "label": "Le stockage une vaste question surtout quand on a pas le sous!",
+        "url": "le-stockage-une-vaste-question-surtout-quand-on-a-pas-le-sous",
+        "picture": "https://i.pinimg.com/564x/0a/d4/53/0ad45364d43814d556b2f7d59798f423.jpg",
+        "id": "MAHH4lF9qk6lgVD7xYIX"
+    },
+    {
+        "short_description": "Montparnasse – Selon le Guinness Book des Records qui validé l’exploit il y a quelques minutes, c’est officiel : la France compte dans son lot une population encore plus abrutie et stupide que les personnages du film Prometheus qui mettait en scène des ",
+        "author": {
+            "name": "simon delamarre",
+            "avatar": "https://lh3.googleusercontent.com/a-/AOh14GiVBIBh-OcI59MJFyakSpxEB6qq_w51G0F4blQx",
+            "id": "yb6jqdCJaBYIgKW4tGrtdI5RVB92"
+        },
+        "url": "la-population-de-tout-un-pays-reussit-le-record-detre-encore-plus-stupide-que-les-perso",
+        "label": "La population de tout un pays réussit le record d’être encore plus stupide que les perso",
+        "picture": "https://i.pinimg.com/564x/54/92/6d/54926d63a29125910d0b642a984c8500.jpg",
+        "markdown": "",
+        "category": "technology",
+        "tags": [
+            "Montparnace",
+            " Gorafi",
+            " "
+        ],
+        "publication": "2020-03-21",
+        "intro": "Montparnasse – Selon le Guinness Book des Records qui validé l’exploit il y a quelques minutes, c’est officiel : la France compte dans son lot une population encore plus abrutie et stupide que les personnages du film Prometheus qui mettait en scène des personnages totalement crétins et prenant tous des décisions ridicules, profondément grotesques et avec un raisonnement proche du néant absolu.",
+        "id": "O0yboV87svY9RjRu4nAo"
+    },
+    {
+        "author": {
+            "avatar": "https://lh3.googleusercontent.com/a-/AOh14GiVBIBh-OcI59MJFyakSpxEB6qq_w51G0F4blQx",
+            "id": "yb6jqdCJaBYIgKW4tGrtdI5RVB92",
+            "name": "simon delamarre"
+        },
+        "url": "lsometrie-au-dixieme-de-degres-pret-tes-pret-a-conaitre-le-secret-",
+        "label": "L'sométrie au dixième de degrés prêt t'es prêt à conaître le secret ?",
+        "picture": "https://i.pinimg.com/564x/6a/a3/97/6aa39770c4ba10c67fca9d59e37e293a.jpg",
+        "markdown": "",
+        "category": "design",
+        "tags": [
+            "illustration",
+            " isométrie",
+            " 3D",
+            " graphisme"
+        ],
+        "publication": "2020-03-21",
+        "intro": "Au début des années 2000, j'ai conçu beaucoup de projets avec des illustrations isométriques.\nPour commencer et à l'époque nous n'avions  pas accès à la 3D si facilement et  encore moins de WebGL qui n'est  toujours pas accessible sur tout les browser aujouord'hui.\n\nComme il m'arrive régulièrement de tomber sur des illustrations isométriques mal conçues et  que je devais en faire une pour Bige, j'ai décidé de vous en parler.\n\nUn peu d'histoire pour commencer (...) en cours",
+        "short_description": "Au début des années 2000, j'ai conçu beaucoup de projets avec des illustrations isométriques.\nPour commencer et à l'époque nous n'avions  pas accès à la 3D si facilement et  encore moins de WebGL qui n'est  toujours pas accessible sur tout les browser...",
+        "id": "9kxh2rbVcOtlrOPSerWz"
+    },
+    {
+        "intro": "Article en  cours d'écriture (...)\nPerso, savoir que tu joue au Bingo et que ton grand père fait du kite surf, je m'en passe volontier dans mon quotidien !\nComme la vie privée nous a pété les mirettes depuis 2018 (enfin pour ceux qui l'ont appliqué), je me suis dit \"elle est ou la faille ?\" ",
+        "publication": "2020-03-15",
+        "short_description": "Perso, savoir que tu joue au Bingo et que ton grand père fait du kitesurf, je m'en passe volontiers !  Comme la vie privée nous a pété les mirettes depuis 2018 (enfin pour ceux qui l'ont appliqué), je me suis dit \"elle est ou la faille ?\", donc je v  (...)",
+        "author": {
+            "name": "simon delamarre",
+            "avatar": "https://lh3.googleusercontent.com/a-/AOh14GiVBIBh-OcI59MJFyakSpxEB6qq_w51G0F4blQx",
+            "id": "yb6jqdCJaBYIgKW4tGrtdI5RVB92"
+        },
+        "url": "des-scopes-cryptes-pour-alimenter-un-classificateur-de-contenus-oh-yeah-",
+        "label": "Des scopes cryptés pour alimenter un classificateur de contenus, OH YEAH !",
+        "picture": "https://firebasestorage.googleapis.com/v0/b/bige-start.appspot.com/o/bige_touch_id.svg?alt=media&token=0ce6e871-a55c-41fe-8391-7d5f38762bdf",
+        "markdown": "# pas le temps de commenter\n\n> l'idée c'est d'itérer sur un jeu e donnée basique, du style :\n\n> [1,0,0,0][0,1,0,00[0,0,1,Ø]\\2/x1=fn1\n\n>. ces tableaux aussi simples soient-ils sont une représentation de vos interactions, comme un like sur un pos, un login ou encore le simple fait que vous soyez en train. de lire cet article pas fini.\n\n> l'idée est simple, les itérer et les croiser et recroiser dans des espaces mémoire",
+        "tags": [
+            "scopes",
+            " jwt",
+            " RGPD"
+        ],
+        "category": "technology",
+        "id": "wDYoYzza2gKAhITgBuyx"
+    },
+    {
+        "url": "des-illustrations-pour-le-plaisir-de-tester-le--design-system-bige",
+        "label": "Des illustrations pour le plaisir de tester le  design system Bige.",
+        "picture": "https://i.pinimg.com/564x/0a/d4/53/0ad45364d43814d556b2f7d59798f423.jpg",
+        "markdown": "",
+        "category": "technology",
+        "tags": [
+            "design",
+            " illustration",
+            " graphisme"
+        ],
+        "publication": "2020-03-21",
+        "intro": "En grattant j'ai fait  pas mal de test pour me faire une conviction  sur mes choix dans la charte graphique et le design system qui l'accompagne pour Bige.\n\nCes illus n'ont pas spécialement  de sens ni vocation à accompagner des articles pour le moment mais comme on dit \" Rien ne se pard, tout  se transforme \" alors je vous les partage simplement  dans cet article  avec des petits textes pour les accompagner et définir la singularité de chacune dans la recherche du design System Bige.",
+        "short_description": "En grattant j'ai fait  pas mal de test pour me faire une conviction  sur mes choix dans la charte graphique et le design system qui l'accompagne pour Bige.\n\nCes illus n'ont pas spécialement  de sens ni vocation à accompagner des articles pour le moment...",
+        "author": {
+            "id": "yb6jqdCJaBYIgKW4tGrtdI5RVB92",
+            "name": "simon delamarre",
+            "avatar": "https://lh3.googleusercontent.com/a-/AOh14GiVBIBh-OcI59MJFyakSpxEB6qq_w51G0F4blQx"
+        },
+        "id": "0WvYpzJor34gu17cq4Bt"
+    },
+    {
+        "url": "conception-du-logo-pourquoi-ce-logo-bige-la-reponse-ici",
+        "label": "Conception du logo, pourquoi ce logo Bige? la réponse ici...",
+        "picture": "https://i.pinimg.com/564x/bf/27/34/bf2734351279043d12efcb01ad1c504a.jpg",
+        "markdown": "<div class=\"container\">\n\n## Avant propos\n\n> Bige c'est un projet de contenus autour de la science du numérique appliquée.\n\n> <b>Ça consiste à créer un lieu de partage et de prise de notes plus ou moins avancées sur un ensemble de propos.</b>\n\n> <b>Ces 15 dernières années,</b> j'ai probablement traité plus d'un millier de sujets et j'ai toujours voulu partager les ingrédients importants qui souvent sont <b>les plus petits ou du moins les moins visibles,</b> seulement je n'ai jamais trouvé le bon endroit, le bon espace et encore moins le bon moment pour regrouper et partager tout ça.\n\n> Tu me connais peut-être autour du travail et si c'est le cas tu t'es certainement posé cette question <b>\" Mais (...) il fait quoi Simon en fait ?\"</b>, et bien sur Bige je compte <b>m'atteler</b> à te donner des fragments de réponses.\n\n> Revenons au sujet, <b>c'est quoi ce Logo et qu'est ce qu'il veut dire ?</b>\n</div>\n<div class=\"container\" style=\"text-align:center;\">\n\n<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/15KE7aE1mkU\" frameborder=\"0\" allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>\n\n> Né en 1982 ;-)\n</div>\n<div class=\"container\">\n\n> <b>Avant de me mettre à gratter pour définir ce logo</b> il fallait un nom, bah oui bello c'est quoi le sens d'un logo quand t'as pas de nom ou minimum une base d'échange sur un concept ?\n> Comme a mes habitudes j'ai fait un random WIKI, ok c'est pas le must mais quand t'as pas d'idée faut bien avouer que ça prête à réflexion...\n\n> je suis donc tombé sur un tas de trucs idiots ou intelligibles aussi parfois ( la question n'est pas là...) \n> Donc en traînant j'ai commencé à gratter sur le fond du projet, et j'en ai déduit que le projet ne serait pas un produit ( et oui, sinon j'aurais rien de plus à proposer...) puis j'ai regardé ce que j'ai produit ces dernières années et me suis rendu  compte que c'est :\n\n<div style=\"text-align:center;\">\n<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/CoB36zxT940\" frameborder=\"0\" allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>\n</div>\n\n> <b>Comme beaucoup de créatifs</b>, je suis trop souvent pris par la charge et on ne s'intéresse que rarement à ce que je produit et encore moins au pourquoi.\n(TLDR; c'est encore un autre sujet à noter...)\n\n> Dans ma réflexion je me suis demandé ce qui me ferait vraiment plaisir, et la réponse est  devenue une évidence <b>\"Je veux arrêter de réinventer la roue et de dev des roues carrées\"</b>\n\nPour avancer dans l'article quelques bullshitpoints sur le logo :\n   - Garder une trace  de mes recherches\n   - Partager pour me faire entendre et non plus juste écouter\n   - Re-définir les basiques\n   - Que ce soit ré-exploitable quand c'est utile\n   - Un minimum fédérateur bien que je parle en mon nom\n   - Éviter d'en faire une plateforme ou un lieu d'échange \n   - C'est le Twitter que je n'aurais jamais partant du principe que \" tout le monde se fou de ce que je pense \"\n   - Parler de ma gueule même si comme toute personne censée j'ai des difficultés sur ce point.\n\n\n>.\n### Bref, je vais en revenir au but de l'article t'inquiète Billy !\n\n> Donc <b>\"ne  pas ré-écrire la roue\"</b> c'est une chose mais comment s'y prendre dans ce monde de brute ?\n\n> Première réponse:  <b>Par l'énergie que me donnerait ce logo</b>\n> Bon ok, je vais ré-écrire entièrement ce postit quand j'aurais le temps...\n\n</div>",
+        "category": "design",
+        "tags": [
+            "graphisme",
+            " logo",
+            " bige"
+        ],
+        "intro": "Jeudi dernier, j'étais tranquillement en train de tafer sur un projet lorsqu'un SMS est arrivé: <b>\"Bertrand est décédé\"</b>\nBertrand c'était mon oncle et un brasseur en OR. \n\n<b>15 minutes plus tard</b> mon manager m'a dit: <b>\"tu sais nous on voudrais bien que tu reste tout ça mais la conjoncture...\"</b> \n\n<b>Pas la peine de me faire un dessin je suis pas un mouton</b>, on va arrêter la période d'essai...\n\n5 minutes après l'entretiens, <b>je ne savais plus ou j'habitais et la nouvelle est tombée :</b>\n\n<b>COVID19</b>,  fini les notes de frais, plus aucun investissement, les budgets seront re-soumis à analyse, réduction des effectifs, tout ce qui n'est pas vital doit disparaître (...)\n\n<b>De quoi se poser des questions quand t'es chez un des plus grands retailer au monde...</b>\nPerso je fais de la R&D et surtout de la veille et des tests de faisabilité pour mise en oeuvre donc t'imagine bien que je n'étais pas vital en cet instant de crise...\n\nJuste pour la parenthèse, je suis convaincu que l'innovation se doit d'être partout sauf que faut pas tout mélanger, <b>dans la recherche on ne crée pas la valeur d'aujourd'hui mais celle de demain</b>, c'est donc ultra schizophrénique comme enjeu car d'une part faut se faire entendre et d'autre part on ne fait pas parti du présent. (TLDR; à traiter dans un autre article...)\n\nBref, j'ai gratté les pourquoi(s) puis je me suis demandé ce qui me ferait plaisir déjà personnellement, de là est né Bige : <b>\"Comme une roue de secours pour le savoir.\"</b>",
+        "publication": "2020-03-21",
+        "short_description": "Jeudi dernier, j'étais en train de tafer sur un projet en période d'essai lorsque ce SMS est arrivé: <b>\" Bertrand est décédé \"</b> Bertrand c'était mon oncle et un brasseur en OR. 15 minutes plus tard mon manager m'a dit <b>tu sais nous on voud</b>",
+        "author": {
+            "id": "yb6jqdCJaBYIgKW4tGrtdI5RVB92",
+            "name": "simon delamarre",
+            "avatar": "https://lh3.googleusercontent.com/a-/AOh14GiVBIBh-OcI59MJFyakSpxEB6qq_w51G0F4blQx"
+        },
+        "id": "nXQIuoZ5nN0aRihEfRFW"
+    },
+    {
+        "category": "r&d",
+        "tags": [
+            "scopes",
+            " client",
+            " données  personnelles",
+            " vie privée",
+            " wordlab"
+        ],
+        "intro": "Nouvel article à écrire pour Bige,\nl'idée c'est de définir lee recherches et travaux sur les scopes et de  les croiser avec WordLab...\n\nen gros on sais gérer un utilisateur par son client et non par la collecten parler de GDPR au  paggage...",
+        "publication": "2020-03-23",
+        "short_description": "Nouvel article à écrire pour Bige,\nl'idée c'est de définir lee recherches et travaux sur les scopes et de  les croiser avec WordLab...\n\nen gros on sais gérer un utilisateur par son client et non par la collecten parler de GDPR au  paggage...",
+        "author": {
+            "name": "simon delamarre",
+            "avatar": "https://lh3.googleusercontent.com/a-/AOh14GiVBIBh-OcI59MJFyakSpxEB6qq_w51G0F4blQx",
+            "id": "yb6jqdCJaBYIgKW4tGrtdI5RVB92"
+        },
+        "label": "Chaque visiteur est unique ! seulement pourquoi stocker ses centres d' intérêts?",
+        "url": "chaque-visiteur-est-unique--seulement-pourquoi-stocker-ses-centres-d-interets",
+        "picture": "https://firebasestorage.googleapis.com/v0/b/bige-start.appspot.com/o/bige_illustrations-80.jpg?alt=media&token=bd0741c9-3060-4dbd-a2a6-a25a138b3a0b",
+        "markdown": "",
+        "id": "LsznogeXRLR9EMVu9Nya"
+    },
+    {
+        "url": "bullshit-array-loop-en-javascript-les-basiques-du-savoir-pour-arreter",
+        "label": "BULLSHIT array loop en javascript, les basiques du savoir pour arrêter...",
+        "picture": "https://firebasestorage.googleapis.com/v0/b/bige-start.appspot.com/o/bige_about_array.svg?alt=media&token=2eedaae4-9c41-4b8e-8df9-7d8cf17b42bd",
+        "markdown": "<div class=\"container\">\n\n# À toi qui lit ça :\n\n> tu te  dis probablement: \" qui es tu pour me dire que je fais de la merde ? \"\n\n##  Et je te répondrais que :\"je ne suis qu'un humain qui partage un savoir pour d'autres noobs que toi...\"\n\n> donc allons-y gaiement si vous le permettez !\n> la seule question à se poser c'est un fuck***g array en 2020 et pour un front-end c'est quoi exactement ?\n> T'inquiète ma gueule la réponse est \" ci-dessous\" parce que t'as pas envie de lire tes mails et je respecte !x\n\n## Règle N°1\n> ne plus écrire de for pour rien,  car au fond de toi dans les tréfonds de ton âme, tu le sais quand tu l'écris, t'es pas en train de DEV quoi que ce soit, tu fais juste de l'intégration à la con pour un client de merde (...)\n\n> Ce que je veux dire c'est que c'est  pas une fin en sois et t'as plein de qualités mec donc persiste  à essayer de faire les trucs proprement de façon à ce que le repreneur (car je ne te souhaite pas de maintenir ton projet/produit) sache utiliser/réutiliser partiellement ton code !# À toi qui lit ça :\n\n> tu te  dis probablement: \" qui es tu pour me dire que je fais de la merde ? \"\n\n##  Et je te répondrais que :\"je ne suis qu'un humain qui partage un savoir pour d'autres noobs que toi...\"\n\n> donc allons-y gaiement si vous le permettez !\n> la seule question à se poser c'est un fuck***g array en 2020 et pour un front-end c'est quoi exactement ?\n> T'inquiète ma gueule la réponse est \" ci-dessous\" parce que t'as pas envie de lire tes mails et je respecte !# À toi qui lit ça :\n\n> tu te  dis probablement: \" qui es tu pour me dire que je fais de la merde ? \"\n\n> Donc allons-y gaiement si vous le permettez !\n> la seule question à se poser c'est un fuck***g array en 2020 et pour un front-end c'est quoi exactement ?\n> T'inquiète ma gueule la réponse est \" ci-dessous\" parce que t'as pas envie de lire tes mails et je respecte !\n</div>\n<div class=\"container\">\n\n> T'auras pigé que je ne suis pas politiquement correcte et que je m'en bas les steacks de tes principes donc, c'est parti :\n\n\n\n<div class=\"row\">\n<div class=\"col\">\n\n### t'as pas inventé le rhum et moi non plus (...)\nDans la vie t'as  le choix entre le bon, le bien et ton  savoir donc si tu sais taper un Each ou un for (ici on traite du JS donc pardon, bref l'exemple ci-contre  démontre ton incompétence à écrire un code élégant seulement et si tu fais du front end) \n</div>\n<div class=\"col\">\n\n### Exmeple de loop de noobs\n```\nvar num: Number = 0;\nfor(i=0; i<10; i++){\n    num++;\n}\nconsole.log(`num ${nuum}`);\n/* ça va te retourner 9... */\n````\n</div>\n</div>\n\n",
+        "tags": [
+            "array",
+            " loop"
+        ],
+        "category": "technology",
+        "intro": "Durant des années, j'ai croisé une multitude de profils allant du plus noobs (qui a l'envie de savoir), au plus confirmés (qui ne test rien et utilise toujours les mêmes méthodes sans jamais arriver aux mêmes fins...) bref, je n'ai pas la science infuse et sur cette page, je vais vous partager les basiques de basiques car bien qu'il existe des underscore ou des lodash dans l'application au quotidien je vois trop de merde trainer.\n\nl'idée c'est pas de donner des leçon, c'est simplement de retrouver facilement les basiques qu'un frontend devrait savoir et appliquer...\n\nDonc: on va causer tableaux, objets et de comment les filtrer de façon propre et élégante (...) qui n'a jamais rêvé que son langage natif sache trier, filtrer ou encore réunir selon ses propres besoins ?\n\nQui n'a jamais émis l'éventualité que ce soit possible sans charger des libs ultra lourdes ?\n\nQui  ne s'est jamais demandé comment faire simplement avec juste un savoir ?\n\non va en parler RIGHT NOW !",
+        "publication": "2020-03-19",
+        "short_description": "Durant des années, j'ai croisé une multitude de profils allant du plus noobs (qui a envie de savoir), aux plus confirmés (qui ne test plus rien et utilise toujours les mêmes méthodes sans jamais arriver aux mêmes fins...) bref, je n'ai pas la science (...)",
+        "author": {
+            "name": "simon delamarre",
+            "avatar": "https://lh3.googleusercontent.com/a-/AOh14GiVBIBh-OcI59MJFyakSpxEB6qq_w51G0F4blQx",
+            "id": "yb6jqdCJaBYIgKW4tGrtdI5RVB92"
+        },
+        "id": "pyf1PxA4Jv5DKbXYKpTk"
+    }
+]

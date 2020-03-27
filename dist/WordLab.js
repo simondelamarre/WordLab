@@ -1,45 +1,31 @@
-
-export default class WordLab {
-    setup = Object({
-        dataset: Array, // the  array of object you want to vectorize and request
-        options: Object({
-            layers: Array, // Layer is an Array of string such as key of your dataset Array Objects
-            keywords: Array, // Keywords is and array of Strings where we are goind to search, or the list of key String in your dataset to vectorize as words
-            scale: Number, // this is the size of your index a good default option is the lenght of your (dataset * by count of words per entry) to scale efficently
-            index: String, // this is the db occcurence index (your category for exemple)
-            multiplicator: Number, // this is a factor specidied by occurence, it will move the occurence index in the space
-            clean: Boolean, // True by default if its set to false wordlab return a large data scale with each iteration for debug
-        })
-    });
-    _Observer = Function;
-    output = Object(
-        {
-            words: Array,
-            properNames: Array,
-            indexed: Array
-        }
-    );
+"use strict";
+class WordLab {
     constructor(dataset, options, Observer) {
-        console.log('constructor ', options);
+        // TODO : validate setup options types
+        this.setup = {};
         this.setup.dataset = dataset;
         this.setup.options = options;
         this._Observer = Observer;
         this.output = { words: [], properNames: [], indexed: [] };
     }
     // Getters
-    get output() {
+    get execution() {
+        return this.end - this.start;
+    }
+    /* get output() {
         return this.output;
-    }
-    get setup() {
+    } */
+    /* get setup() {
         return this.setup;
-    }
+    } */
     // Setters
     set area(val) {
         this.area = val;
-        this._onPropertyChanged('area', val);
+        // this._onPropertyChanged('area', val);
     }
     // Methods
-    trainDataset = () => {
+    async train() {
+        this.start = new Date().getTime();
         if (!this.setup.options.index || this.setup.options.index.length === 0)
             return this._onPropertyChanged('Error', "You must define an index in the wordLab instance options");
         if (!this.setup.options.keywords || this.setup.options.keywords.length === 0)
@@ -51,13 +37,14 @@ export default class WordLab {
         this.dispatchWords();
         this.dispatchEntries();
 
+        this.end = new Date().getTime();
         if (this.setup.options.clean) {
             return this.cleanOutput();
         } else {
             return this.output;
         }
     }
-    formatDataset = () => {
+    formatDataset() {
         var output = { words: [], properNames: [], indexed: [] };
         Object.keys(this.setup.options.layers).forEach(layer => output[layer] = []);
         // first run on dataset
@@ -65,11 +52,14 @@ export default class WordLab {
             let words = [],
                 properNames = [];
             let str = "";
-            this.setup.options.keywords.forEach(keyword => str += item[keyword])
-            words.push(this.wordlab(item.label + "  " + item.intro + "  " + item.short_description + " " + item.tags.join(' ')).words);
-            output.words.push(this.wordlab(item.label + "  " + item.intro + "  " + item.short_description + " " + item.tags.join(' ')).words);
-            properNames.push(this.wordlab(item.label + "  " + item.intro + "  " + item.short_description + " " + item.tags.join(' ')).names);
-            output.properNames.push(this.wordlab(item.label + "  " + item.intro + "  " + item.short_description + " " + item.tags.join(' ')).names);
+            this.setup.options.keywords.forEach(keyword => str += item[keyword]);
+
+            words.push(this.wordlab(str).words);
+            output.words.push(this.wordlab(str).words);
+
+            properNames.push(this.wordlab(str).names);
+            output.properNames.push(this.wordlab(str).names);
+
             //setup layers
             Object.keys(this.setup.options.layers).forEach(
                 layer => {
@@ -90,13 +80,13 @@ export default class WordLab {
         this._onPropertyChanged('output', output);
         return output;
     }
-    cleanOutput = () => {
+    cleanOutput() {
         Object.keys(this.output).forEach(function (entry) {
             Object.keys(this.output[entry]).forEach(function (it) {
                 this.output[entry][it] = this.lastIndex(this.output[entry][it]).map(x => parseFloat(x.toFixed(2)));
             }.bind(this))
         }.bind(this))
-        this._onPropertyChanged('output', this.output);
+        // this._onPropertyChanged('output', this.output);
         return this.output;
     }
     dispatchIndexes() {
@@ -112,10 +102,10 @@ export default class WordLab {
             this.output[this.setup.options.index][key].push([posX, posY, amplitude]);
             angle += step;
         });
-        this._onPropertyChanged('message', "index has been dispatched");
+        // this._onPropertyChanged('message', "index has been dispatched");
         return this.output;
     }
-    dispatchWords = () => {
+    dispatchWords() {
         // on parcours le dataset
         this.setup.dataset.forEach(function (item) {
             // puis chaque mot de chaque article pour faire évoluer la position du mot dans l 'espace
@@ -129,7 +119,7 @@ export default class WordLab {
             });
         }.bind(this));
     }
-    dispatchEntries = () => {
+    dispatchEntries() {
         // on place les entrées du dataset de façon relative à leur index ou  categorie et à lleurs mots cles
         this.setup.dataset.forEach(function (item) {
             item.words.forEach(word => {
@@ -142,7 +132,7 @@ export default class WordLab {
             });
         }.bind(this));
     }
-    addVector = (target, key, point, factor, amplitude) => {
+    addVector(target, key, point, factor, amplitude) {
         // note : on prend la derniere position du mot et on la soustrait au nouveau point d'influence de l'index en  cours
         // ou la catégorie dans le cas de bige post articles...
         // donc notre mot va se déplacer d'une catégorie vers une autre lorsqu'un article contient le mot en question
@@ -162,21 +152,21 @@ export default class WordLab {
         // on ajoute la nouvelle position au target
         return true;
     }
-    lastIndex = (item) => {
+    lastIndex(item) {
         return item[item.length - 1];
     }
     // eslint-disable-next-line no-unused-vars
-    getCount = (key, index) => {
+    getCount(key, index) {
         return this.setup.dataset.filter(item => {
             return item.category === key;
         }).length;
     }
-    arrayToVector = (array) => {
+    arrayToVector(array) {
         let parsed = {}
         array.forEach(item => parsed[item] = [[0, 0, 0]])
         return parsed;
     }
-    wordlab = (paragraph) => {
+    wordlab(paragraph) {
         // TODO IMPLEMENTER LES COEFFICIENTS
         /**
          * import adv from "adverbes"
@@ -215,7 +205,7 @@ export default class WordLab {
 
         return { words: queryString, names: names };
     }
-    syllab = (s) => {
+    syllab(s) {
         var a = s.toLowerCase();
         // CHECK LES NOMS COMPOSES AVEC TRAIT D'function
         if (a.split("-").length > 0) {
@@ -285,7 +275,7 @@ export default class WordLab {
             .join("");
         return (r + "000").slice(0, 8).toUpperCase();
     }
-    isPreposition = (str) => {
+    isPreposition(str) {
         // TODO rename as except, finallement c'est pas juste des preprosition en l'état mais des execptions de requete complexe indésirables...
         // le but est d'alléger au maximum les relations pour augmenter la vitesse de traitement...
         let prep = ["je", "tu", "il", "nous", "vous", "ils", "elles", "ont", "à", "les", "la", "le", "pas", "des", "une", "unes", "est", "son", "sa", "ses", "aux", "car", "et", "que", "qui", "quoi", "quand", "comment", "après", "avant", "avec", "chez", "contre", "dans", "de", "derrière", "devant", "en", "entre", "excepté", "malgré", "moyennant", "outre", "par", "parmi", "passé", "pendant", "pour", "sans", "sauf", "selon", "sous", "suivant", "sur", "vers", "vu", "entre", "sans"];
@@ -294,32 +284,25 @@ export default class WordLab {
         else
             return false;
     }
-    getPoint = (contrainst, key) => {
+    getPoint(contrainst, key) {
         return { contrainst: contrainst, key: key };
     }
-    setPoint = (target) => {
+    setPoint(target) {
         target.push[{ x: 0, y: 0, z: 0 }];
     }
-    cleanStr = (str) => {
+    cleanStr(str) {
         // TODO strip html return text only
         return str
             .replace(/[,:;"'’،、…⋯‘’“”""«»()+-=%[{}¿?!.]/g, " ") // release ponctuation
             .replace(/\n/g, " "); // release lines
     }
-    uniq = (array) => {
+    uniq(array) {
         // .join('-').split('-') DATES ?
         return array.filter((value, index, self) => {
             return self.indexOf(value) === index && value !== "";
         })
     }
-    search = (words) => {
-        let wordsArray = this.wordlab(words).words.split('-'),
-            output = [];
-        wordsArray.forEach(word => { if (this.output.words[word]) output.push(this.lastIndex(this.output.words[word])) })
-        let point = this.getMiddle(output);
-        return point;
-    }
-    getMiddle = (points) => {
+    getMiddle(points) {
         let middle = [0, 0, 0];
         points.forEach(function (point) {
             middle[0] += point[0];
@@ -329,7 +312,7 @@ export default class WordLab {
         middle.map(value => value / points.length);
         return middle;
     }
-    getNearestNeighbors = (point, target) => {
+    getNearestNeighbors(point, target) {
         // let cleaned = Object.keys(target).map(entry => target[entry] = this.lastIndex(target[entry]));
         let distances = Object.keys(target).sort((a, b) => {
             if (this.getDistance(this.lastIndex(target[a]), point) > this.getDistance(this.lastIndex(target[b]), point)) {
@@ -342,7 +325,7 @@ export default class WordLab {
         });
         return distances;
     }
-    getDistance = (a, b) => {
+    getDistance(a, b) {
         if (!b)
             return a;
         return Math.sqrt(
@@ -356,4 +339,13 @@ export default class WordLab {
         this._Observer(propName, val);
         return this[propName];
     }
+    search(words) {
+        let wordsArray = this.wordlab(words).words.split('-'),
+            output = [];
+        wordsArray.forEach(word => { if (this.output.words[word]) output.push(this.output.words[word]) })
+        let point = this.getMiddle(output);
+        return point;
+    }
 }
+
+exports.WordLab = WordLab;
