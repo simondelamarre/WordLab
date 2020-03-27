@@ -81,15 +81,15 @@ let order = DB.search("second");
 
 > le fait de rechercher le mot "second" va te retourner un objet comme suit :
 
-```
+```json
 {
     "2": {
         "distance":0,
-        "weight:100
+        "weight":100
     },
     "1": {
         "distance":100,
-        "weight:0
+        "weight":0
     }
 }
 ```
