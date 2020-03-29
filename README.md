@@ -107,10 +107,12 @@ let order = DB.search("second");
 > C'est tout, WordLab te retourne tes articles classés par ID ordonancés par distance et poids de l'index
 > Forcément ici on a que deux articles donc on a des poids marqués à l'extrême 0 ou 100...
 
+<div style="display:inline-flex">
 <img src="./assets/wordlab_bilateration.svg" style="width:200px;" width="200">
-<img src="./assets/wordlab_trilateration.svg.svg" style="width:200px;" width="200">
-<img src="./assets/wordlab_quadrilateration.svg.svg" style="width:200px;" width="200">
-<img src="./assets/wordlab_search_resuult.svg.svg.svg" style="width:200px;" width="200">
+<img src="./assets/wordlab_trilateration.svg" style="width:200px;" width="200">
+<img src="./assets/wordlab_quadrilateration.svg" style="width:200px;" width="200">
+<img src="./assets/wordlab_search_resuult.svg.svg" style="width:200px;" width="200">
+</div>
 
 Author : Simon Delamarre
 License : MIT
