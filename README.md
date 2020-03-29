@@ -114,11 +114,14 @@ let order = DB.search("second");
 <img src="./assets/wordlab_search_resuult.svg" style="width:200px;" width="200"/>
 </div>
 
-## WordLab travaille aussi sur des indexes multiples
+## WordLab offre le bon contenu au bon moment au bon utiliisateur
 
-> Rechercher sur un index c'est cool mais sur une multitude c'est encore mieux !
-> C'est en cours de test mais imaginez la pertinence d'une liste d'articles sur un site e-commerce sans utiliser de puissance de calcul sur votre serveur !
-> C'est ce que Bige WordLab est en train de tester pour vous...
+> Lorsque WrodLab est monté sur un front-end, vous pouvez y ajouter différents vecteurs à la demande par exemple un utilisateur,
+> considérons qu'un utilisateur entre sur votre site et commence à naviguer il va lire un article ou taper unue recherche ou encore effectuer tout autre type d'opérations
+> vous pourriez essayer de traiter ça en envoyant des paquets de données sur sa navigation et orienter vos contenus en fonction,
+> seulement ça sous entend de faire des traitements lourds côté serveur et comme (je vous le souhaite) votre serveur est déjà en bout de piste
+> ça peut rapidiement devenir très couteux...
+> WordLab va orienter vos utiliisateurs sans traitements serveur en le déplaçant de façon logique au travers de vos contenus.
 
 <div style="display:inline-flex">
 <img src="./assets/wordlab_user_1.svg"  width="200"/>
@@ -126,6 +129,14 @@ let order = DB.search("second");
 <img src="./assets/wordlab_user_3.svg"  width="200"/>
 <img src="./assets/wordlab_user_4.svg"  width="200"/>
 </div>
+
+
+## WordLab travaille aussi sur des indexes multiples
+
+> Rechercher sur un index c'est cool mais sur une multitude c'est encore mieux !
+> C'est en cours de test mais imaginez la pertinence d'une liste d'articles sur un site e-commerce sans utiliser de puissance de calcul sur votre serveur !
+> C'est ce que Bige WordLab est en train de tester pour vous...
+
 
 <img src="./assets/wordlab_complex_indexes.svg"/>
 
