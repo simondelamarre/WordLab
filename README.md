@@ -1,6 +1,6 @@
 # WordLab
 
-<img src="./assets/wordlab.svg" style="max-width:200px;">
+<img src="./assets/wordlab.svg" style="width:200px;" width="200">
 > Attention! 
 > WordLab est une approche totalement expérimentale de traitement d'indexes sur des jeux de textes.
 > Je n'assure aucuune maintenance du package bien que je l'utilise pour mes propres besoins
@@ -107,6 +107,10 @@ let order = DB.search("second");
 > C'est tout, WordLab te retourne tes articles classés par ID ordonancés par distance et poids de l'index
 > Forcément ici on a que deux articles donc on a des poids marqués à l'extrême 0 ou 100...
 
+<img src="./assets/wordlab_bilateration.svg" style="width:200px;" width="200">
+<img src="./assets/wordlab_trilateration.svg.svg" style="width:200px;" width="200">
+<img src="./assets/wordlab_quadrilateration.svg.svg" style="width:200px;" width="200">
+<img src="./assets/wordlab_search_resuult.svg.svg.svg" style="width:200px;" width="200">
 
 Author : Simon Delamarre
 License : MIT
