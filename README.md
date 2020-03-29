@@ -108,11 +108,28 @@ let order = DB.search("second");
 > Forcément ici on a que deux articles donc on a des poids marqués à l'extrême 0 ou 100...
 
 <div style="display:inline-flex">
-<img src="./assets/wordlab_bilateration.svg" style="width:200px;" width="200">
-<img src="./assets/wordlab_trilateration.svg" style="width:200px;" width="200">
-<img src="./assets/wordlab_quadrilateration.svg" style="width:200px;" width="200">
-<img src="./assets/wordlab_search_resuult.svg.svg" style="width:200px;" width="200">
+<img src="./assets/wordlab_bilateration.svg" style="width:200px;" width="200"/>
+<img src="./assets/wordlab_trilateration.svg" style="width:200px;" width="200"/>
+<img src="./assets/wordlab_quadrilateration.svg" style="width:200px;" width="200"/>
+<img src="./assets/wordlab_search_resuult.svg" style="width:200px;" width="200"/>
 </div>
 
-Author : Simon Delamarre
-License : MIT
+## WordLab travaille aussi sur des indexes multiples
+
+> Rechercher sur un index c'est cool mais sur une multitude c'est encore mieux !
+> C'est en cours de test mais imaginez la pertinence d'une liste d'articles sur un site e-commerce sans utiliser de puissance de calcul sur votre serveur !
+> C'est ce que Bige WordLab est en train de tester pour vous...
+
+<div style="display:inline-flex">
+<img src="./assets/wordlab_user_1.svg"  width="200"/>
+<img src="./assets/wordlab_user_2.svg"  width="200"/>
+<img src="./assets/wordlab_user_3.svg"  width="200"/>
+<img src="./assets/wordlab_user_4.svg"  width="200"/>
+</div>
+
+<img src="./assets/wordlab_complex_indexes.svg"/>
+
+
+> Author : Simon Delamarre
+
+> License : MIT
