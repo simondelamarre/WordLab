@@ -1,5 +1,6 @@
 # WordLab
 
+<img src="./assets/wordlab.svg" style="max-width:200px;">
 > Attention! 
 > WordLab est une approche totalement expérimentale de traitement d'indexes sur des jeux de textes.
 > Je n'assure aucuune maintenance du package bien que je l'utilise pour mes propres besoins

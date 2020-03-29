@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 24.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FFF666;}
+	.st1{opacity:0.2;fill:#5761FF;}
+	.st2{fill:#5761FF;}
+	.st3{fill:none;stroke:#5761FF;stroke-width:3.4956;stroke-miterlimit:10;}
+	.st4{fill:none;stroke:#ED4C4C;stroke-width:4;stroke-linecap:round;stroke-miterlimit:10;}
+	.st5{fill:#ED4C4C;}
+	.st6{fill:none;stroke:#ED4C4C;stroke-width:1.6;stroke-linecap:round;stroke-miterlimit:10;}
+	.st7{fill:#2B2B70;}
+	.st8{font-family:'CharlevoixPro-Bold';}
+	.st9{font-size:16px;}
+</style>
+<g id="Calque_1">
+</g>
+<g id="Calque_4">
+	<g>
+		<rect x="221" y="317.9" class="st0" width="23" height="23"/>
+		<g>
+			<g>
+				<polygon class="st1" points="254.4,144.1 22.1,260.6 257.1,372.7 489.3,256.2 				"/>
+				<circle class="st2" cx="256.5" cy="404" r="13"/>
+				<line class="st3" x1="256.5" y1="404" x2="256.5" y2="108.9"/>
+				<polygon class="st3" points="22.1,260.6 256.1,145.3 489.3,256.2 257.1,372.7 				"/>
+				<circle class="st2" cx="372.4" cy="315.7" r="13"/>
+				<circle class="st2" cx="141.1" cy="200.1" r="13"/>
+				<circle class="st2" cx="140.7" cy="315.6" r="13"/>
+				<circle class="st2" cx="256.7" cy="108.9" r="13"/>
+				<circle class="st2" cx="373" cy="199.1" r="13"/>
+				<line class="st3" x1="140.7" y1="315.6" x2="373" y2="199.1"/>
+				<path class="st3" d="M140.7,315.6"/>
+				<path class="st3" d="M372.4,315.7L140.5,199.8"/>
+			</g>
+		</g>
+		<circle class="st2" cx="256.2" cy="256.7" r="9"/>
+		<line class="st4" x1="343.5" y1="249.8" x2="295.6" y2="297.7"/>
+		<g>
+			<polyline class="st3" points="283.3,180.2 256.7,255.9 342.5,156.5 			"/>
+			<polyline class="st3" points="346.7,246.8 256.2,256.7 290.7,299.9 			"/>
+			<circle class="st2" cx="342.5" cy="156.5" r="9"/>
+			<polyline class="st3" points="283.3,180.2 256.7,255.9 342.5,156.5 			"/>
+			<line class="st4" x1="282.3" y1="181.3" x2="337.6" y2="158"/>
+			<circle class="st5" cx="318.3" cy="218.5" r="12.3"/>
+			<polyline class="st3" points="346.7,246.8 256.2,256.7 290.7,299.9 			"/>
+			<circle class="st2" cx="283.3" cy="180.2" r="9"/>
+			<line class="st4" x1="346.2" y1="243.7" x2="344" y2="164.9"/>
+			<circle class="st2" cx="346.7" cy="246.8" r="9"/>
+			<circle class="st2" cx="290.7" cy="299.9" r="9"/>
+			<line class="st4" x1="290.7" y1="296.1" x2="284" y2="186.9"/>
+			<circle class="st2" cx="342.5" cy="156.5" r="9"/>
+			<line class="st4" x1="282.3" y1="181.3" x2="337.6" y2="158"/>
+			<circle class="st5" cx="318.3" cy="218.5" r="12.3"/>
+			<circle class="st2" cx="283.3" cy="180.2" r="9"/>
+			<line class="st4" x1="346.2" y1="243.7" x2="344" y2="164.9"/>
+			<circle class="st2" cx="346.7" cy="246.8" r="9"/>
+			<circle class="st2" cx="290.7" cy="299.9" r="9"/>
+		</g>
+		<path class="st6" d="M293.3,293.6"/>
+		<rect x="394" y="208.1" class="st0" width="23" height="23"/>
+		<rect x="278.6" y="121.9" class="st0" width="23" height="23"/>
+		<rect x="91" y="213.7" class="st0" width="23" height="23"/>
+		<polyline class="st6" points="102.5,225.2 318.3,218.5 290.1,133.3 		"/>
+		<polyline class="st6" points="405.5,219.6 318.3,218.5 365.2,277.3 		"/>
+		<line class="st6" x1="318.3" y1="218.5" x2="232.4" y2="329.4"/>
+		<rect x="353.7" y="265.8" class="st7" width="23" height="23"/>
+		<circle class="st5" cx="102.5" cy="225.2" r="3.9"/>
+		<circle class="st5" cx="290.2" cy="133.2" r="3.9"/>
+		<circle class="st5" cx="405.6" cy="219.7" r="3.9"/>
+		<circle class="st0" cx="365.4" cy="277.2" r="3.9"/>
+		<circle class="st5" cx="232.4" cy="329.4" r="3.9"/>
+		<text transform="matrix(1 0 0 1 310.2236 223.1641)" class="st8 st9">.E</text>
+		<g>
+			<text transform="matrix(1 0 0 1 376.6758 264.3613)" class="st7 st8 st9">NEAREST</text>
+		</g>
+	</g>
+</g>
+</svg>

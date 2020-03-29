@@ -1,6 +1,6 @@
 {
   "name": "@landscape/wordlab",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Wordlab is a vector3D text classifier that allow you to sort indexs by distance writted for French",
   "main": "dist/WordLab.js",
   "directories": {
@@ -25,7 +25,7 @@
     "neighbors"
   ],
   "author": "Simon Delamarre",
-  "license": "MIT",
+  "license": "ISC",
   "bugs": {
     "url": "https://github.com/simondelamarre/WordLab/issues"
   },

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 24.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FFF666;}
+	.st1{opacity:0.2;fill:#5761FF;}
+	.st2{fill:#5761FF;}
+	.st3{fill:none;stroke:#5761FF;stroke-width:3.6587;stroke-miterlimit:10;}
+	.st4{fill:#ED4C4C;}
+	.st5{fill:none;stroke:#ED4C4C;stroke-width:1.6747;stroke-linecap:round;stroke-miterlimit:10;}
+	.st6{fill:none;stroke:#ED4C4C;stroke-width:3.3494;stroke-linecap:round;stroke-miterlimit:10;}
+</style>
+<g id="Calque_1">
+</g>
+<g id="Calque_4">
+	<g>
+		<rect x="219.3" y="320.7" class="st0" width="24" height="24"/>
+		<g>
+			<g>
+				<polygon class="st1" points="254.3,138.8 11.2,260.8 257.2,378.1 500.2,256.2 				"/>
+				<circle class="st2" cx="256.5" cy="410.9" r="13.6"/>
+				<line class="st3" x1="256.5" y1="410.9" x2="256.5" y2="102"/>
+				<polygon class="st3" points="11.2,260.8 256.1,140.1 500.2,256.2 257.2,378.1 				"/>
+				<circle class="st2" cx="135.7" cy="197.5" r="13.6"/>
+				<circle class="st2" cx="135.4" cy="318.4" r="13.6"/>
+				<circle class="st2" cx="256.7" cy="102" r="13.6"/>
+				<circle class="st2" cx="378.5" cy="196.4" r="13.6"/>
+				<circle class="st2" cx="378" cy="318.7" r="13.6"/>
+				<line class="st3" x1="135.4" y1="318.4" x2="378.5" y2="196.4"/>
+				<path class="st3" d="M135.4,318.4"/>
+				<path class="st3" d="M377.8,318.5L135.1,197.2"/>
+			</g>
+		</g>
+		<circle class="st2" cx="256.2" cy="256.7" r="9.4"/>
+		<g>
+			<circle class="st4" cx="310.3" cy="239.5" r="12.8"/>
+			<path class="st4" d="M329.1,275c0-10.4-8.4-18.8-18.8-18.8s-18.8,8.4-18.8,18.8c0,0,2.9,5.1,19,5.1S329.1,275,329.1,275z"/>
+		</g>
+		<path class="st5" d="M295,295.3"/>
+		<rect x="400.5" y="205.8" class="st0" width="24" height="24"/>
+		<rect x="279.7" y="115.6" class="st0" width="24" height="24"/>
+		<rect x="83.3" y="211.7" class="st0" width="24" height="24"/>
+		<rect x="358.3" y="266.2" class="st0" width="24" height="24"/>
+		<circle class="st4" cx="95.4" cy="223.7" r="4.1"/>
+		<circle class="st4" cx="291.8" cy="127.5" r="4.1"/>
+		<circle class="st4" cx="412.6" cy="218" r="4.1"/>
+		<circle class="st4" cx="370.5" cy="278.2" r="4.1"/>
+		<circle class="st4" cx="231.3" cy="332.8" r="4.1"/>
+		<line class="st6" x1="332.4" y1="271.1" x2="370.5" y2="278.2"/>
+		<line class="st6" x1="256.2" y1="256.7" x2="291.6" y2="263.4"/>
+		<circle class="st4" cx="256.2" cy="256.7" r="5.3"/>
+	</g>
+</g>
+</svg>
