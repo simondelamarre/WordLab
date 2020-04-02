@@ -38,9 +38,9 @@ DB.train();
 /**
  * Tests => Trouver les articles en fonction de mots clés
  */
-console.log(DB.search('second article'));
-console.log(DB.search('premier article'));
-console.log(DB.search('troisième article'));
+console.log("second => ", DB.search('second'));
+console.log("premier => ", DB.search('premier'));
+console.log("troisieeme => ", DB.search('troisième'));
 
 console.log(`execution m ${new Date().getTime() - start}`);
 console.log('DB training time => ', DB.execution);

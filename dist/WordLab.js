@@ -14,8 +14,8 @@ class WordLab {
     }
     /* get output() {
         return this.output;
-    } */
-    /* get setup() {
+    }
+    get setup() {
         return this.setup;
     } */
     // Setters
@@ -81,12 +81,16 @@ class WordLab {
         return output;
     }
     cleanOutput() {
+        let cleaned = {}
         Object.keys(this.output).forEach(function (entry) {
+            cleaned[entry] = [];
             Object.keys(this.output[entry]).forEach(function (it) {
-                this.output[entry][it] = this.lastIndex(this.output[entry][it]).map(x => parseFloat(x.toFixed(2)));
+                cleaned[entry].push({ label: it, pos: this.lastIndex(this.output[entry][it]).map(x => parseFloat(x.toFixed(2))) });
             }.bind(this))
-        }.bind(this))
+        }.bind(this));
+
         // this._onPropertyChanged('output', this.output);
+        this.output = cleaned;
         return this.output;
     }
     dispatchIndexes() {
@@ -313,17 +317,22 @@ class WordLab {
         return middle;
     }
     getNearestNeighbors(point, target) {
-        // let cleaned = Object.keys(target).map(entry => target[entry] = this.lastIndex(target[entry]));
-        let distances = Object.keys(target).sort((a, b) => {
-            if (this.getDistance(this.lastIndex(target[a]), point) > this.getDistance(this.lastIndex(target[b]), point)) {
-                a[3] = this.getDistance(this.lastIndex(target[a]), point);
-                return a;
-            } else {
-                b[3] = this.getDistance(this.lastIndex(target[b]), point);
-                return b
-            }
+        let distances = target.sort((a, b) => {
+            let distA = this.getDistance(point, a.pos);
+            let distB = this.getDistance(point, b.pos);
+            console.log(distA, distB);
+            a.weight = distB - distA;
+            b.weight = distB - distA;
+            return distB - distA;
         });
         return distances;
+    }
+    jsonKeyToLabelValue(input) {
+        let output = [];
+        Object.keys(input).forEach(entry => {
+            output.push({ label: entry, value: input[entry] });
+        });
+        return output;
     }
     getDistance(a, b) {
         if (!b)
@@ -340,11 +349,26 @@ class WordLab {
         return this[propName];
     }
     search(words) {
+        console.log("words => ", words);
         let wordsArray = this.wordlab(words).words.split('-'),
             output = [];
-        wordsArray.forEach(word => { if (this.output.words[word]) output.push(this.output.words[word]) })
+
+        console.log(wordsArray);
+
+        wordsArray.forEach(function (word) {
+            console.log("wordsArray.forEach => ", word, this.output.words);
+            if (this.output.words[word]) output.push(this.output.words[word])
+        }.bind(this));
+
+        console.log('output search arraywords => ', output);
+        console.log('words => ', wordsArray, " from => ", words, " exist in => ", this.output.words, " ?");
         let point = this.getMiddle(output);
-        return point;
+        let responses = this.getNearestNeighbors(point, this.output.indexed);
+        this._onPropertyChanged('search', responses);
+        if (output.length === 0)
+            return { message: `words "${words}" not found`, result: responses };
+        else
+            return { message: "finds", result: responses };
     }
 }
 

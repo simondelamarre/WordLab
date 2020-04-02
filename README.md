@@ -1,9 +1,16 @@
 # WordLab
 
 <img src="./assets/wordlab.svg" style="width:200px;" width="200">
+
+# aplologies
+this package didn't work actually, i cant desable it at this time so am waching your downloads and i'll said you, DO NOT DOWNLOAD THIS PACKAGE cause the features are comming and actually its just a BULLSHIT.
+
 > Attention! 
 > WordLab est une approche totalement expérimentale de traitement d'indexes sur des jeux de textes.
 > Je n'assure aucuune maintenance du package bien que je l'utilise pour mes propres besoins
+> N'installe pas WordLab pour le moment car c'est en recherche et ça ne va pas fonctionner c'est certain.
+> Il ne sert qu'à des recherches personnelles du moins tant que personne ne va proposer un fork sur GitHub.
+> je ne pige pas les 130 downloads d'hier, calmos on avance et comme indiqué pour le moment c'est du BULLSHIT...
 
 ## C'est quoi ?
 
