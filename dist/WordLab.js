@@ -320,12 +320,11 @@ class WordLab {
         let distances = target.sort((a, b) => {
             let distA = this.getDistance(point, a.pos);
             let distB = this.getDistance(point, b.pos);
-            console.log(distA, distB);
             a.weight = distB - distA;
             b.weight = distB - distA;
             return distB - distA;
         });
-        return distances;
+        return distances.sort((a, b) => b.weight - a.weight);
     }
     jsonKeyToLabelValue(input) {
         let output = [];
@@ -348,20 +347,17 @@ class WordLab {
         this._Observer(propName, val);
         return this[propName];
     }
-    search(words) {
-        console.log("words => ", words);
-        let wordsArray = this.wordlab(words).words.split('-'),
+    async search(words) {
+
+        let wordsArray = await this.wordlab(words).words.split('-'),
             output = [];
 
-        console.log(wordsArray);
-
-        wordsArray.forEach(function (word) {
-            console.log("wordsArray.forEach => ", word, this.output.words);
-            if (this.output.words[word]) output.push(this.output.words[word])
+        await this.output.words.forEach(function (word) {
+            wordsArray.forEach((w) => {
+                if (word.label === w) output.push(word.pos);
+            });
         }.bind(this));
 
-        console.log('output search arraywords => ', output);
-        console.log('words => ', wordsArray, " from => ", words, " exist in => ", this.output.words, " ?");
         let point = this.getMiddle(output);
         let responses = this.getNearestNeighbors(point, this.output.indexed);
         this._onPropertyChanged('search', responses);

@@ -38,9 +38,19 @@ DB.train();
 /**
  * Tests => Trouver les articles en fonction de mots clés
  */
-console.log("second => ", DB.search('second'));
-console.log("premier => ", DB.search('premier'));
-console.log("troisieeme => ", DB.search('troisième'));
+
+let test = async function () {
+    console.log("premier => ", await DB.search('premier'));
+    console.log("second => ", await DB.search('second'));
+    console.log("troisieme => ", await DB.search('troisieme'));
+    console.log("troisième => ", await DB.search('troisième'));
+    console.log("XXX premier XXX => ", await DB.search('je cherche le premier article'));
+    console.log("XXX second XXX => ", await DB.search('je cherche le second article'));
+    console.log("XXX troisieme XXX => ", await DB.search('je cherche le troisieme article'));
+}
+test();
+/* console.log("premier => ", DB.search('premier'));
+console.log("troisieeme => ", DB.search('troisième')); */
 
 console.log(`execution m ${new Date().getTime() - start}`);
 console.log('DB training time => ', DB.execution);

@@ -1,9 +1,21 @@
+
+# aplologies
+
+> This package didn't work actually, 
+> Am working on SO PLEASE DO NOT INSTALL!
+> If you are interested, i'll put any features and advances on the Github repo.
+> Please come back soon
+
+> Ce paquet ne fonctionne pas pour le moment,
+> j'y travaille...
+> Si tu es intéréssé, je vais mettre les features en cours sur le GIT.
+> Merci de revenir plus tard.
+
+
 # WordLab
 
 <img src="./assets/wordlab.svg" style="width:200px;" width="200">
 
-# aplologies
-this package didn't work actually, i cant desable it at this time so am waching your downloads and i'll said you, DO NOT DOWNLOAD THIS PACKAGE cause the features are comming and actually its just a BULLSHIT.
 
 > Attention! 
 > WordLab est une approche totalement expérimentale de traitement d'indexes sur des jeux de textes.
