@@ -5,29 +5,27 @@
  */
 const start = new Date().getTime();
 import WL from '../dist/WordLab';
-import Articles from './Products';
+import Articles from './articles_200.json';
 
 const DB = new WL.WordLab(
     Articles,
     {
         scale: 100, // la taille de tes indexs
-        keywords: ["description", "color", "type"], // la liste des labels de type String à parser
+        keywords: ["post_content", "post_title"], // la liste des labels de type String à parser
         layers: { // layers from json kes input
-            category: "category"/* ,
-            color: "color",
-            sexe: "sexe",
-            type: "type" */
+            category: "category"
         }, // words`ll be setted by default
         index: "category",
-        key_index: "id",
-        clean: true // boolean that return only last position or each vectors evolutions
+        key_index: "ID",
+        clean: true // boolean that return only last position or each vectors evolutions,
     },
     function (e, val) {
-        console.log('listener => ', JSON.stringify(e));
-        if (e.error)
+        // console.log('listener => ', JSON.stringify(e), " val => ", JSON.stringify(val));
+        if (e === "Error")
             console.error(e, val);
-        if (e.warn)
-            console.warn(e, val);
+        if (e === "output")
+            console.warn(e, JSON.stringify(val));
+        // console.log("premier => ", DB.search('premier'));
     }.bind(this)
 );
 
@@ -38,15 +36,15 @@ DB.train();
  */
 
 let testSearch = async function () {
-    console.log("premier => ", await DB.search('premier'));
-    /* console.log("TSHIRT ROUOGE => ", await DB.search('TSHIRT ROUGE'));
+    console.log("TOP TIPS => ", await DB.search('Voici une bonne id\u00e9e pour faire passer la pilule'));
+    /*
     console.log("second => ", await DB.search('second'));
     console.log('move user => ', DB.moveUser(0, [0, 0, 0])); 
     */
 }
 setTimeout(function () {
     testSearch();
-}, 1000);
+}, 3000);
 
 
 /* console.log('add user => ', DB.addUser());

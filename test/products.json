@@ -1,0 +1,117 @@
+[
+    {
+        "id": 1,
+        "type": "TSHIRT",
+        "color": "RED",
+        "size": [
+            "M",
+            "L",
+            "XL"
+        ],
+        "sexe": "MALE",
+        "description": "t-shirt homme rouge manche courte",
+        "category": "wear",
+        "sub_category": "top"
+    },
+    {
+        "id": 2,
+        "type": "PANTALOON",
+        "color": "YELLOW",
+        "size": [
+            "M",
+            "L"
+        ],
+        "sexe": "MALE",
+        "description": "pantalon homme jaune manche courte",
+        "category": "wear",
+        "sub_category": "bottom"
+    },
+    {
+        "id": 3,
+        "type": "COAT",
+        "color": "GREEN",
+        "size": [
+            "M"
+        ],
+        "sexe": "MALE",
+        "description": "manteau homme vert manche courte",
+        "category": "wear",
+        "sub_category": "top"
+    },
+    {
+        "id": 4,
+        "type": "TSHIRT",
+        "color": [
+            "WHITE",
+            "BLUE"
+        ],
+        "size": [
+            "M",
+            "XXL"
+        ],
+        "sexe": "MALE",
+        "description": "t-shirt homme rayé blanc et bleu, marinière manche courte",
+        "category": "wear",
+        "sub_category": "top"
+    },
+    {
+        "id": 5,
+        "type": "TSHIRT",
+        "color": "WHITE",
+        "size": [
+            "M",
+            "L"
+        ],
+        "sexe": "FEMALE",
+        "description": "t-shirt femme blanc manche courte",
+        "category": "wear",
+        "sub_category": "top"
+    },
+    {
+        "id": 6,
+        "type": "COAT",
+        "color": [
+            "GREEN"
+        ],
+        "size": [
+            "M",
+            "S",
+            "XXS"
+        ],
+        "sexe": "FEMALE",
+        "description": "manteau femme rayé vert",
+        "category": "wear",
+        "sub_category": "top"
+    },
+    {
+        "id": 7,
+        "type": "TSHIRT",
+        "color": [
+            "WHITE",
+            "BLUE"
+        ],
+        "size": [
+            "M",
+            "S"
+        ],
+        "sexe": "FEMALE",
+        "description": "t-shirt femme rayé blanc et bleu, marinière manche courte",
+        "category": "wear",
+        "sub_category": "top"
+    },
+    {
+        "id": 7,
+        "type": "JEAN",
+        "color": [
+            "orange"
+        ],
+        "size": [
+            "M",
+            "XL"
+        ],
+        "sexe": "FEMALE",
+        "description": "jeaen femme orange",
+        "category": "wear",
+        "sub_category": "bottom"
+    }
+]

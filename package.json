@@ -9,7 +9,9 @@
     "bin": "bin"
   },
   "scripts": {
-    "test": "node --experimental-modules test/"
+    "test": "node --experimental-modules test/",
+    "test2": "node --experimental-modules test/index2",
+    "test3": "node --experimental-modules test/index3"
   },
   "repository": {
     "type": "git",

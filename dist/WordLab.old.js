@@ -5,13 +5,21 @@ class WordLab {
         this.setup.dataset = dataset;
         this.setup.options = options;
         this._Observer = Observer;
-        this.output = { words: [], indexed: [] };
+        this.output = { words: [], properNames: [], indexed: [] };
         this.users = {}
     }
     // Getters
     get execution() {
         return this.end - this.start;
     }
+    /* 
+    get output() {
+        return this.output;
+    }
+    get setup() {
+        return this.setup;
+    } 
+    */
     // Setters
     set area(val) {
         this.area = val;
@@ -25,34 +33,34 @@ class WordLab {
         if (!this.setup.options.keywords || this.setup.options.keywords.length === 0)
             return this._onPropertyChanged('Error', "You must defined each object string keys to convert as vector in options keywords[]");
         // #1 format output layers
-        this.output = await this.formatDataset();
+        this.output = this.formatDataset();
         // #2 dispatch static outputs
-        await this.dispatchIndexes();
-        await this.dispatchWords();
-        await this.dispatchEntries();
+        this.dispatchIndexes();
+        this.dispatchWords();
+        this.dispatchEntries();
 
         this.end = new Date().getTime();
         if (this.setup.options.clean) {
-            let cleaned = await this.cleanOutput();
-            this.output = cleaned;
-            this._onPropertyChanged('output', cleaned);
-            return this.output;
+            return this.cleanOutput();
         } else {
-            this._onPropertyChanged('output', this.output);
             return this.output;
         }
     }
-    async formatDataset() {
-        var output = { words: [], indexed: [] };
+    formatDataset() {
+        var output = { words: [], properNames: [], indexed: [] };
         Object.keys(this.setup.options.layers).forEach(layer => output[layer] = []);
         // first run on dataset
-        await this.setup.dataset.forEach(function (item, index) {
-            let words = [];
+        this.setup.dataset.forEach(function (item, index) {
+            let words = [],
+                properNames = [];
             let str = "";
             this.setup.options.keywords.forEach(keyword => str += item[keyword]);
 
             words.push(this.wordlab(str).words);
             output.words.push(this.wordlab(str).words);
+
+            properNames.push(this.wordlab(str).names);
+            output.properNames.push(this.wordlab(str).names);
 
             //setup layers
             Object.keys(this.setup.options.layers).forEach(
@@ -60,29 +68,34 @@ class WordLab {
                     output[layer].push(item[this.setup.options.layers[layer]])
                 }
             );
-            output.indexed.push(item[this.setup.options.key_index]);
-
+            output.indexed.push(item.id);
+            // store article words only one time
             this.setup.dataset[index].words = this.uniq(words.join('-').split('-'));
+            this.setup.dataset[index].names = this.uniq(properNames.join('-').split('-'));
         }.bind(this));
         // define output format with origin vector on each keys
         output.words = output.words.join('-').split('-');
         // Lets put origin on each entries
-        await Object.keys(output).forEach(key => output[key] = this.arrayToVector(this.uniq(output[key])));
+        Object.keys(output).forEach(key => output[key] = this.arrayToVector(this.uniq(output[key])));
 
+        this.output = output;
+        this._onPropertyChanged('output', output);
         return output;
     }
-    async cleanOutput() {
+    cleanOutput() {
         let cleaned = {}
-        await Object.keys(this.output).forEach(async function (entry) {
+        Object.keys(this.output).forEach(function (entry) {
             cleaned[entry] = [];
-            await Object.keys(this.output[entry]).forEach(async function (it) {
+            Object.keys(this.output[entry]).forEach(function (it) {
                 cleaned[entry].push({ label: it, pos: this.lastIndex(this.output[entry][it]).map(x => parseFloat(x.toFixed(2))) });
             }.bind(this))
         }.bind(this));
+
+        // this._onPropertyChanged('output', this.output);
         this.output = cleaned;
         return this.output;
     }
-    async dispatchIndexes() {
+    dispatchIndexes() {
         // Les indexes sont dispatchés dans l'espace de façon circulaire avec une amplitude relative à leur influence ou plutôt au count total de chaque
         let ln = Object.keys(this.output[this.setup.options.index]).length,
             angle = 0,
@@ -90,48 +103,45 @@ class WordLab {
         Object.keys(this.output[this.setup.options.index]).forEach((key) => {
             let posX = (this.setup.options.scale * Math.cos(angle));
             let posY = (this.setup.options.scale * Math.sin(angle));
-            // let posZ = Math.sin(angle);
             let amplitude = (this.setup.options.scale * this.getCount(key, this.setup.options.index));
             // let amplitude = 0; //(this.setup.options.scale * this.getCount(key));
             this.output[this.setup.options.index][key].push([posX, posY, amplitude]);
             angle += step;
         });
+        // this._onPropertyChanged('message', "index has been dispatched");
         return this.output;
     }
-    async dispatchWords() {
+    dispatchWords() {
         // on parcours le dataset
-
-
-        // foreach words word 
-        // word.move category
-
-        await this.setup.dataset.forEach(async function (item) {
-            await item.words.forEach(word => {
+        this.setup.dataset.forEach(function (item) {
+            // puis chaque mot de chaque article pour faire évoluer la position du mot dans l 'espace
+            item.words.forEach(word => {
                 this.addVector(
                     this.output.words,
                     word,
-                    this.lastIndex(this.output.category[item.category]),
+                    this.lastIndex(this.output[this.setup.options.index][item.category]),
                     this.output.words.length
                 )
             });
         }.bind(this));
-        return this.output;
     }
-    async dispatchEntries() {
+    dispatchEntries() {
         // on place les entrées du dataset de façon relative à leur index ou  categorie et à lleurs mots cles
-        await this.setup.dataset.forEach(async function (item) {
-            await item.words.forEach(async word => {
-                await this.addVector(
+        this.setup.dataset.forEach(function (item) {
+            item.words.forEach(word => {
+                this.addVector(
                     this.output.indexed,
-                    item[this.setup.options.key_index],
+                    item.id,
                     this.lastIndex(this.output.words[word]),
                     item.words.length
                 ); // on déplace le vecteur selon l'influence du mot clé
             });
         }.bind(this));
     }
-    async addVector(target, key, point, factor, amplitude) {
-        // note : on prend la derniere position du mot et on la soustrait au nouveau point d'influence de l'index en cours
+    addVector(target, key, point, factor, amplitude) {
+        // note : on prend la derniere position du mot et on la soustrait au nouveau point d'influence de l'index en  cours
+        // ou la catégorie dans le cas de bige post articles...
+        // donc notre mot va se déplacer d'une catégorie vers une autre lorsqu'un article contient le mot en question
         if (target[key]) {
             let current = this.lastIndex(target[key]);
             if (!amplitude)
@@ -144,21 +154,17 @@ class WordLab {
                 ((point[2]) + current[2]) / 2
             ]
             target[key].push(newPoint);
-            return newPoint;
-        } else {
-            return false;
         }
-
+        // on ajoute la nouvelle position au target
+        return true;
     }
     lastIndex(item) {
-        if (typeof item === 'undefined')
-            return [0, 0, 0];
         return item[item.length - 1];
     }
     // eslint-disable-next-line no-unused-vars
     getCount(key, index) {
         return this.setup.dataset.filter(item => {
-            return item[index] === key;
+            return item.category === key;
         }).length;
     }
     arrayToVector(array) {
@@ -169,17 +175,15 @@ class WordLab {
     wordlab(paragraph) {
         // TODO IMPLEMENTER LES COEFFICIENTS
         /**
-         * import adv from "WordType_FR"
+         * import adv from "adverbes"
          * - NC     : 2 (noms communs)
-         * - NP     : 9 (noms propres)
+         * - NP     : 10 (noms propres)
          * - PRON   : 1 (pronoms)
          * - ND     : 1 (undefined)
          * - ADV    : 1 (adverbes)
          * - INTJ   : 4 (interjections)
          * - TOX    : 360° radius toxicity
          */
-
-
         if (typeof paragraph !== "string") {
             return "";
         }
@@ -275,7 +279,6 @@ class WordLab {
                 return i === 0 ? v !== codes[f] : v !== a[i - 1];
             })
             .join("");
-
         return (r + "000").slice(0, 8).toUpperCase();
     }
     isPreposition(str) {
@@ -295,9 +298,7 @@ class WordLab {
     }
     cleanStr(str) {
         // TODO strip html return text only
-        // paragraph = paragraph.replace(/<\/?[^>]+(>|$)/g, "");
         return str
-            .replace(/<\/?[^>]+(>|$)/g, "")
             .replace(/[,:;"'’،、…⋯‘’“”""«»()+-=%[{}¿?!.]/g, " ") // release ponctuation
             .replace(/\n/g, " "); // release lines
     }
@@ -396,6 +397,7 @@ class WordLab {
                 return "sliced " + JSON.stringify(this.users[id]);
         }
     }
+
 }
 
 exports.WordLab = WordLab;
