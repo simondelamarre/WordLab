@@ -1,17 +1,3 @@
-
-# aplologies
-
-> This package didn't work actually, 
-> Am working on SO PLEASE DO NOT INSTALL!
-> If you are interested, i'll put any features and advances on the Github repo.
-> Please come back soon
-
-> Ce paquet ne fonctionne pas pour le moment,
-> j'y travaille...
-> Si tu es intéréssé, je vais mettre les features en cours sur le GIT.
-> Merci de revenir plus tard.
-
-
 # WordLab
 
 <img src="./assets/wordlab.svg" style="width:200px;" width="200">
@@ -19,10 +5,8 @@
 
 > Attention! 
 > WordLab est une approche totalement expérimentale de traitement d'indexes sur des jeux de textes.
-> Je n'assure aucuune maintenance du package bien que je l'utilise pour mes propres besoins
-> N'installe pas WordLab pour le moment car c'est en recherche et ça ne va pas fonctionner c'est certain.
-> Il ne sert qu'à des recherches personnelles du moins tant que personne ne va proposer un fork sur GitHub.
-> je ne pige pas les 130 downloads d'hier, calmos on avance et comme indiqué pour le moment c'est du BULLSHIT...
+> Je n'assure aucune maintenance du package bien que je l'utilise pour mes propres besoins
+
 
 ## C'est quoi ?
 
