@@ -4,14 +4,14 @@
  * Remaining execution time < 2ms on firebase functions
  */
 const start = new Date().getTime();
-import WL from '../dist/WordLab';
+import WL from '../dist/PhoneLab';
 import Articles from './articles_200.json';
 
 const DB = new WL.WordLab(
     Articles,
     {
         scale: 100, // la taille de tes indexs
-        keywords: ["post_content", "post_title", ""], // la liste des labels de type String à parser
+        keywords: ["post_content", "post_title"], // la liste des labels de type String à parser
         layers: { // layers from json kes input
             category: "category"
         }, // words`ll be setted by default
@@ -24,12 +24,11 @@ const DB = new WL.WordLab(
         if (e === "Error")
             console.error(e, val);
         if (e === "output")
-            console.log('GET AN OUTPUT')
-        // DB.search('premier');
-        if (e === "ready")
-            DB.search('premier');
+            testSearch();
+        //    console.warn(e, JSON.stringify(val));
 
-        console.warn(e, JSON.stringify(val));
+
+
         // console.log("premier => ", DB.search('premier'));
     }
 );
@@ -41,15 +40,20 @@ DB.train();
  */
 
 let testSearch = async function () {
-    let search = await DB.search('Voici une bonne id\u00e9e pour faire passer la pilule');
-    console.log("TOP TIPS => ", search[0].label);
+    let search = await DB.search('des histoires à raconter sur oreiller');
+    console.log("TOP TIPS => ", search.result[0].label, Articles.filter(function (art) { return art.ID == search.result[0].label })[0].post_title);
+    console.log("TOP TIPS => ", search.result[1].label, Articles.filter(function (art) { return art.ID == search.result[1].label })[0].post_title);
+    console.log("TOP TIPS => ", search.result[2].label, Articles.filter(function (art) { return art.ID == search.result[2].label })[0].post_title);
+    console.log("TOP TIPS => ", search.result[3].label, Articles.filter(function (art) { return art.ID == search.result[3].label })[0].post_title);
+    console.log("TOP TIPS => ", search.result[4].label, Articles.filter(function (art) { return art.ID == search.result[4].label })[0].post_title);
+    console.log(search);
     /*
     console.log("second => ", await DB.search('second'));
     console.log('move user => ', DB.moveUser(0, [0, 0, 0])); 
     */
 }
 setTimeout(function () {
-    testSearch();
+    // testSearch();
 }, 3000);
 
 

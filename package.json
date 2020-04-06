@@ -1,6 +1,6 @@
 {
   "name": "@landscape/wordlab",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Wordlab is a vector3D text classifier that allow you to sort indexs by distance writted for French",
   "main": "dist/WordLab.js",
   "directories": {
@@ -11,7 +11,9 @@
   "scripts": {
     "test": "node --experimental-modules test/",
     "test2": "node --experimental-modules test/index2",
-    "test3": "node --experimental-modules test/index3"
+    "test3": "node --experimental-modules test/index3",
+    "test4": "node --experimental-modules test/index4",
+    "test5": "node --experimental-modules test/index5"
   },
   "repository": {
     "type": "git",
