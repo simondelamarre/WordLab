@@ -25,7 +25,7 @@ const DB = new WL.WordLab(
             console.error(e, val);
         if (e === "output")
             testSearch();
-        //    console.warn(e, JSON.stringify(val));
+        // console.warn(e, JSON.stringify(val));
 
 
 
@@ -47,12 +47,29 @@ let testSearch = async function () {
     logresponses(search);
 
     console.log("****************************");
+    console.log("SIMILAR ", DB.output.indexed[0]);
+    let similar = await DB.similar(DB.output.indexed[0].pos);
+    logresponses(similar);
 
-    // console.log(search);
-    /*
-    console.log("second => ", await DB.search('second'));
-    console.log('move user => ', DB.moveUser(0, [0, 0, 0])); 
-    */
+    console.log("****************************");
+    console.log("SIMILAR CAT ", DB.output.category[0]);
+    similar = await DB.similar(DB.output.category[0].pos);
+    logresponses(similar);
+
+    console.log("****************************");
+    console.log("SIMILAR CAT ", DB.output.category[1]);
+    similar = await DB.similar(DB.output.category[1].pos);
+    logresponses(similar);
+
+    console.log("****************************");
+    console.log("SIMILAR CAT ", DB.output.category[2]);
+    similar = await DB.similar(DB.output.category[2].pos);
+    logresponses(similar);
+
+    console.log("****************************");
+    console.log("SIMILAR CAT ", DB.output.category[3]);
+    similar = await DB.similar(DB.output.category[3].pos);
+    logresponses(similar);
 }
 let logresponses = function (search) {
     for (var i = 0; i < 5; i++) {

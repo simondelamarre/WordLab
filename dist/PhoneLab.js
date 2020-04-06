@@ -128,13 +128,12 @@ class WordLab {
     }
     async dispatchEntries() {
         // on place les entrées du dataset de façon relative à leur index ou  categorie et à lleurs mots cles
-        for await (let item of this.setup.dataset) {// .forEach(async function (item) {
-
+        for await (let item of this.setup.dataset) { // .forEach(async function (item) {
             // first move in category
             // TODO IMPORTANT check ! vérifier si on dois placer les articles sur la position de la catégorie ou non... 
-            if (this.output.indexed[item[this.setup.options.key_index]].length === 1) {
+            /* if (this.output.indexed[item[this.setup.options.key_index]].length === 1) {
                 this.output.indexed[item[this.setup.options.key_index]].push(this.lastIndex(this.output.category[item.category]));
-            }
+            } */
             for await (let word of item.words) { //.forEach(async word => {
                 await this.addVector(
                     this.output.indexed,
@@ -146,11 +145,9 @@ class WordLab {
         }//.bind(this));
     }
     async addVector(target, key, point, factor, amplitude) {
-        // console.log(factor);
         // note : on prend la derniere position du mot et on la soustrait au nouveau point d'influence de l'index en cours
         if (target[key]) {
             if (target[key].length === 1) {
-                // console.log('move first point ', point);
                 target[key].push(point);
                 return point;
             }
@@ -260,12 +257,9 @@ class WordLab {
             a = a.slice(0, a.length - 1);
 
         let coefficient = REGLES.getCoefficient(a);
-        // console.log(REGLES.haspires);
         // let a = "autrement";
         a = await this.phonetise(a);
 
-
-        // console.log("replace phonetik => ", s, a);
         // a = a.toLowerCase();
 
         if (a.split("-").length > 0) {
@@ -353,12 +347,10 @@ class WordLab {
                 return codes[v];
             })
             .filter(function (v, i, a) {
-                // console.log(v, i, a);
                 return i === 0 ? v !== codes[f] : v !== a[i - 1];
             })
             .join("");
 
-        console.log(s, " = ", r, " = ", a.join(''));
         return r; (r).toUpperCase();
     }
     async phonetise(a) {
@@ -572,18 +564,15 @@ class WordLab {
     // eslint-disable-next-line no-unused-vars
     async search(words, userID) {
         let WP = await this.wordlab(words);
-        console.log("WP ? ", WP);
         let wordsArray = WP.words.split('-'),
             output = [];
 
-        // console.log(JSON.stringify(this.output.words));
         wordsArray.forEach((w) => {
             let exist = this.output.words.filter(word => word.label === w);
             if (exist.length === 1) {
                 output.push(exist[0].pos);
             }
         });
-        console.log('output ', output, " length ", output.length);
         let point;
         if (output.length === 1)
             point = output[0];
@@ -591,7 +580,6 @@ class WordLab {
             point = this.getMiddle(output);
 
 
-        console.log("middlee => ", point);
         let responses = this.getNearestNeighbors(point, this.output.indexed);
 
         // responses = responses.sort((a, b) => Math.abs(a.weight) - Math.abs(b.weight));
@@ -600,6 +588,11 @@ class WordLab {
             return { message: `words "${words}" not found`, result: responses };
         else
             return { message: "finds", result: responses };
+    }
+    similar(point) {
+        let responses = this.getNearestNeighbors(point, this.output.indexed);
+        this._onPropertyChanged('similar', responses);
+        return { message: "similar", result: responses };
     }
     addUser(id) {
         if (id && this.users[id] || !id === true) {

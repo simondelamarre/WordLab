@@ -40,13 +40,20 @@ DB.train();
  */
 
 let testSearch = async function () {
-    let search = await DB.search('des histoires à raconter sur oreiller');
+    let search = await DB.search('TOP TIPS pillowblabla');
     console.log("TOP TIPS => ", search.result[0].label, Articles.filter(function (art) { return art.ID == search.result[0].label })[0].post_title);
     console.log("TOP TIPS => ", search.result[1].label, Articles.filter(function (art) { return art.ID == search.result[1].label })[0].post_title);
     console.log("TOP TIPS => ", search.result[2].label, Articles.filter(function (art) { return art.ID == search.result[2].label })[0].post_title);
     console.log("TOP TIPS => ", search.result[3].label, Articles.filter(function (art) { return art.ID == search.result[3].label })[0].post_title);
     console.log("TOP TIPS => ", search.result[4].label, Articles.filter(function (art) { return art.ID == search.result[4].label })[0].post_title);
-    console.log(search);
+    // console.log(search);
+
+    console.log('SIMiLAR HAS ', DB.output.indexed[0]);
+    let similar = await DB.similar(DB.output.indexed[0].pos);
+    console.log("SIMILAR => ", similar.result[0].label, similar.result[0]);
+    console.log("SIMILAR => ", similar.result[similar.result.length - 1].label, similar.result[similar.result.length - 1]);
+
+    //  console.log(similar);
     /*
     console.log("second => ", await DB.search('second'));
     console.log('move user => ', DB.moveUser(0, [0, 0, 0])); 
