@@ -1,2 +1,2 @@
 import { distance } from './Maths/distance';
-export const WordLab = () => distance([0, 0, 0], [1, 1, 1]);
+export const WordLab = () => distance({ x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 });
