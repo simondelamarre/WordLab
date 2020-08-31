@@ -4,7 +4,7 @@
  * Remaining execution time < 2ms on firebase functions
  */
 const start = new Date().getTime();
-import WL from '../dist/PhoneLab';
+import WL from '../dist/WordLab';
 import Articles from './bige_articles.json';
 
 const DB = new WL.WordLab(
@@ -25,9 +25,7 @@ const DB = new WL.WordLab(
             console.error(e, val);
         if (e === "output")
             testSearch();
-        // console.warn(e, JSON.stringify(val));
-
-
+        console.warn(e, JSON.stringify(val));
 
         // console.log("premier => ", DB.search('premier'));
     }
@@ -47,29 +45,15 @@ let testSearch = async function () {
     logresponses(search);
 
     console.log("****************************");
-    console.log("SIMILAR ", DB.output.indexed[0]);
-    let similar = await DB.similar(DB.output.indexed[0].pos);
-    logresponses(similar);
+    console.log("NEAREST POINT ", DB.output.indexed[0]);
+    let nearest = await DB.nearest(DB.output.indexed[0].pos);
+    logresponses(nearest);
 
     console.log("****************************");
-    console.log("SIMILAR CAT ", DB.output.category[0]);
-    similar = await DB.similar(DB.output.category[0].pos);
+    console.log("SIMILAR CAT ", DB.output.category[1], DB.output.category[1].label);
+    let similar = await DB.similar("category", DB.output.category[1].label);
     logresponses(similar);
 
-    console.log("****************************");
-    console.log("SIMILAR CAT ", DB.output.category[1]);
-    similar = await DB.similar(DB.output.category[1].pos);
-    logresponses(similar);
-
-    console.log("****************************");
-    console.log("SIMILAR CAT ", DB.output.category[2]);
-    similar = await DB.similar(DB.output.category[2].pos);
-    logresponses(similar);
-
-    console.log("****************************");
-    console.log("SIMILAR CAT ", DB.output.category[3]);
-    similar = await DB.similar(DB.output.category[3].pos);
-    logresponses(similar);
 }
 let logresponses = function (search) {
     for (var i = 0; i < 5; i++) {

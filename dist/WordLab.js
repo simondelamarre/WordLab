@@ -1,4 +1,7 @@
+/* eslint-disable no-unused-vars */
 "use strict";
+
+const REGLES = require("./WordTypes_FR");
 class WordLab {
     constructor(dataset, options, Observer) {
         this.setup = {};
@@ -46,13 +49,16 @@ class WordLab {
         var output = { words: [], indexed: [] };
         Object.keys(this.setup.options.layers).forEach(layer => output[layer] = []);
         // first run on dataset
-        await this.setup.dataset.forEach(function (item, index) {
+        let index = 0;
+        for await (let item of this.setup.dataset) {
+            // await this.setup.dataset.forEach(function (item, index) {
             let words = [];
             let str = "";
             this.setup.options.keywords.forEach(keyword => str += item[keyword]);
 
-            words.push(this.wordlab(str).words);
-            output.words.push(this.wordlab(str).words);
+            let WLAB = await this.wordlab(str);
+            words.push(WLAB.words);
+            output.words.push(WLAB.words);
 
             //setup layers
             Object.keys(this.setup.options.layers).forEach(
@@ -63,12 +69,16 @@ class WordLab {
             output.indexed.push(item[this.setup.options.key_index]);
 
             this.setup.dataset[index].words = this.uniq(words.join('-').split('-'));
-        }.bind(this));
+            index++;
+        }; //.bind(this));
         // define output format with origin vector on each keys
         output.words = output.words.join('-').split('-');
         // Lets put origin on each entries
-        await Object.keys(output).forEach(key => output[key] = this.arrayToVector(this.uniq(output[key])));
-
+        for await (let key of Object.keys(output)) {
+            output[key] = this.arrayToVector(this.uniq(output[key]));
+        }
+        // await Object.keys(output).forEach(key => output[key] = this.arrayToVector(this.uniq(output[key])));
+        this._onPropertyChanged('formatDataset', `dataset formmatted`);
         return output;
     }
     async cleanOutput() {
@@ -96,48 +106,61 @@ class WordLab {
             this.output[this.setup.options.index][key].push([posX, posY, amplitude]);
             angle += step;
         });
+        this._onPropertyChanged('dispatchIndexes', `indexes dispatched`);
         return this.output;
     }
     async dispatchWords() {
         // on parcours le dataset
 
-
         // foreach words word 
         // word.move category
 
-        await this.setup.dataset.forEach(async function (item) {
-            await item.words.forEach(word => {
+        for await (let item of this.setup.dataset) { // }.forEach(async function (item) {
+            for await (let word of item.words) { //}.forEach(word => {
                 this.addVector(
                     this.output.words,
                     word,
                     this.lastIndex(this.output.category[item.category]),
                     this.output.words.length
                 )
-            });
-        }.bind(this));
+            } // );
+        }// .bind(this));
+        this._onPropertyChanged('dispatchWord', `words dispatched`);
+
         return this.output;
     }
     async dispatchEntries() {
         // on place les entrées du dataset de façon relative à leur index ou  categorie et à lleurs mots cles
-        await this.setup.dataset.forEach(async function (item) {
-            await item.words.forEach(async word => {
+        for await (let item of this.setup.dataset) { // .forEach(async function (item) {
+            // first move in category
+            // TODO IMPORTANT check ! vérifier si on dois placer les articles sur la position de la catégorie ou non... 
+            /* if (this.output.indexed[item[this.setup.options.key_index]].length === 1) {
+                this.output.indexed[item[this.setup.options.key_index]].push(this.lastIndex(this.output.category[item.category]));
+            } */
+            for await (let word of item.words) { //.forEach(async word => {
                 await this.addVector(
                     this.output.indexed,
                     item[this.setup.options.key_index],
                     this.lastIndex(this.output.words[word]),
                     item.words.length
                 ); // on déplace le vecteur selon l'influence du mot clé
-            });
-        }.bind(this));
+            } // );
+        }//.bind(this));
+        this._onPropertyChanged('dispatchEntries', `entries dispatched`);
+        return this.ooutput;
     }
     async addVector(target, key, point, factor, amplitude) {
         // note : on prend la derniere position du mot et on la soustrait au nouveau point d'influence de l'index en cours
         if (target[key]) {
+            if (target[key].length === 1) {
+                target[key].push(point);
+                return point;
+            }
             let current = this.lastIndex(target[key]);
-            if (!amplitude)
-                amplitude = 1
-            if (!factor)
-                factor = 1;
+            /* if (!amplitude)  
+                amplitude = 1 */
+            /* if (!factor)
+                factor = 1; */
             let newPoint = [
                 ((point[0]) + current[0]) / 2,
                 ((point[1]) + current[1]) / 2,
@@ -166,7 +189,7 @@ class WordLab {
         array.forEach(item => parsed[item] = [[0, 0, 0]])
         return parsed;
     }
-    wordlab(paragraph) {
+    async wordlab(paragraph) {
         // TODO IMPLEMENTER LES COEFFICIENTS
         /**
          * import adv from "WordType_FR"
@@ -179,7 +202,6 @@ class WordLab {
          * - TOX    : 360° radius toxicity
          */
 
-
         if (typeof paragraph !== "string") {
             return "";
         }
@@ -187,7 +209,7 @@ class WordLab {
 
         let queryString = "";
         let names = "";
-        paragraph.forEach(function (word, index) {
+        for await (let word of paragraph) { // .forEach(async function (word, index) {
             let str = word;
             // TODO mettre les noms propres dans un nouveau layer pour maéliorer les traitements plus importants... 
             /* let name = word;
@@ -195,21 +217,56 @@ class WordLab {
                 name += " " + paragraph[index + 1];
                 names += name;
             } else { */
-            if (str.length > 1 && !this.isPreposition(str)) {
-                queryString += this.syllab(str.toLowerCase());
+
+            if (/\b[A-Z]+\b/.test(str) || /\w*[A-Z]\w*[A-Z]\w*/g.test(str)) {
+                // les mots en FULL CAPITAL ou avec plusieurs capitales SONT AJOUTES EN ENTIER et systematiquement
+                queryString += str;
+            } else if (!this.isPreposition(str)) {
+                // queryString += await this.syllab(str);
+                queryString += await this.syllab(str.toLowerCase());
             }
-            if (index < paragraph.length - 1) {
+            queryString += "-";
+            /* if (index < paragraph.length - 1) {
                 queryString += "-"; // keyseparator
-            }
+            } */
             //}
 
-        }.bind(this));
-
+        } // .bind(this));
+        queryString = queryString.slice(0, queryString.length - 1);
+        this._onPropertyChanged('wordlab', `${queryString}`);
         return { words: queryString, names: names };
     }
-    syllab(s) {
-        var a = s.toLowerCase();
+    removeSpecialChars(str) {
+        let output = str
+            .toLowerCase()
+            .replace(/[àáâãäå]/gi, "a")
+            .replace(/[éèëê]/gi, "e")
+            .replace(/[ïîì]/gi, "i")
+            .replace(/[òöôoõ]/gi, "o")
+            .replace(/[üûù]/gi, "u")
+            .replace(/[ñ]/gi, "n")
+            .replace(/[ç]/gi, "c")
+            .replace(/[ ]/gi, "-")
+            .replace(/[^a-z0-9/-]/gi, "");
+        return output;
+    }
+    async syllab(s) {
+        var a = s;
         // CHECK LES NOMS COMPOSES AVEC TRAIT D'function
+        // phonetik reducer list
+        // TODO ignorer les H muets
+        if (REGLES.haspires.indexOf(a))
+            a.replace(/h/g, "");
+
+        if (REGLES.invariables.indexOf(a) && a.slice(a.length - 1, a.length) === "s")
+            a = a.slice(0, a.length - 1);
+
+        let coefficient = REGLES.getCoefficient(a);
+        // let a = "autrement";
+        a = await this.phonetise(a);
+
+        // a = a.toLowerCase();
+
         if (a.split("-").length > 0) {
             var w = a.split("-"),
                 m = "";
@@ -222,50 +279,73 @@ class WordLab {
             }
             a = m;
         }
-        let exceptions = ["s", "x", "p", "d"];
+        // let exceptions = ["s", "x", "p", "d"];
         // eslint-disable-next-line no-self-assign
-        exceptions.includes(a.slice(-1)) ? (a = a.substring(0, a.length - 1)) : (a = a);
+        // exceptions.includes(a.slice(-1)) ? (a = a.substring(0, a.length - 1)) : (a = a);
         a = a.split("");
 
         var f = a.shift(),
             r = "",
             codes = {
-                // voyelles
-                a: 1,
-                e: 1,
-                i: 1,
-                o: 1,
-                u: 1,
-                y: 1,
-                // syllabes groupe #1
-                b: 2,
-                f: 2,
-                p: 2,
-                v: 2,
-                // syllabes groupe #2
-                c: 3,
-                g: 3,
-                j: 3,
-                k: 3,
-                q: 3,
-                s: 3,
-                x: 3,
-                z: 3,
-                // syllabes groupe #3
-                d: 4,
-                t: 4,
-                h: "", // lettre muette ou accord non indispensable a la tokenisation
-                w: 4,
-                // syllabes groupe #4
-                l: 5,
-                // syllabes groupe #5
-                m: 6,
-                n: 6,
-                // syllabes groupe #6
-                r: 7,
-                // Noms propres : seuls les noms + prénom = nom propres peuvent contenir un espace dans wordlab
-                " ": 8
-            };
+                // group 1
+                a: 0,
+                e: 0,
+                i: 0,
+                o: 0,
+                u: 0,
+                y: 0,
+                // group 2
+                b: 1,
+                f: 1,
+                p: 1,
+                v: 1,
+                // group 3
+                c: 2,
+                g: 2,
+                J: 2,
+                k: 2,
+                q: 2,
+                s: 2,
+                x: 2,
+                z: 2,
+                // group 4
+                d: 3,
+                t: 3,
+                h: 3,
+                W: 3,
+                w: 3,
+                // group 5
+                l: 4,
+                // group 6
+                m: 5,
+                n: 5,
+                // group 7
+                r: 6,
+                //  exeptions group
+                ʒ: "A",
+                ɛ̃: "B",
+                ɛ: "C",
+                ɔ̃: "D",
+                ɲ: "E",
+                ʀ: "F",
+                º: "G",
+                ɔ̃: "H",
+                ʃ: "I",
+                ɐ: "J",
+                1: "K",
+                ʒ: "L",
+                v: "M",
+                A: "N",
+                Ω: "O",
+                δ: "P",
+                β: "Q",
+                Y: "R",
+                S: "S",
+                E: "T",
+                G: "U",
+                ñ: "V"
+            }
+
         r = f + a
             // eslint-disable-next-line no-unused-vars
             .map(function (v, i, a) {
@@ -275,12 +355,135 @@ class WordLab {
                 return i === 0 ? v !== codes[f] : v !== a[i - 1];
             })
             .join("");
+        this._onPropertyChanged('syllab', `${s} <=> ${a}`);
+        return r; (r).toUpperCase();
+    }
+    async phonetise(a) {
+        let str = a;
+        let phonetik = {
+            a: ["à", "á", "â", "ã", "ä", "å", "ae", "æ", "h<a", "h<â", "h<u", "h<o"], // A
+            x: ["x>o", "x>i", "x>a", "x>e", "cc>a", "cc>e", "cc>i", "cc>o", "cc>u", "cc>y"], // KS
+            ɔ̃: ["ion!>n", "ion!>e", "yon!>e", "yon!>n"],
+            o: [">>aux", ">>eaux", "eau", "au", "ô", "ò", "ö", "ô", "õ"], // O
+            Y: ["t!<ill", "r!<ill", "o<ill", "e<ill", "ai<ll", "ai<l", "a<y", "y>e", "y>a", "ill>a", "ill>e", "ill>o"], // Y
+            W: ["kw", "quw", "qw"], // W
+            G: ["gu"],
+            k: [">>que", "qu", "ch>r", "ch>o", "ch>ia", "ck", "x>i", "c>t", "cc>a"], // K 
+            ɲ: ["gn>e", "gn>a", "gn>o"], // GN
+            ʀ: ["é<r", "è<r", "ë<r", "ê<r", "rr", "aire", ">>ert"], // R
+            ɛ̃: ["ai!>ne", "ai>me", "i<en", "h<é", "h<è", "h<ê", "er>n", "er>r", "er>a", "er>e", "er>é", "er>i", "er>o", "er>u"], // É
+            S: ["ss", "ç", "sc>e"], // S
+            ɛ: ["t>e", ">>ez", ">>ais", ">>ait", "e>f", ">>er", "ai>n", "ai!>e", "ai!>o", "ai>r", ">>aient", ">>ées", ">>ée", "é", "è", "ë", "ê"], // É
+            t: ['th'], // T
+            º: ["ou"], // OU
+            J: ["i<lle"], // Jx@
+            ɔ̃: ["on!>n"], // ON
+            ʃ: ["ch", "sch", "sh"], // CH
+            ɐ: ["ng"], // ng
+            1: ["ain", "ein", "un>[CONS]", "in>[CONS]", "im>[CONS]"],
+            ʒ: ["dj", "j>ean"], // DJ
+            ʒ: ["gi", "gy", "a<ge", "e<ge", "i<ge", "o<ge", "u<ge", "n<ge"], // J
+            L: ["ai!<ll", "ei!<ll", "ui!<ll", "oi!<ll", "e<l", "é<l", "ë<l", "ê<l"], // L
+            i: ["y!<a", "y!<a", "y!<o", "y!<u", "î", "ï", "ì"], // i
+            v: ["w>a"], // v
+            A: ['aon', '>>ant', "an!>c", "an!>t", "an!>n", "an!>a", "an!>e", "an!>i", "an!>o", "an!>u", "en!>e", "em>m", "an"], // AN
+            f: ["ph>a", "ph>i", "ph>o", "ph>e", "ph>u", "ph>y"], // f
+            Ω: ["om>m", "om>p", "om>pt", "om>e", "om>o", "om>i", "om>a", "om>u", "om>y"],
+            E: ["oe", "œ", "oeu", "œu", "eu", "e!>i", "ie!>l", ">>eux", ">>ent"], // E
+            m: ["mm"],
+            z: ["s>i", "s>o"],
+            δ: ["tion"],
+            β: ["bou", "bout"],
+            p: ["pp"],
+            u: ['ü', "û", "ù"],
+            ñ: ["gn"]
+        }
+        Object.keys(phonetik).forEach(key => {
+            let w = a;
+            for (let s in phonetik[key]) {
+                let song = phonetik[key][s],
+                    replaced = false;
 
-        return (r + "000").slice(0, 8).toUpperCase();
+                // TODO UPDATE WITH -> [CONS] [VOY]
+                // les negation avant
+                if (song.indexOf("!<") !== -1) {
+                    // n'est pas précédé par
+                    let split = song.split('!<');
+                    if (w.slice(w.indexOf([split[1]]) - split[0].length, split[0].length) === split[0])
+                        w = w.replace(new RegExp(split[1], "g"), key);
+                    replaced = true;
+                }
+                if (song.indexOf("!>") !== -1 && replaced === false) {
+                    // n'est pas suivi de
+                    let split = song.split('!>');
+                    if (w.slice(w.indexOf([split[0]]) - split[1].length, split[1].length) === split[1])
+                        w = w.replace(new RegExp(split[0], "g"), key);
+                    replaced = true;
+                }
+                // ensuite tout ce qui commence par
+                if (song.indexOf(">>") !== -1 && replaced === false) {
+                    // se termine par
+                    let split = song.split('>>');
+                    if (w.slice(w.indexOf([split[1]]), w.length) === split[1]) {
+                        w = w.slice(0, w.indexOf([split[1]])) + key;
+                        // new RegExp(split[0], "g"), key);
+                    }
+                    replaced = true;
+                }
+                if (song.indexOf("<<") !== -1 && replaced === false) {
+                    // est précédé de
+                    let split = song.split("<<");
+                    if (w.slice(w.indexOf([split[0]]), split[0].length) === split[0])
+                        w = w.replace(new RegExp(split[1], "g"), key);
+                    replaced = true;
+                }
+                // puis les exceptions
+                if (song.indexOf("<") !== -1 && replaced === false) {
+                    // est précédé de
+                    let split = song.split('<');
+                    if (w.slice(w.indexOf([split[1]]) - split[1].length, split[0].length) === split[0])
+                        w = w.replace(new RegExp(split[1], "g"), key);
+                    replaced = true;
+                }
+                if (song.indexOf(">") !== -1 && replaced === false) {
+                    // est suivi de
+                    let split = song.split('>');
+                    let nextLetter = w.slice(w.indexOf([split[0]]) + split[0].length, split[1].length);
+                    /* if (key === '[CONS]') {
+                        nextLetter = w.slice(w.indexOf([split[0]]) + split[0].length, w.indexOf([split[0]]) + split[0].length + 1);
+                        if (/bcdgklmnpqrstvwxz/.test(nextLetter))
+                            w = w.replace(new RegExp(split[0], "g"), key);
+                    } else if (key === '[VOY]') {
+                        nextLetter = w.slice(w.indexOf([split[0]]) + split[0].length, w.indexOf([split[0]]) + split[0].length + 1);
+                        if (/aeiouy/.test(nextLetter))
+                            w = w.replace(new RegExp(split[0], "g"), key);
+                    } else  */
+                    if (nextLetter === split[1]) {
+                        w = w.replace(new RegExp(split[0], "g"), key);
+                    }
+                    replaced = true;
+                }
+                // si rien n'a changé on remplace par default
+                if (replaced === false && w.indexOf(song) !== -1) {
+                    w = w.replace(new RegExp(song, "g"), key);
+                }
+                a = w;
+            }
+        });
+        this._onPropertyChanged('phonetise', `${a} <=> ${str}`);
+        return a;
     }
     isPreposition(str) {
         // TODO rename as except, finallement c'est pas juste des preprosition en l'état mais des execptions de requete complexe indésirables...
         // le but est d'alléger au maximum les relations pour augmenter la vitesse de traitement...
+        if (/[A-Z]/g.test(str) === true) {
+            return false;
+        }
+
+        if (/’'ʼ/g.test(str)) {
+            return true;
+        }
+
         let prep = ["je", "tu", "il", "nous", "vous", "ils", "elles", "ont", "à", "les", "la", "le", "pas", "des", "une", "unes", "est", "son", "sa", "ses", "aux", "car", "et", "que", "qui", "quoi", "quand", "comment", "après", "avant", "avec", "chez", "contre", "dans", "de", "derrière", "devant", "en", "entre", "excepté", "malgré", "moyennant", "outre", "par", "parmi", "passé", "pendant", "pour", "sans", "sauf", "selon", "sous", "suivant", "sur", "vers", "vu", "entre", "sans"];
         if (prep.includes(str.toLowerCase()) || str.length <= 2 || parseInt(str) || parseFloat(str)) //  inférieur à 2 chars = poubelle ainsi que les nombres qui n'auront pas de sens
             return true;
@@ -297,7 +500,7 @@ class WordLab {
         // TODO strip html return text only
         // paragraph = paragraph.replace(/<\/?[^>]+(>|$)/g, "");
         return str
-            .replace(/<\/?[^>]+(>|$)/g, "")
+            .replace(/<\/?[^>]+(>|$)/g, "") // release code || script || html etc...
             .replace(/[,:;"'’،、…⋯‘’“”""«»()+-=%[{}¿?!.]/g, " ") // release ponctuation
             .replace(/\n/g, " "); // release lines
     }
@@ -314,18 +517,19 @@ class WordLab {
             middle[1] += point[1];
             middle[2] += point[2];
         });
-        middle.map(value => value / points.length);
+        middle[0] = middle[0] / points.length;
+        middle[1] = middle[1] / points.length;
+        middle[2] = middle[2] / points.length;
+        // middle.map(value => value % points.length);
         return middle;
     }
     getNearestNeighbors(point, target) {
-        let distances = target.sort((a, b) => {
-            let distA = this.getDistance(point, a.pos);
-            let distB = this.getDistance(point, b.pos);
-            a.weight = distB - distA;
-            b.weight = distB - distA;
-            return distB - distA;
-        });
-        return distances.sort((a, b) => b.weight - a.weight);
+        let distances = [];
+        for (let item of target) {
+            item.weight = this.getDistance(point, item.pos);
+            distances.push(item);
+        }
+        return distances.sort((a, b) => a.weight - b.weight);
     }
     jsonKeyToLabelValue(input) {
         let output = [];
@@ -337,6 +541,12 @@ class WordLab {
     getDistance(a, b) {
         if (!b)
             return a;
+
+        /* var dx = a[0] - b[0];
+        var dy = a[1] - b[1];
+        var dz = a[2] - b[2];
+
+        return Math.sqrt(dx * dx + dy * dy + dz * dz); */
         return Math.sqrt(
             ((a[0] - b[0]) * (a[0] - b[0])) +
             ((a[1] - b[1]) * (a[1] - b[1])) +
@@ -348,24 +558,45 @@ class WordLab {
         this._Observer(propName, val);
         return this[propName];
     }
+    // eslint-disable-next-line no-unused-vars
     async search(words, userID) {
-
-        let wordsArray = await this.wordlab(words).words.split('-'),
+        let WP = await this.wordlab(words);
+        let wordsArray = WP.words.split('-'),
             output = [];
 
-        await this.output.words.forEach(function (word) {
-            wordsArray.forEach((w) => {
-                if (word.label === w) output.push(word.pos);
-            });
-        }.bind(this));
+        wordsArray.forEach((w) => {
+            let exist = this.output.words.filter(word => word.label === w);
+            if (exist.length === 1) {
+                output.push(exist[0].pos);
+            }
+        });
+        let point;
+        if (output.length === 1)
+            point = output[0];
+        else
+            point = this.getMiddle(output);
 
-        let point = this.getMiddle(output);
+
         let responses = this.getNearestNeighbors(point, this.output.indexed);
+
+        // responses = responses.sort((a, b) => Math.abs(a.weight) - Math.abs(b.weight));
         this._onPropertyChanged('search', responses);
         if (output.length === 0)
             return { message: `words "${words}" not found`, result: responses };
         else
             return { message: "finds", result: responses };
+    }
+    nearest(point) {
+        let responses = this.getNearestNeighbors(point, this.output.indexed);
+        this._onPropertyChanged('similar', responses);
+        return { message: "similar", result: responses };
+    }
+    similar(tragetName, ID) {
+        let point = this.output[tragetName].filter(entry => entry.label == ID)[0].pos;
+        console.log('similar point => ', point, tragetName, ID, ">>>", this.output[tragetName].filter(entry => entry.label == ID)[0].pos, "<<<");
+        let responses = this.getNearestNeighbors(point, this.output.indexed);
+        this._onPropertyChanged('similar', responses);
+        return { message: "similar", result: responses };
     }
     addUser(id) {
         if (id && this.users[id] || !id === true) {
@@ -375,7 +606,6 @@ class WordLab {
         return id;
     }
     moveUser(id, point, type) {
-
         if (!id)
             id = Object.keys(this.users)[0];
 

@@ -4,13 +4,13 @@
  * Remaining execution time < 2ms on firebase functions
  */
 const start = new Date().getTime();
-import WL from '../dist/PhoneLab';
+import WL from '../dist/WordLab';
 import Articles from './articles_200.json';
 
 const DB = new WL.WordLab(
     Articles,
     {
-        scale: 100, // la taille de tes indexs
+        scale: Articles.length, // la taille de tes indexs
         keywords: ["post_content", "post_title"], // la liste des labels de type String à parser
         layers: { // layers from json kes input
             category: "category"
@@ -48,17 +48,46 @@ let testSearch = async function () {
     console.log("TOP TIPS => ", search.result[4].label, Articles.filter(function (art) { return art.ID == search.result[4].label })[0].post_title);
     // console.log(search);
 
-    console.log('SIMiLAR HAS ', DB.output.indexed[0]);
+    console.log("****************************");
+    console.log("SIMILAR ", DB.output.indexed[0]);
     let similar = await DB.similar(DB.output.indexed[0].pos);
-    console.log("SIMILAR => ", similar.result[0].label, similar.result[0]);
-    console.log("SIMILAR => ", similar.result[similar.result.length - 1].label, similar.result[similar.result.length - 1]);
+    logresponses(similar);
 
+    console.log("****************************");
+    console.log("SIMILAR CAT ", DB.output.category[0]);
+    similar = await DB.similar(DB.output.category[0].pos);
+    logresponses(similar);
+
+    console.log("****************************");
+    console.log("SIMILAR CAT ", DB.output.category[1]);
+    similar = await DB.similar(DB.output.category[1].pos);
+    logresponses(similar);
+
+    console.log("****************************");
+    console.log("SIMILAR CAT ", DB.output.category[2]);
+    similar = await DB.similar(DB.output.category[2].pos);
+    logresponses(similar);
+
+    console.log("****************************");
+    console.log("SIMILAR CAT ", DB.output.category[3]);
+    similar = await DB.similar(DB.output.category[3].pos);
+    logresponses(similar);
     //  console.log(similar);
     /*
     console.log("second => ", await DB.search('second'));
     console.log('move user => ', DB.moveUser(0, [0, 0, 0])); 
     */
 }
+
+const logresponses = function (search) {
+    for (var i = 0; i < 5; i++) {
+        console.log("search.result[i]=> ", search.result[i]);
+        console.log(" => ", search.result[i].weight, search.result[i], Articles.filter(function (art) {
+            return art.Id == search.result[i].label;
+        }));
+    }
+}
+
 setTimeout(function () {
     // testSearch();
 }, 3000);

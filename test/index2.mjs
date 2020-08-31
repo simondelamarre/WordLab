@@ -4,7 +4,7 @@
  * Remaining execution time < 2ms on firebase functions
  */
 const start = new Date().getTime();
-import WL from '../dist/WordLab';
+import WL from '../dist/WordLab.wrong';
 import Articles from './Products';
 
 const DB = new WL.WordLab(
