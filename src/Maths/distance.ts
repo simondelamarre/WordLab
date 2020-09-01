@@ -1,3 +1,9 @@
+/**
+ * a => b weight such as distance
+ * @param a Vector3D
+ * @param b Vector3D
+ */
+
 import Vector3D from "../types/Vector3D"
 
 export const distance = (a: Vector3D, b: Vector3D) => {

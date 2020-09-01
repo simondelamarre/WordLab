@@ -1,5 +1,5 @@
 /**
- * each subindex allow large files to reduce indexes in small processes 
+ * each index allow large files to reduce indexes in small processes 
  * that's the almost basic way to process in research by zero to hero
  * @param id : numberid => UUIDV4 id todo swicth as uuid tye format
  * @param index : integer => small integer
@@ -7,11 +7,13 @@
  * @param pos : Vector3D => vector 3D dispathed position
  */
 
-
-import Vector3D from "../types/Vector3D"
+import Vector3D from "../types/Vector3D";
 import Axis from "../types/Axis";
-export default interface SubIndex {
-    label: string | number | null,
+import SubIndex from "../types/SubIndex";
+
+export default interface WordLabIndex {
+    label: string | number,
     pos: Vector3D | null,
-    axis: Axis | null
+    axis: Axis
+    subIndexes: SubIndex[] | null
 }

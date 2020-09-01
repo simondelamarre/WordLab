@@ -1,0 +1,93 @@
+[
+    {
+        "label": "T-shirt col Claudine fille",
+        "sizes": [
+            "3A",
+            "4A",
+            "5A",
+            "6A",
+            "8A",
+            "10A",
+            "12A"
+        ],
+        "sexe": "female",
+        "description": "T-shirt Fille. Jersey de coton doux et légèrement extensible. Coupe droite. Encolure arrondie animée d'un col Claudine. Patte boutonnée dos enfilage facile. Rayures brodées ton sur ton. Manches courtes. Base légèrement arrondie. Coutures ton sur ton. Petite étiquette Okaïdi en détail.",
+        "composition": "Coton: 100%",
+        "price": 9.99,
+        "ref": "0094294_K0138",
+        "colors": [
+            "blue",
+            "white"
+        ],
+        "brand": "okaidi"
+    },
+    {
+        "label": "Jean skinny stretch garçon",
+        "sizes": [
+            "3A",
+            "4A",
+            "5A",
+            "6A",
+            "7A",
+            "8A",
+            "9A",
+            "10A",
+            "12A",
+            "14A"
+        ],
+        "sexe": "male",
+        "description": "CONFORT: Taille ajustable/réglable. PRATIQUE: Bouton pression jusqu'au 7 ans inclus. Ce jean coupe skinny (très étroite) en denim stretch est parfait pour une liberté de mouvement et confort pour s'adapter à toutes les morphologies. 5 poches rivets métal et revers ajustables.",
+        "composition": "Coton: 79%, Elasthane: 3%, Polyester: 18%",
+        "price": 17.99,
+        "ref": "0094209_K0091",
+        "colors": [
+            "blue délavé"
+        ],
+        "brand": "okaidi"
+    },
+    {
+        "label": "Robe imprimée et legging fin tricot bébé fille",
+        "sizes": [
+            "3M",
+            "6M",
+            "9M",
+            "12M",
+            "18M",
+            "23M",
+            "3A"
+        ],
+        "sexe": "female",
+        "description": "Un ensemble au graphisme moderne parfait pour la rentrée. Une robe manches longues en gaze de coton imprimée boutonnée dos réchauffée d'un leggings en tricot chiné à taille élastiquée. Un ensemble au graphisme moderne parfait pour la rentrée. Une robe manches longues en gaze de coton imprimée boutonnée dos réchauffée d'un leggings en tricot chiné à taille élastiquée.",
+        "composition": "Coton: 96%, Elasthane: 4%",
+        "price": 25.99,
+        "ref": "0097124_K0422",
+        "colors": [
+            "imprimé rose"
+        ],
+        "brand": "obaibi"
+    },
+    {
+        "label": "Pull rayé marin coton bio et laine bébé garçon",
+        "sizes": [
+            "3M",
+            "6M",
+            "9M",
+            "12M",
+            "18M",
+            "23M",
+            "3A"
+        ],
+        "sexe": "male",
+        "description": "En bleu marine ou en couleur le pull des garçons est revisité de rayures 3D tricotées et de finitions couleur actuelles. Boutonnage pratique aux emmanchures raglan. Coton bio majoritaire réchauffé de laine douce.",
+        "composition": "Coton: 60%, Laine: 10%, Nylon: 30%",
+        "price": 15.99,
+        "ref": "0095953_K0171",
+        "colors": [
+            "rayures bleu",
+            "rayures jaunes",
+            "blanc",
+            "bleu navy"
+        ],
+        "brand": "obaibi"
+    }
+]
