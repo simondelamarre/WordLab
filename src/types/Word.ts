@@ -1,7 +1,7 @@
-import Vector3D from "../types/Vector3D"
+import Axis from "../types/Axis"
 export default interface Word {
     value: string,
     token: string,
-    pos: Vector3D,
+    pos: Axis,
     weight: number
 }
