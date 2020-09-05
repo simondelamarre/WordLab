@@ -4,23 +4,24 @@
  * todo : checking out the aspects of "ement" => "reciproquement" on WordType parser to simplify statements
  */
 
-import WordType = require("./WordTypes_FR");
+import WordType = require("../Words/WordTypes_FR");
 // tslint:disable-next-line: no-var-requires
-const unverbalizer = require("./Unverbalizer"); // checkouts verbs group return infititif
+// const unverbalizer = require("../Words/Unverbalizer"); // checkouts verbs group return infititif
 // tslint:disable-next-line: no-var-requires
-const syllab = require("./Syllab"); // use required for any  exporte default js files
+// const syllab = require("../Words/Syllab"); // use required for any  exporte default js files
+import Syllab from "../Words/Syllab"
+import Unverbalizer from "../Words/Unverbalizer"
 
 export default (paragraph: string) => {
     const REGLES = new WordType();
     // tslint:disable-next-line: no-unused-expression
     const cleaned = REGLES.cleanStr(paragraph).split(' ');
     const output = [];
-    for (const word of cleaned) {
+    for (let word of cleaned) {
+        word = Unverbalizer(word);
         output.push(
-            syllab( // get syllab
-                unverbalizer(  // remove verb conjugation
-                    word.toLowerCase() // from cleaned words array
-                )
+            Syllab( // get syllab
+                word.toLowerCase() // from cleaned words array
             )
         );
     }

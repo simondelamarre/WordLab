@@ -1,14 +1,14 @@
-import WordType from "./WordTypes_FR";
-import phonetise from "./Phonetise";
+import WordType from "../Words/WordTypes_FR";
+import phonetise from "../Words/Phonetise";
 
 // TODO rewrite logik in typescript
-export const syllab = (str) => {
+export default (str) => {
     const REGLES = new WordType();
-    var a = str;
+    var a = str.toLowerCase();
     // CHECK LES NOMS COMPOSES AVEC TRAIT D'function
     // phonetik reducer list
-    if (REGLES.haspires.indexOf(a))
-        a.replace(/h/g, "");
+    if (REGLES.isHaspire(a))
+        a.replaceFirst("h", "");
 
     if (REGLES.invariables.indexOf(a) && a.slice(a.length - 1, a.length) === "s")
         a = a.slice(0, a.length - 1);

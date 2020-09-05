@@ -16,6 +16,7 @@ import Watcher from "./types/Watcher"
 import WordlabIndex from "./types/WordlabIndex"
 import Word from "./types/Word"
 import Axis from "./types/Axis"
+import IndexEntry from "./types/IndexEntry"
 // classes
 import Tokenizer from "./Words/Tokenizer"
 import IndexOrientation from "./types/IndexOrientation"
@@ -42,7 +43,8 @@ class WordLab {
         URI: string,
         WATCHER: Watcher,
         UID: string,
-        INDEXES: string[],
+        WORDS: string[],
+        INDEXES: IndexEntry[],
         SUBINDEXES: string[],
         SCALE: number | null,
         DEBUG: boolean | null,
@@ -51,14 +53,14 @@ class WordLab {
         this._watcher = WATCHER;
         this.uid = UID;
         if (MODE)
-            this.mode = MODE
+            this.mode = MODE;
         if (SCALE)
             this.scale = SCALE;
         if (DEBUG)
             this.debug = DEBUG;
         this.build(URI, INDEXES, SUBINDEXES);
     }
-    private async build(URL: string, INDEXES: string[], SUBINDEXES: string[]) {
+    private async build(URL: string, INDEXES: IndexEntry[], SUBINDEXES: string[]) {
         this.dataset = this.dataset
             .concat(await this.fetchDataset(URL))
             .filter((value: any, index: number, self: any) => {
@@ -73,35 +75,118 @@ class WordLab {
         const body = await response.json();
         return body.data;
     }
-    private async setupIndexes(indexes: string[]) {
+    private setupIndexes = async (indexes: IndexEntry[]) => {
+        let listUniqIndex: string[][] = [];
+        let iterator: number = 0;
+        const indexAxis = ["X", "Y", "Z", "RX", "RY", "RZ"];
         for (const index of indexes) {
-            // tslint:disable-next-line: no-shadowed-variable
-            const listUniqIndex = this._dataset.map((data: { [x: string]: any }) => data[index]).filter((value: any, index: number, self: any) => {
-                return self.indexOf(value) === index && value !== "";
-            })
-            // tslint:disable-next-line: no-console
-            console.log(listUniqIndex)
+            switch (index.type) {
+                case 'string':
+                    const indexSorted: [] = listUniqIndex = this._dataset.map(
+                        (data: { [x: string]: any }) => data[index.key])
+                        // tslint:disable-next-line: no-shadowed-variable
+                        .filter((value: any, index: number, self: any) => {
+                            return self.indexOf(value) === index && value !== "";
+                        }).sort((a: string, b: string) => {
+                            if (a < b) { return -1; }
+                            if (a > b) { return 1; }
+                            return 0;
+                        }).map((w: string) => Tokenizer(w));
+                    this.dispatchIndexes(indexSorted, indexAxis[iterator]);
+                    listUniqIndex.push(indexSorted);
+                    break;
+                case 'array':
+                    // Array of srting only
+                    let values: string[] = [];
+                    for (const set of this._dataset) {
+                        values = values.concat(set[index.key]);
+                    }
+                    values = values
+                        .map((s: string) => s.replace(/ /g, '').toLowerCase())
+                        // tslint:disable-next-line: no-shadowed-variable
+                        .filter((value: any, index: number, self: any) => self.indexOf(value) === index && value !== "")
+                        .map((w: string) => Tokenizer(w))
+                        // tslint:disable-next-line: no-shadowed-variable
+                        .filter((value: any, index: number, self: any) => self.indexOf(value) === index && value !== "");
+                    this.dispatchIndexes(values, indexAxis[iterator]);
+                    listUniqIndex.push(values);
+                    break;
+                case 'object':
+                    // todo deport parser from type to another function for nested objects
+                    let nests: string[] = [];
+                    if (index.nest) {
+                        switch (index.nest.type) {
+                            case 'string':
+                                for (const set of this._dataset) {
+                                    nests = nests.concat(set[index.key][index.nest.key]);
+                                }
+                                nests = nests
+                                    .map((s: string) => s.replace(/ /g, '').toLowerCase())
+                                    // tslint:disable-next-line: no-shadowed-variable
+                                    .filter((value: any, index: number, self: any) => self.indexOf(value) === index && value !== "");
+
+                                this.dispatchIndexes(nests, indexAxis[iterator]);
+                                listUniqIndex.push(nests);
+                                break;
+                        }
+                    }
+                    break;
+                default:
+                    // for any others types like sizes, dates, prices etc do not tokenize words
+                    const indexsSorted: [] = listUniqIndex = this._dataset.map(
+                        (data: { [x: string]: any }) => data[index.key])
+                        // tslint:disable-next-line: no-shadowed-variable
+                        .filter((value: any, index: number, self: any) => {
+                            return self.indexOf(value) === index && value !== "";
+                        }).sort((a: string, b: string) => {
+                            if (a < b) { return -1; }
+                            if (a > b) { return 1; }
+                            return 0;
+                        });
+                    this.dispatchIndexes(indexsSorted, indexAxis[iterator]);
+                    listUniqIndex.push(indexsSorted);
+                    break;
+            }
+            iterator++
             // todo return list string array
         }
+        return listUniqIndex;
     }
     // todo dispatch on circle with axes
-    private dispatchIndexes(indexes: string[]) {
-        // todo type of ouput is an axis
-        let output = [];
-        const ln = indexes.length;
+    private dispatchIndexes(indexes: string[], AXIS: string) {
         let angle = 0;
-        const step = 2 * Math.PI / ln;
-        for (const indeex of indexes) {
-            const posX = (this.scale * Math.cos(angle));
-            const posY = (this.scale * Math.sin(angle));
-            // let posZ = Math.sin(angle);
+        const step = 2 * Math.PI / indexes.length;
+        for (const label of indexes) {
+            let posX: number;
+            let posY: number;
+            let posZ: number;
+            switch (AXIS) {
+                case "X":
+                    posX = (this.scale * Math.cos(angle));
+                    posY = (this.scale * Math.sin(angle));
+                    posZ = 0, Math.sin(angle);
+                    break;
+                case "Y":
+                    posX = (this.scale * Math.cos(angle));
+                    posY = 0, Math.sin(angle);
+                    posZ = (this.scale * Math.sin(angle));
+                    break;
+                case "Z":
+                    posX = 0, Math.sin(angle);
+                    posY = (this.scale * Math.sin(angle));
+                    posZ = (this.scale * Math.cos(angle));
+                    break;
+                default:
+                    posX = (this.scale * Math.cos(angle));
+                    posY = (this.scale * Math.sin(angle));
+                    posZ = Math.sin(angle);
+                    break;
+            }
             // let amplitude = (this.setup.options.scale * this.getCount(key, indexes.length));
             // let amplitude = 0; //(this.setup.options.scale * this.getCount(key));
-            // this.output[this.setup.options.index][key].push([posX, posY, amplitude]);
+            this.indexes.push({ label: label.toString(), pos: { x: posX, y: posY, z: posZ, rx: 0, ry: 0, rz: 0 }, axis: AXIS })
             angle += step;
-            // todo output.push(X,Y,Z)
-        });
-        return output;
+        };
     }
 }
 export = WordLab

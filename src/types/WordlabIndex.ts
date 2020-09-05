@@ -12,8 +12,7 @@ import Axis from "../types/Axis";
 import SubIndex from "../types/SubIndex";
 
 export default interface WordLabIndex {
-    label: string | number,
-    pos: Vector3D | null,
-    axis: Axis
-    subIndexes: SubIndex[] | null
+    label: string,
+    pos: Vector3D,
+    axis: string
 }

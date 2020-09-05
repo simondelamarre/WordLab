@@ -46,49 +46,49 @@ export default (a) => {
             if (song.indexOf("!<") !== -1) {
                 // n'est pas précédé par
                 let split = song.split('!<');
-                if (w.slice(w.indexOf([split[1]]) - split[0].length, split[0].length) === split[0])
-                    w = w.replace(new RegExp(split[1], "g"), key);
+                // if (w.slice(w.indexOf([split[1]]) - split[0].length, split[0].length) === split[0])
+                w = w.replace(new RegExp(split[1], "g"), key);
                 replaced = true;
             }
             if (song.indexOf("!>") !== -1 && replaced === false) {
                 // n'est pas suivi de
                 let split = song.split('!>');
-                if (w.slice(w.indexOf([split[0]]) - split[1].length, split[1].length) === split[1])
-                    w = w.replace(new RegExp(split[0], "g"), key);
+                // if (w.slice(w.indexOf([split[0]]) - split[1].length, split[1].length) === split[1])
+                w = w.replace(new RegExp(split[0], "g"), key);
                 replaced = true;
             }
             // ensuite tout ce qui commence par
             if (song.indexOf(">>") !== -1 && replaced === false) {
                 // se termine par
                 let split = song.split('>>');
-                if (w.slice(w.indexOf([split[1]]), w.length) === split[1]) {
-                    w = w.slice(0, w.indexOf([split[1]])) + key;
-                    // new RegExp(split[0], "g"), key);
-                }
+                // if (w.slice(w.indexOf([split[1]]), w.length) === split[1]) 
+                w = w.slice(0, w.indexOf([split[1]])) + key;
+                // new RegExp(split[0], "g"), key);
+
                 replaced = true;
             }
             if (song.indexOf("<<") !== -1 && replaced === false) {
                 // est précédé de
                 let split = song.split("<<");
-                if (w.slice(w.indexOf([split[0]]), split[0].length) === split[0])
-                    w = w.replace(new RegExp(split[1], "g"), key);
+                // if (w.slice(w.indexOf([split[0]]), split[0].length) === split[0])
+                w = w.replace(new RegExp(split[1], "g"), key);
                 replaced = true;
             }
             // puis les exceptions
             if (song.indexOf("<") !== -1 && replaced === false) {
                 // est précédé de
                 let split = song.split('<');
-                if (w.slice(w.indexOf([split[1]]) - split[1].length, split[0].length) === split[0])
-                    w = w.replace(new RegExp(split[1], "g"), key);
+                // if (w.slice(w.indexOf([split[1]]) - split[1].length, split[0].length) === split[0])
+                w = w.replace(new RegExp(split[1], "g"), key);
                 replaced = true;
             }
             if (song.indexOf(">") !== -1 && replaced === false) {
                 // est suivi de
                 let split = song.split('>');
                 let nextLetter = w.slice(w.indexOf([split[0]]) + split[0].length, split[1].length);
-                if (nextLetter === split[1]) {
-                    w = w.replace(new RegExp(split[0], "g"), key);
-                }
+                // if (nextLetter === split[1])
+                w = w.replace(new RegExp(split[0], "g"), key);
+
                 replaced = true;
             }
             // si rien n'a changé on remplace par default

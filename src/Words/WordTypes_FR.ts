@@ -39,9 +39,9 @@ class WordType {
     private properFullName = (str: string, next: string) => /[A-Z]/.test(str[0]) && /[A-Z]/.test(next[0]);
     private feelImportant = (str: string) => str[0].match(/[A-Z]/g);
 
-    public isHaspire = (str: string) => this.haspires.indexOf(str);
-    public isInvariable = (str: string) => this.invariables.indexOf(str);
-    public isAdverbe = (str: string) => this.invariables.indexOf(str);
+    public isHaspire = (str: string) => this.haspires.split(' - ').includes(str);
+    public isInvariable = (str: string) => this.invariables.split(' - ').includes(str);
+    public isAdverbe = (str: string) => this.invariables.split(' - ').includes(str);
     public isPreprosition = (str: string) => this.preprositions.includes(str.toLowerCase())
     public cleanStr = (str: string) => str
         .replace(/<\/?[^>]+(>|$)/g, "") // release code || script || html etc...
