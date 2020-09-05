@@ -10,13 +10,15 @@
  * @param UID : string => uniq identifier to merge updated dataset multi pages common errors from your API
  * @param mode : String => circus by default dispatch indexes in 3D space values : circus | linear | unbielivable
  */
-import "isomorphic-fetch"
+
+import "isomorphic-fetch" // needed to fetch api from URI setup
+
 // types
 import Watcher from "./types/Watcher"
 import WordlabIndex from "./types/WordlabIndex"
 import Word from "./types/Word"
-import Axis from "./types/Axis"
 import IndexEntry from "./types/IndexEntry"
+
 // classes
 import Tokenizer from "./Words/Tokenizer"
 import IndexOrientation from "./types/IndexOrientation"
@@ -24,8 +26,17 @@ import IndexOrientation from "./types/IndexOrientation"
 class WordLab {
     public _watcher: Watcher;
 
+    public _fetchError: any = null;
+    get fetchError(): any { return this._fetchError; };
+    set fetchError(value: any) { this._fetchError = value; this._watcher("fetchError", value); }
+
+    public _isLoading: boolean = false;
+    get isLoading(): any { return this._isLoading; };
+    set isLoading(value: any) { this._isLoading = value; this._watcher("isLoading", value); }
+
     private debug: boolean = false;
-    private uid: string;
+    private uid: string | number;
+
     private _dataset: any = [];
     get dataset(): any { return this._dataset; };
     set dataset(value: any) { this._dataset = value; this._watcher("dataset", (this.debug) ? value : null); }
@@ -34,7 +45,9 @@ class WordLab {
     get words(): Word[] { return this._words; }
     set words(value: Word[]) { this._words = value; this._watcher("words", (this.debug) ? value : null); }
 
-    private mode: string = "circus"; // mode is the way to dispatch indexed vectors3D in space | circus: default | linear | unbelievable
+    private wordsIndex: IndexEntry[];
+
+    private mode: string = "circus"; // TODO deal with :mode is the way to dispatch indexed vectors3D in space | circus: default | linear | unbelievable
     private indexes: WordlabIndex[] = [];
     private subIndexes: WordlabIndex[] = [];
     private scale: number = 1000;
@@ -42,8 +55,8 @@ class WordLab {
     constructor(
         URI: string,
         WATCHER: Watcher,
-        UID: string,
-        WORDS: string[],
+        UID: string | number,
+        WORDSINDEX: IndexEntry[],
         INDEXES: IndexEntry[],
         SUBINDEXES: string[],
         SCALE: number | null,
@@ -58,31 +71,29 @@ class WordLab {
             this.scale = SCALE;
         if (DEBUG)
             this.debug = DEBUG;
+        this.wordsIndex = WORDSINDEX;
         this.build(URI, INDEXES, SUBINDEXES);
     }
     private async build(URL: string, INDEXES: IndexEntry[], SUBINDEXES: string[]) {
+        // todo fetch multi pages API so think about GET params for REST and GRAPHQL then checkout UID for reducer
         this.dataset = this.dataset
             .concat(await this.fetchDataset(URL))
             .filter((value: any, index: number, self: any) => {
                 return self.findIndex((item: { id: any }) => item.id === value.id) === index;
-            });
+            }); // reducer is important cause you cannot doublon UID
+        // !! remove ID such  as static var from any dataset or llets try its work
         await this.setupIndexes(INDEXES);
+        this.wordsReducer();
+        this.wordsDispatcher();
     }
-    private async fetchDataset(
-        request: RequestInfo
-    ): Promise<any> {
-        const response = await fetch(request);
-        const body = await response.json();
-        return body.data;
-    }
-    private setupIndexes = async (indexes: IndexEntry[]) => {
-        let listUniqIndex: string[][] = [];
+
+    private async setupIndexes(indexes: IndexEntry[]) {
         let iterator: number = 0;
         const indexAxis = ["X", "Y", "Z", "RX", "RY", "RZ"];
         for (const index of indexes) {
             switch (index.type) {
                 case 'string':
-                    const indexSorted: [] = listUniqIndex = this._dataset.map(
+                    const indexSorted: [] = this._dataset.map(
                         (data: { [x: string]: any }) => data[index.key])
                         // tslint:disable-next-line: no-shadowed-variable
                         .filter((value: any, index: number, self: any) => {
@@ -93,7 +104,6 @@ class WordLab {
                             return 0;
                         }).map((w: string) => Tokenizer(w));
                     this.dispatchIndexes(indexSorted, indexAxis[iterator]);
-                    listUniqIndex.push(indexSorted);
                     break;
                 case 'array':
                     // Array of srting only
@@ -109,7 +119,6 @@ class WordLab {
                         // tslint:disable-next-line: no-shadowed-variable
                         .filter((value: any, index: number, self: any) => self.indexOf(value) === index && value !== "");
                     this.dispatchIndexes(values, indexAxis[iterator]);
-                    listUniqIndex.push(values);
                     break;
                 case 'object':
                     // todo deport parser from type to another function for nested objects
@@ -126,15 +135,20 @@ class WordLab {
                                     .filter((value: any, index: number, self: any) => self.indexOf(value) === index && value !== "");
 
                                 this.dispatchIndexes(nests, indexAxis[iterator]);
-                                listUniqIndex.push(nests);
                                 break;
                         }
                     }
                     break;
                 default:
-                    // for any others types like sizes, dates, prices etc do not tokenize words
-                    const indexsSorted: [] = listUniqIndex = this._dataset.map(
-                        (data: { [x: string]: any }) => data[index.key])
+                    /**
+                     * for any others types like :
+                     * sizes: number | string, 
+                     * dates: date | string, 
+                     * prices:number 
+                     * ... do not tokenize words and index original string parsed value for the order
+                     */
+                    const indexsSorted: [] = this._dataset.map(
+                        (data: { [x: string]: any }) => data[index.key].toString())
                         // tslint:disable-next-line: no-shadowed-variable
                         .filter((value: any, index: number, self: any) => {
                             return self.indexOf(value) === index && value !== "";
@@ -144,15 +158,14 @@ class WordLab {
                             return 0;
                         });
                     this.dispatchIndexes(indexsSorted, indexAxis[iterator]);
-                    listUniqIndex.push(indexsSorted);
                     break;
             }
             iterator++
             // todo return list string array
         }
-        return listUniqIndex;
+        // return listUniqIndex;
     }
-    // todo dispatch on circle with axes
+    // Axis type will be one of enum such as : x, y, z, rx, ry, rz
     private dispatchIndexes(indexes: string[], AXIS: string) {
         let angle = 0;
         const step = 2 * Math.PI / indexes.length;
@@ -176,6 +189,8 @@ class WordLab {
                     posY = (this.scale * Math.sin(angle));
                     posZ = (this.scale * Math.cos(angle));
                     break;
+
+                // todo implement orientation such  as rx, ry, rz dispatcher to unlarge indexes
                 default:
                     posX = (this.scale * Math.cos(angle));
                     posY = (this.scale * Math.sin(angle));
@@ -187,6 +202,91 @@ class WordLab {
             this.indexes.push({ label: label.toString(), pos: { x: posX, y: posY, z: posZ, rx: 0, ry: 0, rz: 0 }, axis: AXIS })
             angle += step;
         };
+    }
+    private wordsReducer = () => {
+        // todo reduce each entry of @param WORDS to a tokenized uniq array entry
+        // todo think about nested dataset entry
+        let words: string = "";
+        for (const set of this._dataset) {
+            let innerWords: string = "";
+            // lets loop on complete dataset
+            for (const request of this.wordsIndex) {
+                // lets loop on wordsIndex then get each values such as string or [array of strings]
+                switch (request.type) {
+                    case 'string':
+                        words = `${words} ${set[request.key]}` // sum each string to large
+                        innerWords = `${words} ${set[request.key]}` // sum each string to dataset index
+                        break;
+                    case 'array':
+                        for (const word of set[request.key]) {
+                            words = `${words} ${word}` // sum each array string to large
+                            innerWords = `${words} ${set[request.key]}` // sum each string to dataset index
+                        }
+                        break;
+                    default:
+                        // TODO : get nested objects string || [array of strings]
+                        // !! Ommit || ignore for beta need to implement global nested types
+                        break;
+                }
+            }
+            // WLwords is -OK
+            // !! find who's innerword such as uniq by set of data (_dataset)
+            // TODO : unset WLwords from _dataset
+            set.WLwords = Tokenizer(innerWords)
+                .split('-')
+                .filter((value: any, index: number, self: any) => self.indexOf(value) === index && value.length > 2);
+        }
+        const test = Tokenizer(words);
+        const all = test.split('-').filter((value: any, index: number, self: any) => self.indexOf(value) === index && value.length > 2);
+
+        for (const word of all) {
+            this.words.push({
+                // value: "", // perhaps we need to get origin but don't know why for minified version
+                token: word,
+                pos: { x: 0, y: 0, z: 0, rx: 0, ry: 0, rz: 0 },
+                weight: 0
+            })
+        }
+        // next step is to dispatch from _dataset
+        console.log('words created => ', this.words);
+        return []
+    }
+    private wordsDispatcher() {
+        /**
+         * what to do ?
+         *  - get each words : this.words
+         *  - setup word pos
+         *  - set pos on each from 0 to hero
+         */
+        // todo get and dispatch this.words from indexes of _dataset (nested only first level such as string and array of strings)
+        for (const set of this._dataset) {
+            // tslint:disable-next-line: no-console
+            // !! set.WLwords look like incremental so lookat this (...)
+            // steps of set:
+            // .. 
+            // we got X indexes
+            // each one've somes related keys 
+            // each keys will be related as words
+            // first move key from to pos index Axis | Vector3D {x, y, z, rx, ry, rz}
+            // !! remove one of Axis or Vector !!s
+            // -- gimeup right now
+        }
+    }
+    private cleanUntil() {
+        // todo cleanup app memory by cleaning each until entries to define here
+    }
+    private async fetchDataset(
+        request: RequestInfo
+    ): Promise<any> {
+        this.isLoading = true;
+        const response = await fetch(request);
+        try {
+            const body = await response.json();
+            this.isLoading = false;
+            return body.data;
+        } catch (err) {
+            this.fetchError = err;
+        }
     }
 }
 export = WordLab
