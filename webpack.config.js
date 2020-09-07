@@ -1,3 +1,8 @@
+/**
+ * !ABAN
+ * test webpack compiler... 
+ */
+
 const path = require('path');
 
 module.exports = {
@@ -16,7 +21,7 @@ module.exports = {
         extensions: ['.tsx', '.ts', '.js'],
     },
     output: {
-        filename: 'bundle4.js',
+        filename: 'bundle.js',
         path: path.resolve(__dirname, 'dist'),
     },
 };

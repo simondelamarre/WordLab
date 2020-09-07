@@ -77,7 +77,7 @@ class WordLab {
     private scale: number = 1000;
 
     private mode: DispatchMode = 0;
-
+    private cleanable: boolean = false;
     constructor(
         URI: string,
         PAGING: boolean,
@@ -89,6 +89,7 @@ class WordLab {
         SCALE: number | null,
         DEBUG: boolean | null,
         MODE: DispatchMode,
+        CLEAN: boolean
     ) {
         this._watcher = WATCHER;
         this.uid = UID;
@@ -96,6 +97,7 @@ class WordLab {
         if (SCALE) this.scale = SCALE;
         if (DEBUG) this.debug = DEBUG;
         if (PAGING) this.paging = PAGING;
+        if (CLEAN) this.cleanable = CLEAN
         this.wordsIndex = WORDSINDEX;
         this.requestIndex = INDEXES;
         this.build(URI, INDEXES, SUBINDEXES);
@@ -109,6 +111,7 @@ class WordLab {
         await this.setupIndexes(INDEXES);
         this.wordsReducer();
         this.wordsDispatcher();
+        this.indexesDispatcher();
     }
     private setupIndexes(indexes: IndexEntry[]): void {
         let iterator: number = 0;
@@ -202,9 +205,13 @@ class WordLab {
         let angle = 0;
         const step = (2 * Math.PI) / indexes.length;
         for (const label of indexes) {
+            // todo setup 6 indexes pos x, y, z, rx, ry, rz
             let posX: number;
             let posY: number;
             let posZ: number;
+            let posRX: number = 0;
+            let posRY: number = 0;
+            let posRZ: number = 0;
             switch (AXIS) {
                 case 'X':
                     posX = this.scale * Math.cos(angle);
@@ -233,8 +240,14 @@ class WordLab {
             // let amplitude = 0; //(this.setup.options.scale * this.getCount(key));
             this.indexes.push({
                 label: label.toString(),
-                pos: { x: posX, y: posY, z: posZ, rx: 0, ry: 0, rz: 0 },
+                pos: { x: posX, y: posY, z: posZ, rx: posRX, ry: posRY, rz: posRZ },
                 axis: AXIS,
+            });
+            // create and push each indexes such as index pos to enable basic index search from word
+            this.words.push({
+                token: label.toString(),
+                pos: { x: posX, y: posY, z: posZ, rx: posRX, ry: posRY, rz: posRZ },
+                weight: 0,
             });
             angle += step;
         }
@@ -245,18 +258,19 @@ class WordLab {
         let words: string = '';
         for (const set of this._dataset) {
             let innerWords: string = '';
+            // !imp : ERROR i push each word inside eeach others
             // lets loop on complete dataset
             for (const request of this.wordsIndex) {
                 // lets loop on wordsIndex then get each values such as string or [array of strings]
                 switch (request.type) {
                     case 'string':
-                        words = `${words} ${set[request.key]}`; // sum each string to large
-                        innerWords = `${words} ${set[request.key]}`; // sum each string to dataset index
+                        words = `${words} ${set[request.key]}`;
+                        innerWords = `${innerWords} ${set[request.key]}`;
                         break;
                     case 'array':
                         for (const word of set[request.key]) {
                             words = `${words} ${word}`; // sum each array string to large
-                            innerWords = `${words} ${set[request.key]}`; // sum each string to dataset index
+                            innerWords = `${innerWords} ${set[request.key]}`; // sum each string to dataset index
                         }
                         break;
                     default:
@@ -329,8 +343,40 @@ class WordLab {
             }
         }
     }
+    private indexesDispatcher(): void {
+        // todo seetup each this.dataset Axis by INDEX => this.uid
+        // this._dataset get Middle by words
+        for (const entry of this._dataset) {
+            const points: Vector3D[] = [];
+            for (const w of entry.WLwords) {
+                const it = this.words.find(word => word.token === w);
+                if (it)
+                    points.push(it.pos)
+            }
+            // if (WORD) WORD.pos = Middle(points);
+            entry.pos = Middle(points);
+
+        }
+        // tslint:disable-next-line: no-console
+        if (this.cleanable)
+            this.cleanUntil();
+        // tslint:disable-next-line: no-console
+        console.log('dataset : ', this._dataset.length, ' indexes : ', this.indexes.length, ' words : ', this.words.length);
+    }
     private cleanUntil() {
         // todo cleanup app memory by cleaning each until entries to define here
+        // preserve this.uid and pos only from this._dataset by setting dataset.
+        // this.dataset = this.dataset.reduce((data: { [x: string]: any; pos: Vector3D; }) => { id: data[this.uid], pos: data.pos })
+        this.dataset = this.dataset.map((acc: { [x: string]: number; }, pos: Vector3D) => {
+            const reduced: any = {};
+            reduced[this.uid] = acc[this.uid]
+            reduced.pos = acc.pos
+            return reduced;
+        }, {});
+
+    }
+    public export() {
+        // todo export minified dataset words, indexes and dataset
     }
     private async fetchDataset(request: RequestInfo): Promise<any> {
         this.isLoading = true;
