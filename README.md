@@ -48,7 +48,7 @@ Le produit est en cours de nettooyage et refacto pour ne retenir que le compiler
 - Live dispatcher : ce module va repositionner l'ensemble des vectrices en temps réel
 
 
-## Exemple d'exploitation
+## Exemple d'instance
 
 ```
 
