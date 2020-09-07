@@ -346,7 +346,3 @@ class WordLab {
 };
 
 export = WordLab;
-// export as namespace WordLab
-
-/* if (window)
-    window.WordLab = WordLab */
