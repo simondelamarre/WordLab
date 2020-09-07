@@ -19,7 +19,7 @@ import WordlabIndex from './types/WordlabIndex';
 import Word from './types/Word';
 import IndexEntry from './types/IndexEntry';
 import { DispatchMode } from './types/DispatchMode';
-import Vector3D from './types/Vector3D';
+import Vector6D from './types/Vector6D';
 
 // classes
 import Tokenizer from './Words/Tokenizer';
@@ -29,6 +29,12 @@ import { Middle } from './Maths/Middle';
 
 class WordLab {
     public _watcher: Watcher;
+
+    public _isTrained: boolean = false;
+    set isTrained(value: boolean) {
+        this._isTrained = value;
+        this._watcher('trained', value);
+    }
 
     public _fetchError: any = null;
     get fetchError(): any {
@@ -108,7 +114,7 @@ class WordLab {
             return self.findIndex((item: { id: any }) => item.id === value.id) === index;
         }); // reducer is important cause you cannot doublon UID
         // !! remove ID such  as static var from any dataset or llets try its work
-        await this.setupIndexes(INDEXES);
+        this.setupIndexes(INDEXES);
         this.wordsReducer();
         this.wordsDispatcher();
         this.indexesDispatcher();
@@ -117,6 +123,10 @@ class WordLab {
         let iterator: number = 0;
         const indexAxis = ['X', 'Y', 'Z', 'RX', 'RY', 'RZ'];
         for (const index of indexes) {
+            if (iterator >= 6) {
+                // todo return to much indexes...
+                return;
+            }
             switch (index.type) {
                 case 'string':
                     const indexSorted: [] = this._dataset
@@ -212,6 +222,7 @@ class WordLab {
             let posRX: number = 0;
             let posRY: number = 0;
             let posRZ: number = 0;
+            // ! everythin is here or how to dipatch vectors...
             switch (AXIS) {
                 case 'X':
                     posX = this.scale * Math.cos(angle);
@@ -228,12 +239,11 @@ class WordLab {
                     posY = this.scale * Math.sin(angle);
                     posZ = this.scale * Math.cos(angle);
                     break;
-
                 // todo implement orientation such  as rx, ry, rz dispatcher to unlarge indexes
                 default:
-                    posX = this.scale * Math.cos(angle);
-                    posY = this.scale * Math.sin(angle);
-                    posZ = Math.sin(angle);
+                    posX = 0; // this.scale * Math.cos(angle);
+                    posY = 0; // this.scale * Math.sin(angle);
+                    posZ = 0; // Math.sin(angle);
                     break;
             }
             // let amplitude = (this.setup.options.scale * this.getCount(key, indexes.length));
@@ -313,7 +323,7 @@ class WordLab {
          */
         for (const set of this._dataset) {
             for (const word of set.WLwords) {
-                const points: Vector3D[] = [];
+                const points: Vector6D[] = [];
                 const WORD = this.words.find((w) => w.token === word); // Word :
                 for (const index of this.requestIndex) {
                     switch (index.type) {
@@ -347,7 +357,7 @@ class WordLab {
         // todo seetup each this.dataset Axis by INDEX => this.uid
         // this._dataset get Middle by words
         for (const entry of this._dataset) {
-            const points: Vector3D[] = [];
+            const points: Vector6D[] = [];
             for (const w of entry.WLwords) {
                 const it = this.words.find(word => word.token === w);
                 if (it)
@@ -357,23 +367,20 @@ class WordLab {
             entry.pos = Middle(points);
 
         }
-        // tslint:disable-next-line: no-console
         if (this.cleanable)
             this.cleanUntil();
-        // tslint:disable-next-line: no-console
-        console.log('dataset : ', this._dataset.length, ' indexes : ', this.indexes.length, ' words : ', this.words.length);
+        console.log('dataset : ', this._dataset, ' indexes : ', this.indexes.length, ' words : ', this.words.length);
+        this.isTrained = true;
     }
     private cleanUntil() {
         // todo cleanup app memory by cleaning each until entries to define here
         // preserve this.uid and pos only from this._dataset by setting dataset.
-        // this.dataset = this.dataset.reduce((data: { [x: string]: any; pos: Vector3D; }) => { id: data[this.uid], pos: data.pos })
-        this.dataset = this.dataset.map((acc: { [x: string]: number; }, pos: Vector3D) => {
+        this.dataset = this.dataset.map((acc: { [x: string]: number; }, pos: Vector6D) => {
             const reduced: any = {};
             reduced[this.uid] = acc[this.uid]
             reduced.pos = acc.pos
             return reduced;
         }, {});
-
     }
     public export() {
         // todo export minified dataset words, indexes and dataset
@@ -388,6 +395,9 @@ class WordLab {
         } catch (err) {
             this.fetchError = err;
         }
+    }
+    private reduce = (entry: number) => {
+        return (entry).toFixed(8);
     }
 };
 

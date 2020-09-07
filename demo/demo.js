@@ -25,7 +25,7 @@ const lab = new WordLab(
         // you can add only 2 more indexed level... its suck...
     ],
     [],
-    1,
+    10000,
     false,
     1,
     true  // reduce dataset preserve only UID and geenerated Axis

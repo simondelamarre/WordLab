@@ -1,8 +1,8 @@
-import Vector3D from '../types/Vector3D';
+import Vector6D from '../types/Vector6D';
 
-export const Middle = (points: Vector3D[]) => {
-  const middle: Vector3D = { x: 0, y: 0, z: 0, rx: 0, ry: 0, rz: 0 };
-  points.forEach((point: Vector3D) => {
+export const Middle = (points: Vector6D[]) => {
+  const middle: Vector6D = { x: 0, y: 0, z: 0, rx: 0, ry: 0, rz: 0 };
+  points.forEach((point: Vector6D) => {
     middle.x += point.x;
     middle.y += point.y;
     middle.z += point.z;

@@ -1,8 +1,8 @@
-import Vector3D from '../types/Vector3D';
+import Vector6D from '../types/Vector6D';
 export default interface User {
   id: number;
   index: number;
   value: string;
-  pos: Vector3D;
-  orientation: Vector3D;
+  pos: Vector6D;
+  orientation: Vector6D;
 }

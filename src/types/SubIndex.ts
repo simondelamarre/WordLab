@@ -4,13 +4,13 @@
  * @param id : numberid => UUIDV4 id todo swicth as uuid tye format
  * @param index : integer => small integer
  * @param label : string =>part from json file to index
- * @param pos : Vector3D => vector 3D dispathed position
+ * @param pos : Vector6D => vector 3D dispathed position
  */
 
-import Vector3D from '../types/Vector3D';
+import Vector6D from '../types/Vector6D';
 import Axis from '../types/Axis';
 export default interface SubIndex {
   label: string | number | null;
-  pos: Vector3D | null;
+  pos: Vector6D | null;
   axis: Axis | null;
 }

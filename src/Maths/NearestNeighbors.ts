@@ -1,16 +1,16 @@
 /**
  * Get weights matches from target point
- * @param point Vector3D
- * @param target []<WordType> include pos:<Vector3D>
+ * @param point Vector6D
+ * @param target []<WordType> include pos:<Vector6D>
  */
 
 import { distanceWithParams } from './distance';
 import WordType from '../types/Word';
-import Vector3D from '../types/Vector3D';
+import Vector6D from '../types/Vector6D';
 import Axis from '../types/Axis';
 
 export const NearestNeighbors = (
-  point: Vector3D,
+  point: Vector6D,
   target: WordType[],
   request: {
     x: boolean;

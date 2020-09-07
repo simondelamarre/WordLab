@@ -1,7 +1,7 @@
 /**
  * id: a basic integer index
  * @param label: String => such as display label from key => value
- * @param pos: Vector3D => by index order the  key value is chronologic
+ * @param pos: Vector6D => by index order the  key value is chronologic
  * @param envelop: Integer => define influence of indexes by states thinking 3D
  */
 

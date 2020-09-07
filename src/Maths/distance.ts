@@ -1,29 +1,29 @@
 /**
  * a => b weight such as distance
- * @param a Vector3D
- * @param b Vector3D
+ * @param a Vector6D
+ * @param b Vector6D
  */
 
-import Vector3D from '../types/Vector3D';
+import Vector6D from '../types/Vector6D';
 
-export const distance = (a: Vector3D, b: Vector3D) => {
+export const distance = (a: Vector6D, b: Vector6D) => {
   return Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y) + (a.z - b.z) * (a.z - b.z));
 };
 
-export const distanceWithAxis = (a: Vector3D, b: Vector3D) => {
+export const distanceWithAxis = (a: Vector6D, b: Vector6D) => {
   return Math.sqrt(
     (a.x - b.x) * (a.x - b.x) +
-      (a.y - b.y) * (a.y - b.y) +
-      (a.z - b.z) * (a.z - b.z) +
-      (a.rx - b.rx) * (a.rx - b.rx) +
-      (a.ry - b.ry) * (a.ry - b.ry) +
-      (a.rz - b.rz) * (a.rz - b.rz),
+    (a.y - b.y) * (a.y - b.y) +
+    (a.z - b.z) * (a.z - b.z) +
+    (a.rx - b.rx) * (a.rx - b.rx) +
+    (a.ry - b.ry) * (a.ry - b.ry) +
+    (a.rz - b.rz) * (a.rz - b.rz),
   );
 };
 
 export const distanceWithParams = (
-  a: Vector3D,
-  b: Vector3D,
+  a: Vector6D,
+  b: Vector6D,
   request: {
     x: boolean;
     y: boolean;
