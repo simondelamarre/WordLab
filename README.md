@@ -50,7 +50,7 @@ Le produit est en cours de nettooyage et refacto pour ne retenir que le compiler
 
 ## Exemple d'instance
 
-```
+```javascript
 
 const WordLab = require('../lib/index');
 const lab = new WordLab(
