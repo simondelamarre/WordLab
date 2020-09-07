@@ -37,6 +37,8 @@ cette demonstration n'offre aucun visuel et permet les tests non-statiques sur u
 N'arrivant pas à me décider sur un compiler il y a beaucoup de code jetable pour le moment.
 Le produit est en cours de nettooyage et refacto pour ne retenir que le compiler TSC sans explooitation pure web dans un premier temps.
 
+> La logique mathématique pure est en cours d'écriture.
+
 ### bientôt
 
 - une demo augmentée en 3D sur une base d'articles textiles
