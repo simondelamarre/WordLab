@@ -1,6 +1,7 @@
 const WordLab = require('../lib/index');
-const lab = new WordLab(
+const lab = new WordLab.wordLab(
     'https://us-central1-bige-start.cloudfunctions.net/api/articles',
+    false,
     (name, data) => { console.log('watch ', name, data) },
     "id",
     [
@@ -21,6 +22,6 @@ const lab = new WordLab(
     [],
     1000,
     false,
-    "circular"
+    1
 )
 // console.log('wordlab => ', lab);

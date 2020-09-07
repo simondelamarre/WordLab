@@ -5,8 +5,8 @@
  * @param envelop: Integer => define influence of indexes by states thinking 3D
  */
 
-import Axis from "../types/Axis";
+import Axis from '../types/Axis';
 export default interface IndexOrientation {
-    label: string | number,
-    axis: Axis | null
+  label: string | number;
+  axis: Axis | null;
 }

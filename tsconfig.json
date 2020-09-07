@@ -1,10 +1,20 @@
 {
     "compilerOptions": {
         "target": "es5", // (5, 6) => es2020 // do not forget
-        "module": "commonjs",
+        "module": "commonjs", // es6 ?
+        "lib": [
+            "es2017",
+            "es7",
+            "es6",
+            "dom"
+        ],
         "declaration": true,
         "outDir": "./lib",
-        "strict": true
+        "strict": true,
+        "allowJs": true,
+        "removeComments": true,
+        "sourceMap": true,
+        "esModuleInterop": true
     },
     "include": [
         "src"

@@ -2,7 +2,9 @@
   "name": "@landscape/wordlab",
   "version": "1.0.7",
   "description": "Wordlab is a vector3D text classifier that allow you to sort indexs by distance writted for French",
-  "main": "dist/WordLab.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "prepublish": "tsc",
   "files": [
     "lib/**/*"
   ],
@@ -18,9 +20,14 @@
     "test3": "node --experimental-modules test/index3",
     "test4": "node --experimental-modules test/index4",
     "test5": "node --experimental-modules test/index5",
-    "build": "tsc",
+    "build": "tsc && npm run browserify",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
-    "lint": "tslint -p tsconfig.json"
+    "demo": "node demo/demo.js",
+    "browserify": "browserify lib/index.js -o dist/bundle.js",
+    "minify": "jsmin -o dist/bundle.min.js dist/bundle.js",
+    "uglify": "uglifyjs --compress --mangle --output dist/bundle.min.js lib/bundle.js",
+    "watch": "watchify dist/bundle.js -o dist/bundle.js -v",
+    "webpack": "npx webpack"
   },
   "repository": {
     "type": "git",
@@ -44,17 +51,27 @@
   "devDependencies": {
     "@babel/core": "^7.6.0",
     "@types/jest": "^26.0.10",
+    "babel-core": "^6.26.3",
     "babel-loader": "^8.0.6",
+    "babel-preset-es2015": "^6.24.1",
+    "babelify": "^10.0.0",
+    "browserify": "^16.5.2",
     "jest": "^26.4.2",
+    "jsmin": "^1.0.1",
     "prettier": "^2.1.1",
     "ts-jest": "^26.3.0",
+    "ts-loader": "^8.0.3",
     "tslint": "^6.1.3",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^4.0.2",
-    "webpack-cli": "^3.3.8"
+    "uglify-js": "^3.10.4",
+    "watchify": "^3.11.1",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
   },
   "dependencies": {
     "es6-promise": "^4.2.8",
-    "isomorphic-fetch": "^2.2.1"
+    "isomorphic-fetch": "^2.2.1",
+    "reading-time": "^1.2.0"
   }
 }

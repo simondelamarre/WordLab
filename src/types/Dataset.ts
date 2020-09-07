@@ -1,3 +1,3 @@
 export default interface Dataset {
-    words: string[]
+  words: string[];
 }
