@@ -1,12 +1,57 @@
 <html>
 
 <head>
-    <script src="../dist/bundle.js"></script>
+    <meta charset="utf-8" />
+    <!-- <script src="require.js"></script> -->
+    <script src="../dist/bundle3.js"></script>
+
+    <!-- <script type="module" src="../dist/bundle.js"></script> -->
 </head>
 
 <body>
+    <script type="module">
+        /* import { wordLab } from "../dist/bundle3.js";
+        console.log('WordLab 3 ',
+            WordLab,
+            typeof WordLab,
+            Object.getPrototypeOf(WordLab),
+            Object.getOwnPropertyDescriptor(WordLab)
+        ); */
+        /* const Lab = new WordLab.WordLab(
+            'https://us-central1-bige-start.cloudfunctions.net/api/articles',
+            false,
+            (name, data) => { console.log('watch ', name, data) },
+            "id",
+            [
+                // list of words to parse and dispatch
+                { type: "string", key: "label" },
+                { type: "string", key: "short_description" },
+                { type: "array", key: "tags" }
+            ],
+            [
+                // define indexed keys props : x, y, z, rx, ry, rz
+                { key: "category", type: "string" },
+                { key: "publication", type: "date" },
+                { key: "tags", type: "array" },
+                { key: "author", type: "object", nest: { key: "id", type: "string" } }
+                // !important at this time only string and only one level
+                // you can add only 2 more indexed level... its suck...
+            ],
+            [],
+            1000,
+            false,
+            1
+        ) */
+        // let testClass = new TestClass("Please work, pretty please!");
+        // testClass.greet();
+    </script>
+
     <script>
-        console.log('WordLabs ', typeof WordLab);
+
+        console.log('WordLab 2 ', typeof WordLab, typeof wordLab);
+        // var Lab = require('WordLab');
+
+
         /* const lab = new WordLab(
             'https://us-central1-bige-start.cloudfunctions.net/api/articles',
             false,

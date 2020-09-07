@@ -1,5 +1,10 @@
+/**
+ * A Basic WordLab Articles Blog demo
+ */
+
 const WordLab = require('../lib/index');
-const lab = new WordLab.wordLab(
+console.log('WordLab ', WordLab);
+const lab = new WordLab(
     'https://us-central1-bige-start.cloudfunctions.net/api/articles',
     false,
     (name, data) => { console.log('watch ', name, data) },
@@ -24,4 +29,4 @@ const lab = new WordLab.wordLab(
     false,
     1
 )
-// console.log('wordlab => ', lab);
+
