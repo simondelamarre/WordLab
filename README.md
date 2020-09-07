@@ -41,8 +41,11 @@ Le produit est en cours de nettooyage et refacto pour ne retenir que le compiler
 
 ### bientôt
 
+- des statisques de volume réduits sont en cours d'écriture
+- exploitation avec workbox
+- cache des UID en entrée
 - une demo augmentée en 3D sur une base d'articles textiles
-- 
+- Live dispatcher : ce module va repositionner l'ensemble des vectrices en temps réel
 
 
 ## Exemple d'exploitation
