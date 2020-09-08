@@ -1,4 +1,5 @@
 /**
+ * ! will introduce noise
  * TODO : need a xl dataset from ecommerce website
  * TODO : actually weneed an id on the workflow... need to make id such as var like uid ?= { [x: string]: any }...
  * Wordlab reduce large text dataset
@@ -20,7 +21,7 @@ import Word from './types/Word';
 import IndexEntry from './types/IndexEntry';
 import { DispatchMode } from './types/DispatchMode';
 import Vector6D from './types/Vector6D';
-
+import ApiSetup from './types/ApiSetup';
 // classes
 import Tokenizer from './Words/Tokenizer';
 /* import IndexOrientation from './types/IndexOrientation'; */
@@ -67,7 +68,7 @@ class WordLab {
         this._watcher('dataset', this.debug ? value : null);
     }
 
-    private _words: Word[] = [];
+    public _words: Word[] = [];
     get words(): Word[] {
         return this._words;
     }
@@ -78,15 +79,27 @@ class WordLab {
 
     private wordsIndex: IndexEntry[];
     private requestIndex: IndexEntry[];
-    private indexes: WordlabIndex[] = [];
-    private subIndexes: WordlabIndex[] = [];
+
+    public _indexes: WordlabIndex[] = [];
+    get indexes(): WordlabIndex[] {
+        return this._indexes;
+    }
+    set indexes(value: WordlabIndex[]) {
+        this._indexes = value;
+        this._watcher('indexes', this.debug ? value : null);
+    }
+
+    public subIndexes: WordlabIndex[] = [];
     private scale: number = 1000;
 
+    private apiSetup: ApiSetup | null = null;
     private mode: DispatchMode = 0;
     private cleanable: boolean = false;
     constructor(
         URI: string,
+        DATASET: any,
         PAGING: boolean,
+        APISETUP: ApiSetup | null,
         WATCHER: Watcher,
         UID: string | number,
         WORDSINDEX: IndexEntry[],
@@ -103,21 +116,25 @@ class WordLab {
         if (SCALE) this.scale = SCALE;
         if (DEBUG) this.debug = DEBUG;
         if (PAGING) this.paging = PAGING;
-        if (CLEAN) this.cleanable = CLEAN
+        if (CLEAN) this.cleanable = CLEAN;
+        if (DATASET) this.dataset = DATASET;
+        if (APISETUP) this.apiSetup = APISETUP;
         this.wordsIndex = WORDSINDEX;
         this.requestIndex = INDEXES;
         this.build(URI, INDEXES, SUBINDEXES);
     }
     private async build(URL: string, INDEXES: IndexEntry[], SUBINDEXES: string[]) {
-        // todo fetch multi pages API so think about GET params for REST and GRAPHQL then checkout UID for reducer
-        this.dataset = this.dataset.concat(await this.fetchDataset(URL)).filter((value: any, index: number, self: any) => {
-            return self.findIndex((item: { id: any }) => item.id === value.id) === index;
-        }); // reducer is important cause you cannot doublon UID
+        // TODO
+        if (this.dataset.length === 0 && URL && URL.length > 0)
+            this.dataset = this.dataset.concat(await this.fetchDataset(URL)).filter((value: any, index: number, self: any) => {
+                return self.findIndex((item: { id: any }) => item.id === value.id) === index;
+            }); // reducer is important cause you cannot doublon UID
         // !! remove ID such  as static var from any dataset or llets try its work
         this.setupIndexes(INDEXES);
         this.wordsReducer();
         this.wordsDispatcher();
         this.indexesDispatcher();
+        this._watcher('ready', null);
     }
     private setupIndexes(indexes: IndexEntry[]): void {
         let iterator: number = 0;
@@ -216,9 +233,9 @@ class WordLab {
         const step = (2 * Math.PI) / indexes.length;
         for (const label of indexes) {
             // todo setup 6 indexes pos x, y, z, rx, ry, rz
-            let posX: number;
-            let posY: number;
-            let posZ: number;
+            let posX: number = 0;
+            let posY: number = 0;
+            let posZ: number = 0;
             let posRX: number = 0;
             let posRY: number = 0;
             let posRZ: number = 0;
@@ -227,23 +244,26 @@ class WordLab {
                 case 'X':
                     posX = this.scale * Math.cos(angle);
                     posY = this.scale * Math.sin(angle);
-                    (posZ = 0), Math.sin(angle);
+                    // posZ = 0; // Math.sin(angle);
                     break;
                 case 'Y':
                     posX = this.scale * Math.cos(angle);
-                    (posY = 0), Math.sin(angle);
+                    // posY = 0; // Math.sin(angle);
                     posZ = this.scale * Math.sin(angle);
                     break;
                 case 'Z':
-                    (posX = 0), Math.sin(angle);
+                    // posX = 0; // Math.sin(angle);
                     posY = this.scale * Math.sin(angle);
                     posZ = this.scale * Math.cos(angle);
                     break;
-                // todo implement orientation such  as rx, ry, rz dispatcher to unlarge indexes
-                default:
-                    posX = 0; // this.scale * Math.cos(angle);
-                    posY = 0; // this.scale * Math.sin(angle);
-                    posZ = 0; // Math.sin(angle);
+                case 'RX':
+                    posRX = Math.sin(angle);
+                    break;
+                case 'RY':
+                    posRY = Math.sin(angle);
+                    break;
+                case 'RZ':
+                    posRZ = Math.sin(angle);
                     break;
             }
             // let amplitude = (this.setup.options.scale * this.getCount(key, indexes.length));
@@ -369,6 +389,7 @@ class WordLab {
         }
         if (this.cleanable)
             this.cleanUntil();
+        // tslint:disable-next-line: no-console
         console.log('dataset : ', this._dataset, ' indexes : ', this.indexes.length, ' words : ', this.words.length);
         this.isTrained = true;
     }
@@ -385,8 +406,50 @@ class WordLab {
     public export() {
         // todo export minified dataset words, indexes and dataset
     }
-    private async fetchDataset(request: RequestInfo): Promise<any> {
+    public search(str: string) {
+        // tslint:disable-next-line: no-console
+        console.log('search is under development ', str);
+    }
+    public similar(id: string) {
+        // tslint:disable-next-line: no-console
+        console.log('similar is under development ', id);
+    }
+    private async fetchDataset(URL: string): Promise<any> {
+        // TODO SETUP WITH this.apiSetup model paging, params and headers
         this.isLoading = true;
+        const _self = this;
+        const myHeaders = new Headers();
+        let params: string = "?";
+        if (_self.apiSetup) {
+            Object.keys(_self.apiSetup.headers).forEach((k: string) => {
+                if (_self.apiSetup) {
+                    myHeaders.append(k, _self.apiSetup.headers[k]);
+                }
+            });
+            Object.keys(_self.apiSetup.params).forEach((k: string) => {
+                if (_self.apiSetup) {
+                    params += `${k}=${_self.apiSetup.headers[k]}&`;
+                }
+            });
+        }
+        if (this.paging && _self.apiSetup) {
+            params += `${_self.apiSetup.paging}=${_self.apiSetup.from}`;
+        }
+
+        const request: RequestInfo = new Request(URL, {
+            method: 'GET',
+            headers: myHeaders,
+            mode: 'cors',
+            cache: 'default',
+        });
+
+        // TODO promise all onlly for paging request api
+        /* Promise.all(urls.map(url =>
+            fetch(url).then(resp => resp.text())
+        )).then(texts => {
+            …
+        }) */
+
         const response = await fetch(request);
         try {
             const body = await response.json();

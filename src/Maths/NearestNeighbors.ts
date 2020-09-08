@@ -4,7 +4,7 @@
  * @param target []<WordType> include pos:<Vector6D>
  */
 
-import { distanceWithParams } from './distance';
+import { distanceWithParams } from './Distance';
 import WordType from '../types/Word';
 import Vector6D from '../types/Vector6D';
 import Axis from '../types/Axis';

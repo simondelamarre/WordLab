@@ -74,8 +74,10 @@
   },
   "dependencies": {
     "es6-promise": "^4.2.8",
+    "gsap": "^3.5.1",
     "gulp": "^4.0.2",
     "isomorphic-fetch": "^2.2.1",
-    "reading-time": "^1.2.0"
+    "reading-time": "^1.2.0",
+    "three": "^0.120.1"
   }
 }
