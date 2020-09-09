@@ -67,6 +67,15 @@ var WordLabScene = (function () {
                 ease: gsap_1.Power4.easeInOut,
             });
         };
+        this.moveTarget = function (pos) {
+            gsap_1.TweenMax.to(_this.mesh.position, {
+                x: (pos.x / _this.divider) * _this.multiplyer,
+                y: (pos.y / _this.divider) * _this.multiplyer,
+                z: (pos.z / _this.divider) * _this.multiplyer,
+                duration: 1,
+                ease: gsap_1.Power4.easeInOut,
+            });
+        };
         if (DISTANCE)
             this.distance = DISTANCE;
         if (ASPECT)
@@ -78,9 +87,9 @@ var WordLabScene = (function () {
         this.camera = new THREE.OrthographicCamera(-this.distance * this.aspect, this.distance * this.aspect, this.distance, -this.distance, -100, 100000);
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color(0xffffff);
-        this.material = new THREE.MeshBasicMaterial({ color: 0x2b2b70 });
-        this.geometry = new THREE.BoxGeometry(8, 8, 8);
-        this.mesh = new THREE.Mesh(this.geometry, this.material);
+        this.geometry = new THREE.BoxBufferGeometry(32, 32, 32);
+        var edges = new THREE.EdgesGeometry(this.geometry);
+        this.mesh = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0x2b2b70 }));
         this.scene.add(this.mesh);
         this.mesh.position.z = 0;
         if (GRID) {

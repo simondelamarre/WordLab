@@ -1,6 +1,7 @@
 import 'isomorphic-fetch';
 import WordLab from '../../../lib/index';
 import WLparams from "../Types/WLparams";
+declare type Watcher = (name: string, value: any | null) => void;
 declare class WordLabDemo {
     private container;
     private params;
@@ -15,7 +16,11 @@ declare class WordLabDemo {
     get dataset(): any;
     set dataset(value: any);
     private scene;
-    constructor(URL: string, CONTAINER: HTMLElement | null, PARAMS: WLparams | null);
+    private _result;
+    get result(): any;
+    set result(value: any);
+    emmiter: Watcher;
+    constructor(URL: string, CONTAINER: HTMLElement | null, PARAMS: WLparams | null, EMMITER: Watcher);
     private build;
     private createLab;
     private fetchDataset;

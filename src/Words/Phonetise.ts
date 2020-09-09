@@ -48,6 +48,9 @@ export default (a: string) => {
       'cc>a',
       '[VOY]<ch',
       'ch>o',
+      '>>c',
+      '<<c',
+      'c'
     ], // K
     ɲ: ['gn>e', 'gn>a', 'gn>o'], // GN
     ʀ: ['é<r', 'è<r', 'ë<r', 'ê<r', 'rr', 'aire', '>>ert', '>>erds', '>>erd', '>>ère', '>>air', 'aire'], // R
@@ -95,7 +98,7 @@ export default (a: string) => {
     O: ['on!>n', 'on>e'], // ERROR duplicated ɔ̃: ["on!>n"], // ON | one
     ʃ: ['ch>[VOY]', 'sch', 'sh'], // CH
     e: ['eux', 'eu', 'œ'],
-    ɐ: ['ng'], // ng
+    ɐ: ['>>ng'], // ng
     $: ['ain', 'ein', 'ain>[CONS]', 'un>[CONS]', 'in>[CONS]', 'im>[CONS]', 'hein', '>>hum', '>>um'], // 1: number => cannot be json key replaced by $
     ʒ: ['dj', 'j>ean'], // DJ
     g: ['gi', 'gy', 'a<ge', 'e<ge', 'i<ge', 'o<ge', 'u<ge', 'n<ge', 'ji'], // J
@@ -107,6 +110,7 @@ export default (a: string) => {
     Ω: ['om>m', 'om>p', 'om>pt', 'om>e', 'om>o', 'om>i', 'om>a', 'om>u', 'om>y'],
     E: ['oe', 'œ', 'oeu', 'œu', 'eu', 'e!>i', 'ie!>l', '>>eux', '>>ent'], // E
     m: ['mm'],
+    n: ['nn'],
     z: ['s>i', 's>o'],
     δ: ['tion', '>>ssion', 'ssion>[CONS]'],
     β: ['bou', 'bout', 'bhou', 'bouh'],

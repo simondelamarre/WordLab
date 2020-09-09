@@ -15,4 +15,5 @@ export default interface WordLabIndex {
   label: string;
   pos: Vector6D;
   axis: string;
+  weight: number | null;
 }

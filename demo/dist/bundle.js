@@ -68,6 +68,15 @@ var WordLabScene = (function () {
                 ease: gsap_1.Power4.easeInOut,
             });
         };
+        this.moveTarget = function (pos) {
+            gsap_1.TweenMax.to(_this.mesh.position, {
+                x: (pos.x / _this.divider) * _this.multiplyer,
+                y: (pos.y / _this.divider) * _this.multiplyer,
+                z: (pos.z / _this.divider) * _this.multiplyer,
+                duration: 1,
+                ease: gsap_1.Power4.easeInOut,
+            });
+        };
         if (DISTANCE)
             this.distance = DISTANCE;
         if (ASPECT)
@@ -79,9 +88,9 @@ var WordLabScene = (function () {
         this.camera = new THREE.OrthographicCamera(-this.distance * this.aspect, this.distance * this.aspect, this.distance, -this.distance, -100, 100000);
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color(0xffffff);
-        this.material = new THREE.MeshBasicMaterial({ color: 0x2b2b70 });
-        this.geometry = new THREE.BoxGeometry(8, 8, 8);
-        this.mesh = new THREE.Mesh(this.geometry, this.material);
+        this.geometry = new THREE.BoxBufferGeometry(32, 32, 32);
+        var edges = new THREE.EdgesGeometry(this.geometry);
+        this.mesh = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0x2b2b70 }));
         this.scene.add(this.mesh);
         this.mesh.position.z = 0;
         if (GRID) {
@@ -413,8 +422,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 require("isomorphic-fetch");
 var index_1 = __importDefault(require("../../../lib/index"));
 var Scene_1 = __importDefault(require("../3D/Scene"));
+var three_1 = require("three");
 var WordLabDemo = (function () {
-    function WordLabDemo(URL, CONTAINER, PARAMS) {
+    function WordLabDemo(URL, CONTAINER, PARAMS, EMMITER) {
         this.params = {
             searchInput: null,
             apiInput: null,
@@ -424,6 +434,7 @@ var WordLabDemo = (function () {
         };
         this._isLoading = false;
         this._dataset = [];
+        this.emmiter = EMMITER;
         if (PARAMS)
             this.params = PARAMS;
         (CONTAINER) ? this.container = CONTAINER : this.container = window.document.getElementsByTagName('body')[0];
@@ -459,6 +470,17 @@ var WordLabDemo = (function () {
         enumerable: false,
         configurable: true
     });
+    Object.defineProperty(WordLabDemo.prototype, "result", {
+        get: function () {
+            return this._result;
+        },
+        set: function (value) {
+            this._result = value;
+            this.emmiter("searchResult", value);
+        },
+        enumerable: false,
+        configurable: true
+    });
     WordLabDemo.prototype.build = function (URL) {
         return __awaiter(this, void 0, void 0, function () {
             var _a, _b, _c;
@@ -485,11 +507,12 @@ var WordLabDemo = (function () {
         }, "id", [
             { type: "string", key: "label", nest: null },
             { type: "string", key: "short_description", nest: null },
-            { type: "array", key: "tags", nest: null }
+            { type: "array", key: "tags", nest: null },
+            { key: "publication", type: "date", nest: null },
         ], [
             { key: "category", type: "string", nest: null },
             { key: "publication", type: "date", nest: null },
-        ], [], 1, false, 1, true);
+        ], [], 1, false, 1, true, true);
     };
     WordLabDemo.prototype.fetchDataset = function (request) {
         return __awaiter(this, void 0, void 0, function () {
@@ -519,17 +542,37 @@ var WordLabDemo = (function () {
         });
     };
     WordLabDemo.prototype.createInterface = function () {
-        if (this.params.searchInput)
-            this.params.searchInput.addEventListener("blur", this.search.bind(this));
+        if (this.params.searchInput) {
+            this.params.searchInput.addEventListener("keyup", this.search.bind(this));
+        }
         if (this.params.apiInput)
             this.params.apiInput.addEventListener("blur", this.reload.bind(this));
         this.display3D();
     };
     WordLabDemo.prototype.search = function () {
-        var results = this.Lab.search(this.params.searchInput.value);
+        var results = this.Lab.search(this.params.searchInput.value, 10);
+        if (results.target && results.result.length > 0 && results.result[0]) {
+            this.scene.moveTarget(new three_1.Vector3(results.target.x, results.target.y, results.target.z));
+            var articles = [];
+            var _loop_1 = function (res) {
+                articles.push(this_1.dataset.find(function (d) { return d.id === res.id; }));
+                articles[articles.length - 1].weight = res.weight;
+            };
+            var this_1 = this;
+            for (var _i = 0, _a = results.result; _i < _a.length; _i++) {
+                var res = _a[_i];
+                _loop_1(res);
+            }
+            this.result = articles;
+        }
+        else {
+            this.scene.moveTarget(new three_1.Vector3(0, 0, 0));
+            this.result = null;
+        }
     };
     WordLabDemo.prototype.similar = function (id) {
         var results = this.Lab.similar(id);
+        console.log('similar result ', results);
     };
     WordLabDemo.prototype.reload = function () {
     };
@@ -552,7 +595,7 @@ var WordLabDemo = (function () {
 }());
 module.exports = WordLabDemo;
 
-},{"../../../lib/index":19,"../3D/Scene":1,"isomorphic-fetch":20}],8:[function(require,module,exports){
+},{"../../../lib/index":20,"../3D/Scene":1,"isomorphic-fetch":21,"three":12}],8:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -560,7 +603,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var WordLabDemo_1 = __importDefault(require("./Demos/WordLabDemo"));
 document.addEventListener("DOMContentLoaded", function (event) {
-    var demo = new WordLabDemo_1.default('https://us-central1-bige-start.cloudfunctions.net/api/articles', window.document.getElementById('WL_container'), null);
+    var demo = new WordLabDemo_1.default('https://us-central1-bige-start.cloudfunctions.net/api/articles', window.document.getElementById('WL_container'), {
+        apiInput: null,
+        indexesLabels: false,
+        resultscount: 10,
+        searchInput: document.querySelector('#WL_search'),
+        wordsLabels: false
+    }, function (name, data) {
+        if (name === "searchResult") {
+            if (data) {
+                document.querySelector('#result').innerHTML = "";
+                for (var _i = 0, data_1 = data; _i < data_1.length; _i++) {
+                    var entry = data_1[_i];
+                    document.querySelector('#result').innerHTML = document.querySelector('#result').innerHTML + entry.label + "  w: " + entry.weight + "<br>";
+                }
+                document.querySelector('#result').classList.add('opened');
+            }
+            else {
+                document.querySelector('#result').innerHTML = "";
+                document.querySelector('#result').classList.remove('opened');
+            }
+        }
+    });
 });
 
 },{"./Demos/WordLabDemo":7}],9:[function(require,module,exports){
@@ -104479,6 +104543,43 @@ exports.OrbitControls = OrbitControls;
 },{}],13:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.distanceWithParams = exports.distanceWithAxis = exports.distance = void 0;
+exports.distance = function (a, b) {
+    return Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y) + (a.z - b.z) * (a.z - b.z));
+};
+exports.distanceWithAxis = function (a, b) {
+    return Math.sqrt((a.x - b.x) * (a.x - b.x) +
+        (a.y - b.y) * (a.y - b.y) +
+        (a.z - b.z) * (a.z - b.z) +
+        (a.rx - b.rx) * (a.rx - b.rx) +
+        (a.ry - b.ry) * (a.ry - b.ry) +
+        (a.rz - b.rz) * (a.rz - b.rz));
+};
+exports.distanceWithParams = function (a, b, request) {
+    var x = (a.x - b.x) * (a.x - b.x);
+    var y = (a.y - b.y) * (a.y - b.y);
+    var z = (a.z - b.z) * (a.z - b.z);
+    var rx = (a.rx - b.rx) * (a.rx - b.rx);
+    var ry = (a.ry - b.ry) * (a.ry - b.ry);
+    var rz = (a.rz - b.rz) * (a.rz - b.rz);
+    if (!request.x)
+        x = 0;
+    if (!request.y)
+        y = 0;
+    if (!request.z)
+        z = 0;
+    if (!request.rx)
+        rx = 0;
+    if (!request.ry)
+        ry = 0;
+    if (!request.rz)
+        rz = 0;
+    return Math.sqrt(x + y + z + rx + ry + rz);
+};
+
+},{}],14:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.MiddleY = exports.Middle = void 0;
 exports.Middle = function (points) {
     var middle = { x: 0, y: 0, z: 0, rx: 0, ry: 0, rz: 0 };
@@ -104502,7 +104603,7 @@ exports.MiddleY = function (a, b) {
     return (a.y + b.y) / 2;
 };
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = (function (a) {
@@ -104529,6 +104630,9 @@ exports.default = (function (a) {
             'cc>a',
             '[VOY]<ch',
             'ch>o',
+            '>>c',
+            '<<c',
+            'c'
         ],
         ɲ: ['gn>e', 'gn>a', 'gn>o'],
         ʀ: ['é<r', 'è<r', 'ë<r', 'ê<r', 'rr', 'aire', '>>ert', '>>erds', '>>erd', '>>ère', '>>air', 'aire'],
@@ -104576,7 +104680,7 @@ exports.default = (function (a) {
         O: ['on!>n', 'on>e'],
         ʃ: ['ch>[VOY]', 'sch', 'sh'],
         e: ['eux', 'eu', 'œ'],
-        ɐ: ['ng'],
+        ɐ: ['>>ng'],
         $: ['ain', 'ein', 'ain>[CONS]', 'un>[CONS]', 'in>[CONS]', 'im>[CONS]', 'hein', '>>hum', '>>um'],
         ʒ: ['dj', 'j>ean'],
         g: ['gi', 'gy', 'a<ge', 'e<ge', 'i<ge', 'o<ge', 'u<ge', 'n<ge', 'ji'],
@@ -104588,6 +104692,7 @@ exports.default = (function (a) {
         Ω: ['om>m', 'om>p', 'om>pt', 'om>e', 'om>o', 'om>i', 'om>a', 'om>u', 'om>y'],
         E: ['oe', 'œ', 'oeu', 'œu', 'eu', 'e!>i', 'ie!>l', '>>eux', '>>ent'],
         m: ['mm'],
+        n: ['nn'],
         z: ['s>i', 's>o'],
         δ: ['tion', '>>ssion', 'ssion>[CONS]'],
         β: ['bou', 'bout', 'bhou', 'bouh'],
@@ -104656,7 +104761,7 @@ var isConsonne = function (str) {
 };
 var isVoyelle = function (str) { return ['a', 'e', 'i', 'o', 'u', 'y'].includes(str.slice(0, 1)); };
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -104729,7 +104834,6 @@ exports.default = (function (str) {
         U: 'K',
         L: 'L',
         M: 'M',
-        A: 'N',
         Ω: 'O',
         δ: 'P',
         β: 'Q',
@@ -104747,7 +104851,7 @@ exports.default = (function (str) {
     return "" + f + word.join('');
 });
 
-},{"./Phonetise":14,"./WordTypes_FR":18}],16:[function(require,module,exports){
+},{"./Phonetise":15,"./WordTypes_FR":19}],17:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -104758,17 +104862,20 @@ var Syllab_1 = __importDefault(require("./Syllab"));
 var Unverbalizer_1 = __importDefault(require("./Unverbalizer"));
 exports.default = (function (paragraph) {
     var REGLES = new WordType();
-    var cleaned = REGLES.cleanStr(paragraph).split(' ');
+    var cleaned = REGLES.cleanStr(paragraph.split(' '));
     var output = [];
     for (var _i = 0, cleaned_1 = cleaned; _i < cleaned_1.length; _i++) {
         var word = cleaned_1[_i];
-        word = Unverbalizer_1.default(word);
-        output.push(Syllab_1.default(word.toLowerCase()));
+        word = word.replace(',', '');
+        if (word.length > 1) {
+            word = Unverbalizer_1.default(word);
+            output.push(Syllab_1.default(word.toLowerCase()));
+        }
     }
     return output.join('-');
 });
 
-},{"./Syllab":15,"./Unverbalizer":17,"./WordTypes_FR":18}],17:[function(require,module,exports){
+},{"./Syllab":16,"./Unverbalizer":18,"./WordTypes_FR":19}],18:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var groups = {
@@ -105092,7 +105199,7 @@ exports.default = (function (str) {
     return str;
 });
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 "use strict";
 var WordType = (function () {
     function WordType() {
@@ -105171,10 +105278,20 @@ var WordType = (function () {
         this.isAdverbe = function (str) { return _this.invariables.split(' - ').includes(str); };
         this.isPreprosition = function (str) { return _this.preprositions.includes(str.toLowerCase()); };
         this.cleanStr = function (str) {
-            return str
-                .replace(/<\/?[^>]+(>|$)/g, '')
-                .replace(/[,:;"'’،、…⋯‘’“”""«»()+-=%[{}¿?!.]/g, ' ')
-                .replace(/\n/g, ' ');
+            for (var _i = 0, str_1 = str; _i < str_1.length; _i++) {
+                var s = str_1[_i];
+                if (_this.isPreprosition(s))
+                    s = "";
+                else
+                    s = s
+                        .replace(/<\/?[^>]+(>|$)/g, '')
+                        .replace(/[,:;"'’،、…⋯‘’“”""«»()+-=%[{}¿?!.]/g, ' ')
+                        .replace(/\n/g, ' ')
+                        .replace(',', '')
+                        .replace('(...)', '')
+                        .replace('...', '');
+            }
+            return str;
         };
         this.getCoefficient = function (str, next) {
             if (next)
@@ -105197,7 +105314,7 @@ var WordType = (function () {
 }());
 module.exports = WordType;
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -105241,9 +105358,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 require("isomorphic-fetch");
 var Tokenizer_1 = __importDefault(require("./Words/Tokenizer"));
 var Middle_1 = require("./Maths/Middle");
+var Distance_1 = require("./Maths/Distance");
 var WordLab = (function () {
-    function WordLab(URI, DATASET, PAGING, APISETUP, WATCHER, UID, WORDSINDEX, INDEXES, SUBINDEXES, SCALE, DEBUG, MODE, CLEAN) {
+    function WordLab(URI, DATASET, PAGING, APISETUP, WATCHER, UID, WORDSINDEX, INDEXES, SUBINDEXES, SCALE, DEBUG, MODE, CLEAN, SIMPLIFY) {
         var _this = this;
+        if (SIMPLIFY === void 0) { SIMPLIFY = false; }
         this._isTrained = false;
         this._fetchError = null;
         this._isLoading = false;
@@ -105257,6 +105376,7 @@ var WordLab = (function () {
         this.apiSetup = null;
         this.mode = 0;
         this.cleanable = false;
+        this.simplify = false;
         this.wordsReducer = function () {
             var words = '';
             for (var _i = 0, _a = _this._dataset; _i < _a.length; _i++) {
@@ -105280,14 +105400,16 @@ var WordLab = (function () {
                             break;
                     }
                 }
+                _this.simplifier(innerWords);
                 set.WLwords = Tokenizer_1.default(innerWords)
                     .split('-')
-                    .filter(function (value, index, self) { return self.indexOf(value) === index && value.length > 2; });
+                    .filter(function (value, index, self) { return self.indexOf(value) === index && value.length > 1; });
             }
+            _this.simplifier(words);
             var test = Tokenizer_1.default(words);
             var all = test
                 .split('-')
-                .filter(function (value, index, self) { return self.indexOf(value) === index && value.length > 2; });
+                .filter(function (value, index, self) { return self.indexOf(value) === index && value.length > 1; });
             for (var _f = 0, all_1 = all; _f < all_1.length; _f++) {
                 var word = all_1[_f];
                 _this.words.push({
@@ -105303,6 +105425,7 @@ var WordLab = (function () {
         };
         this._watcher = WATCHER;
         this.uid = UID;
+        this.simplify = SIMPLIFY;
         if (MODE)
             this.mode = MODE;
         if (SCALE)
@@ -105405,7 +105528,6 @@ var WordLab = (function () {
                         this.wordsReducer();
                         this.wordsDispatcher();
                         this.indexesDispatcher();
-                        console.log('all indexes ', this.indexes);
                         this._watcher('ready', null);
                         return [2];
                 }
@@ -105477,10 +105599,10 @@ var WordLab = (function () {
                             })
                                 .sort(function (a, b) {
                                 if (a < b) {
-                                    return -1;
+                                    return 1;
                                 }
                                 if (a > b) {
-                                    return 1;
+                                    return -1;
                                 }
                                 return 0;
                             });
@@ -105540,6 +105662,7 @@ var WordLab = (function () {
                 label: label.toString(),
                 pos: { x: posX, y: posY, z: posZ, rx: posRX, ry: posRY, rz: posRZ },
                 axis: AXIS,
+                weight: 0
             });
             this.words.push({
                 token: label.toString(),
@@ -105556,7 +105679,6 @@ var WordLab = (function () {
                 var points = [];
                 var WORD = this_2.words.find(function (w) { return w.token === word; });
                 var _loop_4 = function (index) {
-                    console.log('index ', index);
                     switch (index.type) {
                         case 'string':
                             var indexMove = this_2.indexes.find(function (i) { return i.label === set[index.key]; });
@@ -105633,11 +105755,10 @@ var WordLab = (function () {
             var hasIndex = void 0;
             for (var _d = 0, _e = this.indexes; _d < _e.length; _d++) {
                 var index = _e[_d];
-                if (JSON.stringify(entry).indexOf(index.label) !== -1)
+                if (JSON.stringify(entry).indexOf(index.label) !== -1) {
                     hasIndex = index;
-            }
-            if (hasIndex) {
-                points.push(hasIndex.pos);
+                    points.push(hasIndex.pos);
+                }
             }
             for (var _f = 0, points_2 = points; _f < points_2.length; _f++) {
                 var point = points_2[_f];
@@ -105662,16 +105783,99 @@ var WordLab = (function () {
             var reduced = {};
             reduced[_this.uid] = acc[_this.uid];
             reduced.pos = acc.pos;
+            reduced.WLwords = acc.WLwords;
             return reduced;
         }, {});
     };
     WordLab.prototype.export = function () {
     };
-    WordLab.prototype.search = function (str) {
-        console.log('search is under development ', str);
+    WordLab.prototype.search = function (str, limit) {
+        var _this = this;
+        if (limit === void 0) { limit = 10; }
+        var points = [];
+        str = str + " ";
+        str.split(" ").forEach(function (w) {
+            var exist = _this.words.find(function (entry) { return entry.token.toLowerCase().indexOf(w.toLowerCase()) !== -1; });
+            if (exist) {
+                points.push(exist.pos);
+            }
+        });
+        console.log('search str ', str);
+        str = this.simplifier(str);
+        var wordsArray = Tokenizer_1.default(str).split('-');
+        console.log('wordsArray ', wordsArray);
+        var _loop_7 = function (request) {
+            var word = this_4.words.find(function (w) { return w.token === request; });
+            if (word)
+                points.push(word.pos);
+        };
+        var this_4 = this;
+        for (var _i = 0, wordsArray_1 = wordsArray; _i < wordsArray_1.length; _i++) {
+            var request = wordsArray_1[_i];
+            _loop_7(request);
+        }
+        var target = Middle_1.Middle(points);
+        var responses = this.getNearestNeighbors(target, wordsArray);
+        console.log('responses ', responses.length);
+        if (points.length === 0)
+            return { status: "NotFound", message: "words \"" + str + "\" not found", result: JSON.parse(JSON.stringify(responses)).slice(0, 10) };
+        else
+            return { status: "Success", message: "finds", target: target, result: JSON.parse(JSON.stringify(responses)).slice(0, 10) };
     };
     WordLab.prototype.similar = function (id) {
         console.log('similar is under development ', id);
+        var target = this.indexes.find(function (index) { return index.label === id; });
+        var responses;
+        if (target)
+            responses = this.getNearestNeighbors(target.pos, null);
+        if (responses.length === 0)
+            return { message: "id \"" + id + "\" not found", result: responses };
+        else
+            return { message: "finds", result: responses };
+    };
+    WordLab.prototype.getNearestNeighbors = function (point, reducer) {
+        var inner = JSON.parse(JSON.stringify(this.dataset));
+        if (reducer) {
+            inner = [];
+            var _loop_8 = function (word) {
+                var exist = this_5.dataset.find(function (entry) {
+                    return entry.WLwords.includes(word);
+                });
+                if (exist)
+                    console.log("exist ", exist);
+                inner.push(exist);
+            };
+            var this_5 = this;
+            for (var _i = 0, reducer_1 = reducer; _i < reducer_1.length; _i++) {
+                var word = reducer_1[_i];
+                _loop_8(word);
+            }
+        }
+        if (inner && inner.length > 0) {
+            for (var _a = 0, inner_1 = inner; _a < inner_1.length; _a++) {
+                var item = inner_1[_a];
+                if (typeof item !== "undefined")
+                    item.weight = Distance_1.distance(point, item.pos);
+            }
+            return inner.sort(function (a, b) {
+                return ((a.weight) ? a.weight : 0) - ((b.weight) ? b.weight : 0);
+            });
+        }
+        else {
+            return [];
+        }
+    };
+    WordLab.prototype.simplifier = function (str) {
+        if (this.simplify) {
+            var accents_1 = 'ÀÁÂÃÄÅĄàáâãäåąßÒÓÔÕÕÖØÓòóôõöøóÈÉÊËĘèéêëęðÇĆçćÐÌÍÎÏìíîïÙÚÛÜùúûüÑŃñńŠŚšśŸÿýŽŻŹžżź';
+            var out_1 = 'AAAAAAAaaaaaaaBOOOOOOOOoooooooEEEEEeeeeeeCCccDIIIIiiiiUUUUuuuuNNnnSSssYyyZZZzzz';
+            return str.split('').map(function (letter) {
+                var i = accents_1.indexOf(letter);
+                return (i !== -1) ? out_1[i] : letter;
+            }).join('');
+        }
+        else
+            return str;
     };
     WordLab.prototype.fetchDataset = function (URL) {
         return __awaiter(this, void 0, void 0, function () {
@@ -105729,7 +105933,7 @@ var WordLab = (function () {
 ;
 module.exports = WordLab;
 
-},{"./Maths/Middle":13,"./Words/Tokenizer":16,"isomorphic-fetch":20}],20:[function(require,module,exports){
+},{"./Maths/Distance":13,"./Maths/Middle":14,"./Words/Tokenizer":17,"isomorphic-fetch":21}],21:[function(require,module,exports){
 // the whatwg-fetch polyfill installs the fetch() function
 // on the global object (window or self)
 //
@@ -105737,7 +105941,7 @@ module.exports = WordLab;
 require('whatwg-fetch');
 module.exports = self.fetch.bind(self);
 
-},{"whatwg-fetch":21}],21:[function(require,module,exports){
+},{"whatwg-fetch":22}],22:[function(require,module,exports){
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :

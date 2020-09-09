@@ -18,8 +18,8 @@ class WordLabScene {
     public camera: THREE.OrthographicCamera;
     public scene: THREE.Scene;
     private material: THREE.MeshBasicMaterial;
-    private geometry: THREE.BoxGeometry;
-    private mesh: THREE.Mesh;
+    private geometry: THREE.BoxBufferGeometry;
+    private mesh: THREE.LineSegments;
     private grid: Grid;
     private renderer: THREE.WebGLRenderer;
     private controls: OrbitControls;
@@ -55,10 +55,16 @@ class WordLabScene {
         );
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color(0xffffff);
-        this.material = new THREE.MeshBasicMaterial({ color: 0x2b2b70 });
-        this.geometry = new THREE.BoxGeometry(8, 8, 8);
 
-        this.mesh = new THREE.Mesh(this.geometry, this.material);
+        this.geometry = new THREE.BoxBufferGeometry(32, 32, 32);
+        const edges = new THREE.EdgesGeometry(this.geometry);
+        this.mesh = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0x2b2b70 }));
+        // scene.add(line);
+
+        /* this.material = new THREE.MeshBasicMaterial({ color: 0x2b2b70 });
+        this.geometry = new THREE.BoxGeometry(32, 32, 32); */
+
+        // this.mesh = new THREE.Mesh(this.geometry, this.material);
         this.scene.add(this.mesh);
         this.mesh.position.z = 0;
         if (GRID) {
@@ -121,6 +127,15 @@ class WordLabScene {
             z: pos.z,
             duration: 3,
             delay: 2,
+            ease: Power4.easeInOut,
+        });
+    }
+    public moveTarget = (pos: Vector3) => {
+        TweenMax.to(this.mesh.position, {
+            x: (pos.x / this.divider) * this.multiplyer,
+            y: (pos.y / this.divider) * this.multiplyer,
+            z: (pos.z / this.divider) * this.multiplyer,
+            duration: 1,
             ease: Power4.easeInOut,
         });
     }

@@ -15,16 +15,21 @@ import Unverbalizer from './Unverbalizer';
 export default (paragraph: string) => {
     const REGLES = new WordType();
     // tslint:disable-next-line: no-unused-expression
-    const cleaned = REGLES.cleanStr(paragraph).split(' ');
+    const cleaned = REGLES.cleanStr(paragraph.split(' '));
     const output = [];
     for (let word of cleaned) {
-        word = Unverbalizer(word);
-        output.push(
-            Syllab(
-                // get syllab
-                word.toLowerCase(), // from cleaned words array
-            ),
-        );
+        // TODO find place of , in str cause cleanstr will remove it moved on cleanStr 
+        word = word.replace(',', '');
+        // min length word MINLENGTH
+        if (word.length > 1) {
+            word = Unverbalizer(word);
+            output.push(
+                Syllab(
+                    // get syllab
+                    word.toLowerCase(), // from cleaned words array
+                ),
+            );
+        }
     }
     return output.join('-');
 };

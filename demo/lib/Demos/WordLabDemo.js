@@ -41,8 +41,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 require("isomorphic-fetch");
 var index_1 = __importDefault(require("../../../lib/index"));
 var Scene_1 = __importDefault(require("../3D/Scene"));
+var three_1 = require("three");
 var WordLabDemo = (function () {
-    function WordLabDemo(URL, CONTAINER, PARAMS) {
+    function WordLabDemo(URL, CONTAINER, PARAMS, EMMITER) {
         this.params = {
             searchInput: null,
             apiInput: null,
@@ -52,6 +53,7 @@ var WordLabDemo = (function () {
         };
         this._isLoading = false;
         this._dataset = [];
+        this.emmiter = EMMITER;
         if (PARAMS)
             this.params = PARAMS;
         (CONTAINER) ? this.container = CONTAINER : this.container = window.document.getElementsByTagName('body')[0];
@@ -87,6 +89,17 @@ var WordLabDemo = (function () {
         enumerable: false,
         configurable: true
     });
+    Object.defineProperty(WordLabDemo.prototype, "result", {
+        get: function () {
+            return this._result;
+        },
+        set: function (value) {
+            this._result = value;
+            this.emmiter("searchResult", value);
+        },
+        enumerable: false,
+        configurable: true
+    });
     WordLabDemo.prototype.build = function (URL) {
         return __awaiter(this, void 0, void 0, function () {
             var _a, _b, _c;
@@ -113,11 +126,12 @@ var WordLabDemo = (function () {
         }, "id", [
             { type: "string", key: "label", nest: null },
             { type: "string", key: "short_description", nest: null },
-            { type: "array", key: "tags", nest: null }
+            { type: "array", key: "tags", nest: null },
+            { key: "publication", type: "date", nest: null },
         ], [
             { key: "category", type: "string", nest: null },
             { key: "publication", type: "date", nest: null },
-        ], [], 1, false, 1, true);
+        ], [], 1, false, 1, true, true);
     };
     WordLabDemo.prototype.fetchDataset = function (request) {
         return __awaiter(this, void 0, void 0, function () {
@@ -147,17 +161,37 @@ var WordLabDemo = (function () {
         });
     };
     WordLabDemo.prototype.createInterface = function () {
-        if (this.params.searchInput)
-            this.params.searchInput.addEventListener("blur", this.search.bind(this));
+        if (this.params.searchInput) {
+            this.params.searchInput.addEventListener("keyup", this.search.bind(this));
+        }
         if (this.params.apiInput)
             this.params.apiInput.addEventListener("blur", this.reload.bind(this));
         this.display3D();
     };
     WordLabDemo.prototype.search = function () {
-        var results = this.Lab.search(this.params.searchInput.value);
+        var results = this.Lab.search(this.params.searchInput.value, 10);
+        if (results.target && results.result.length > 0 && results.result[0]) {
+            this.scene.moveTarget(new three_1.Vector3(results.target.x, results.target.y, results.target.z));
+            var articles = [];
+            var _loop_1 = function (res) {
+                articles.push(this_1.dataset.find(function (d) { return d.id === res.id; }));
+                articles[articles.length - 1].weight = res.weight;
+            };
+            var this_1 = this;
+            for (var _i = 0, _a = results.result; _i < _a.length; _i++) {
+                var res = _a[_i];
+                _loop_1(res);
+            }
+            this.result = articles;
+        }
+        else {
+            this.scene.moveTarget(new three_1.Vector3(0, 0, 0));
+            this.result = null;
+        }
     };
     WordLabDemo.prototype.similar = function (id) {
         var results = this.Lab.similar(id);
+        console.log('similar result ', results);
     };
     WordLabDemo.prototype.reload = function () {
     };

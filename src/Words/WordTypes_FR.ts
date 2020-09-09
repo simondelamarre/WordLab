@@ -107,12 +107,21 @@ class WordType {
   public isInvariable = (str: string) => this.invariables.split(' - ').includes(str);
   public isAdverbe = (str: string) => this.invariables.split(' - ').includes(str);
   public isPreprosition = (str: string) => this.preprositions.includes(str.toLowerCase());
-  public cleanStr = (str: string) =>
-    str
-      .replace(/<\/?[^>]+(>|$)/g, '') // release code || script || html etc...
-      .replace(/[,:;"'’،、…⋯‘’“”""«»()+-=%[{}¿?!.]/g, ' ') // release ponctuation
-      .replace(/\n/g, ' '); // release lines
-
+  public cleanStr = (str: string[]) => {
+    for (let s of str) {
+      if (this.isPreprosition(s))
+        s = "";
+      else
+        s = s
+          .replace(/<\/?[^>]+(>|$)/g, '') // release code || script || html etc...
+          .replace(/[,:;"'’،、…⋯‘’“”""«»()+-=%[{}¿?!.]/g, ' ') // release ponctuation
+          .replace(/\n/g, ' ') // release lines
+          .replace(',', '')
+          .replace('(...)', '')
+          .replace('...', '');
+    }
+    return str;
+  }
   public getCoefficient = (str: string, next: string) => {
     if (next) if (this.properFullName(str, next)) return 5;
     if (this.feelImportant(str)) return 5;

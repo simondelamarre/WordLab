@@ -37,14 +37,35 @@
             border: none;
             outline-color: transparent;
         }
+
+        .result {
+            padding: 10px;
+            position: fixed;
+            right: 0;
+            transform: translateX(20vw);
+            width: 20vw;
+            height: 100vh;
+            overflow: scroll;
+            word-break: break-all;
+            background: white;
+            transition: transform .2s linear;
+            -webkit-box-shadow: 0px 4px 10px -5px rgba(0, 0, 0, 0.3);
+            -moz-box-shadow: 0px 4px 10px -5px rgba(0, 0, 0, 0.3);
+            box-shadow: 0px 4px 10px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        .result.opened {
+            transform: translateX(0);
+        }
     </style>
     <script src="./dist/bundle.js"></script>
 </head>
 
 <body>
     <div class="searchbox">
-        <input type="text" id="WL_search" placeholder="Entre un recherche" />
+        <input type="search" id="WL_search" placeholder="Entre un recherche" />
     </div>
+    <div class="result" id="result"></div>
     <div id="WL_container">
     </div>
 </body>

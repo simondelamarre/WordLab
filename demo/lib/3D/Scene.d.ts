@@ -26,5 +26,6 @@ declare class WordLabScene {
     addIndex: (pos: Axis, name: string) => void;
     addEntry: (pos: Axis, name: string) => void;
     moveCamera: (pos: Vector3) => void;
+    moveTarget: (pos: Vector3) => void;
 }
 export = WordLabScene;

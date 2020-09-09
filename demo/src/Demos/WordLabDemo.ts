@@ -2,6 +2,8 @@ import 'isomorphic-fetch'; // needed to fetch api from URI setup
 import WordLab from '../../../lib/index';
 import Scene from "../3D/Scene";
 import WLparams from "../Types/WLparams";
+import { Vector3 } from 'three';
+type Watcher = (name: string, value: any | null) => void;
 
 class WordLabDemo {
     private container: HTMLElement;
@@ -43,7 +45,19 @@ class WordLabDemo {
 
     private scene: Scene;
 
-    constructor(URL: string, CONTAINER: HTMLElement | null, PARAMS: WLparams | null) {
+
+    private _result: any;
+    get result(): any {
+        return this._result;
+    }
+    set result(value: any) {
+        this._result = value;
+        this.emmiter("searchResult", value);
+    }
+    public emmiter: Watcher;
+
+    constructor(URL: string, CONTAINER: HTMLElement | null, PARAMS: WLparams | null, EMMITER: Watcher) {
+        this.emmiter = EMMITER;
         if (PARAMS) this.params = PARAMS;
         (CONTAINER) ? this.container = CONTAINER : this.container = window.document.getElementsByTagName('body')[0];
         this.build(URL);
@@ -69,11 +83,12 @@ class WordLabDemo {
                 // list of words to parse and dispatch
                 { type: "string", key: "label", nest: null },
                 { type: "string", key: "short_description", nest: null },
-                { type: "array", key: "tags", nest: null }
+                { type: "array", key: "tags", nest: null },
+                { key: "publication", type: "date", nest: null },
             ],
             [
                 // define indexed keys props : x, y, z, rx, ry, rz
-                // { key: "tags", type: "array", nest: null },
+                /* { key: "tags", type: "array", nest: null }, */
                 { key: "category", type: "string", nest: null },
                 { key: "publication", type: "date", nest: null },
                 /* { key: "tags", type: "array", nest: null }, */
@@ -85,7 +100,8 @@ class WordLabDemo {
             1,
             false,
             1,
-            true  // reduce dataset preserve only UID and geenerated Axis
+            true,  // reduce dataset preserve only UID and geenerated Axis
+            true // simplify words remove accents and others special chars translation
         )
     }
     private async fetchDataset(request: RequestInfo): Promise<any> {
@@ -100,17 +116,36 @@ class WordLabDemo {
         }
     }
     private createInterface(): void {
-        if (this.params.searchInput)
-            this.params.searchInput.addEventListener("blur", this.search.bind(this));
+        if (this.params.searchInput) {
+            this.params.searchInput.addEventListener("keyup", this.search.bind(this));
+        }
         if (this.params.apiInput)
             this.params.apiInput.addEventListener("blur", this.reload.bind(this));
         this.display3D();
     }
     private search(): void {
-        const results = this.Lab.search(this.params.searchInput.value);
+        const results: any = this.Lab.search(this.params.searchInput.value, 10);
+        if (results.target && results.result.length > 0 && results.result[0]) {
+            // console.log("results.target = ", results.target);
+            this.scene.moveTarget(new Vector3(results.target.x, results.target.y, results.target.z));
+            // tslint:disable-next-line: no-console
+            // console.log(results.result[0], this.dataset.find(d => d.id === results.result[0].id));
+            const articles = [];
+            for (const res of results.result) {
+                articles.push(this.dataset.find(d => d.id === res.id));
+                articles[articles.length - 1].weight = res.weight;
+            }
+            this.result = articles;
+        } else {
+            this.scene.moveTarget(new Vector3(0, 0, 0));
+            this.result = null;
+        }
+        // get first => results.result[0]
     }
     private similar(id: string): void {
         const results = this.Lab.similar(id);
+        // tslint:disable-next-line: no-console
+        console.log('similar result ', results);
     }
     private reload(): void {
         // todo : reload api then reset wordlab with new dataset 

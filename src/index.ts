@@ -27,6 +27,8 @@ import Tokenizer from './Words/Tokenizer';
 /* import IndexOrientation from './types/IndexOrientation'; */
 /* import Axis from './types/Axis'; */
 import { Middle, MiddleY } from './Maths/Middle';
+import Axis from './types/Axis';
+import { distance } from './Maths/Distance';
 
 class WordLab {
     public _watcher: Watcher;
@@ -95,6 +97,7 @@ class WordLab {
     private apiSetup: ApiSetup | null = null;
     private mode: DispatchMode = 0;
     private cleanable: boolean = false;
+    private simplify: boolean = false
     constructor(
         URI: string,
         DATASET: any,
@@ -108,10 +111,12 @@ class WordLab {
         SCALE: number | null,
         DEBUG: boolean | null,
         MODE: DispatchMode,
-        CLEAN: boolean
+        CLEAN: boolean,
+        SIMPLIFY: boolean = false
     ) {
         this._watcher = WATCHER;
         this.uid = UID;
+        this.simplify = SIMPLIFY;
         if (MODE) this.mode = MODE;
         if (SCALE) this.scale = SCALE;
         if (DEBUG) this.debug = DEBUG;
@@ -137,7 +142,6 @@ class WordLab {
 
         this.indexesDispatcher();
 
-        console.log('all indexes ', this.indexes);
         this._watcher('ready', null);
     }
     private async setupIndexes(indexes: IndexEntry[]) {
@@ -219,10 +223,10 @@ class WordLab {
                         })
                         .sort((a: string, b: string) => {
                             if (a < b) {
-                                return -1;
+                                return 1;
                             }
                             if (a > b) {
-                                return 1;
+                                return -1;
                             }
                             return 0;
                         });
@@ -295,6 +299,7 @@ class WordLab {
                 label: label.toString(),
                 pos: { x: posX, y: posY, z: posZ, rx: posRX, ry: posRY, rz: posRZ },
                 axis: AXIS,
+                weight: 0
             });
             // create and push each indexes such as index pos to enable basic index search from word
             this.words.push({
@@ -336,14 +341,16 @@ class WordLab {
             // WLwords is -OK
             // !! find who's innerword such as uniq by set of data (_dataset)
             // TODO : unset WLwords from _dataset
+            this.simplifier(innerWords);
             set.WLwords = Tokenizer(innerWords)
                 .split('-')
-                .filter((value: any, index: number, self: any) => self.indexOf(value) === index && value.length > 2);
+                .filter((value: any, index: number, self: any) => self.indexOf(value) === index && value.length > 1);
         }
+        this.simplifier(words);
         const test = Tokenizer(words);
         const all = test
             .split('-')
-            .filter((value: any, index: number, self: any) => self.indexOf(value) === index && value.length > 2);
+            .filter((value: any, index: number, self: any) => self.indexOf(value) === index && value.length > 1);
 
         for (const word of all) {
             this.words.push({
@@ -372,22 +379,18 @@ class WordLab {
 
                 /* let hasIndex;
                 for (const index of this.indexes) {
-                    // console.log('index ', index);
                     if (JSON.stringify(set).indexOf(index.label) !== -1)
                         hasIndex = index;
                 } */
 
                 for (const index of this.requestIndex) {
-                    console.log('index ', index);
                     switch (index.type) {
                         case 'string':
                             const indexMove = this.indexes.find((i) => i.label === set[index.key]);
-                            // console.log('indexMove => ', indexMove);
                             if (indexMove) points.push(indexMove.pos);
                             break;
                         case 'date':
                             const dateMove = this.indexes.find((i) => i.label === set[index.key]);
-                            // console.log('indexMove => ', indexMove);
                             if (dateMove) points.push(dateMove.pos);
                             break;
                         case 'array':
@@ -412,7 +415,6 @@ class WordLab {
                     for (const point of points) {
                         if (point.y !== 0)
                             WORD.pos.y = MiddleY(WORD.pos, point)
-                        // console.log('set word pos ', point);
                         else
                             WORD.pos = Middle([WORD.pos, point]);
                     }
@@ -431,18 +433,17 @@ class WordLab {
             }
             let hasIndex;
             for (const index of this.indexes) {
-                // console.log('index ', index);
-                if (JSON.stringify(entry).indexOf(index.label) !== -1)
+                if (JSON.stringify(entry).indexOf(index.label) !== -1) {
                     hasIndex = index;
+                    points.push(hasIndex.pos)
+                }
             }
             /* const hasIndex = this.indexes.find(id => {
-                console.log('index label ', id);
                 return JSON.stringify(entry).indexOf(id.label) !== -1
             }); */
-            if (hasIndex) {
-                // console.log('has index ', hasIndex);
+            /* if (hasIndex) {
                 points.push(hasIndex.pos)
-            }
+            } */
             // }
             // if (WORD) WORD.pos = Middle(points);
             for (const point of points) {
@@ -468,19 +469,118 @@ class WordLab {
             const reduced: any = {};
             reduced[this.uid] = acc[this.uid]
             reduced.pos = acc.pos
+            reduced.WLwords = acc.WLwords
             return reduced;
         }, {});
     }
     public export() {
         // todo export minified dataset words, indexes and dataset
     }
-    public search(str: string) {
+    public search(str: string, limit: number = 10) {
+        const points: Vector6D[] = [];
+        // On test si une clé d'index contiens la valeur brut
+        str = str + " ";
+        str.split(" ").forEach(w => {
+            const exist = this.words.find(entry => entry.token.toLowerCase().indexOf(w.toLowerCase()) !== -1);
+            if (exist) {
+                points.push(exist.pos)
+            }
+        });
         // tslint:disable-next-line: no-console
-        console.log('search is under development ', str);
+        console.log('search str ', str);
+
+        str = this.simplifier(str);
+        const wordsArray = Tokenizer(str).split('-');
+
+        // tslint:disable-next-line: no-console
+        console.log('wordsArray ', wordsArray);
+
+        for (const request of wordsArray) {
+            const word: any = this.words.find(w => w.token === request);
+            if (word)
+                points.push(word.pos);
+        }
+
+        const target = Middle(points);
+        const responses: any = this.getNearestNeighbors(target, wordsArray);
+        // tslint:disable-next-line: no-console
+        console.log('responses ', responses.length);
+        if (points.length === 0)
+            return { status: "NotFound", message: `words "${str}" not found`, result: JSON.parse(JSON.stringify(responses)).slice(0, 10) };
+        else
+            // tslint:disable-next-line: object-literal-shorthand
+            return { status: "Success", message: "finds", target: target, result: JSON.parse(JSON.stringify(responses)).slice(0, 10) };
     }
     public similar(id: string) {
         // tslint:disable-next-line: no-console
         console.log('similar is under development ', id);
+        const target = this.indexes.find(index => index.label === id);
+        let responses: any;
+        if (target)
+            responses = this.getNearestNeighbors(target.pos, null);
+        if (responses.length === 0)
+            return { message: `id "${id}" not found`, result: responses };
+        else
+            return { message: "finds", result: responses };
+    }
+    private getNearestNeighbors(point: Vector6D, reducer: string[] | null) {
+        let inner: any = JSON.parse(JSON.stringify(this.dataset));
+        if (reducer) {
+            /* inner = inner.some((r: any) => {
+                console.log('r.WLwords ', r.WLwords, " some of ", reducer);
+                return r.WLwords.indexOf(reducer)
+            }) */
+            inner = [];
+            for (const word of reducer) {
+                // todo checkout sca, scan, scann, scanne, scanner
+                // todo check skan = scan = scann = skann
+                // introduce live search
+                const exist = this.dataset.find((entry: any) => {
+                    // TODO live search while tipyng allow progress search
+                    // let exist = false;
+                    /* for (const wl of entry.WLwords) {
+                        console.log("wl.indexOf(word) ", wl.indexOf(word));
+                        if (wl.indexOf(word) === -1) {
+                            console.log('wl.indexOf(word) ', wl, word)
+                            exist = false;
+                            return 0
+                        } else {
+                            console.log('!wl.indexOf(word) ', wl, word)
+                            exist = true;
+                            return -1;
+                        }
+                    } */
+                    // return exist;
+                    return entry.WLwords.includes(word)
+                });
+
+                if (exist)
+                    console.log("exist ", exist);
+                inner.push(exist)
+            }
+        }
+        if (inner && inner.length > 0) {
+            for (const item of inner) {
+                if (typeof item !== "undefined")
+                    item.weight = distance(point, item.pos);
+            }
+            return inner.sort((a: { weight: number; }, b: { weight: number; }) =>
+                ((a.weight) ? a.weight : 0) - ((b.weight) ? b.weight : 0)
+            );
+        } else {
+            return []
+        }
+    }
+    private simplifier(str: string) {
+        if (this.simplify) {
+            const accents = 'ÀÁÂÃÄÅĄàáâãäåąßÒÓÔÕÕÖØÓòóôõöøóÈÉÊËĘèéêëęðÇĆçćÐÌÍÎÏìíîïÙÚÛÜùúûüÑŃñńŠŚšśŸÿýŽŻŹžżź';
+            const out = 'AAAAAAAaaaaaaaBOOOOOOOOoooooooEEEEEeeeeeeCCccDIIIIiiiiUUUUuuuuNNnnSSssYyyZZZzzz';
+            return str.split('').map((letter: string) => {
+                const i = accents.indexOf(letter)
+                return (i !== -1) ? out[i] : letter
+            }).join('');
+        } else
+            return str;
     }
     private async fetchDataset(URL: string): Promise<any> {
         // TODO SETUP WITH this.apiSetup model paging, params and headers

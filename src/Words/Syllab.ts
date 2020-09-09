@@ -80,7 +80,6 @@ export default (str: string) => {
         U: 'K',
         L: 'L',
         M: 'M',
-        A: 'N',
         Ω: 'O',
         δ: 'P',
         β: 'Q',

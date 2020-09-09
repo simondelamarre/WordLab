@@ -9,7 +9,7 @@ class Sphere {
 
         const material = new THREE.MeshBasicMaterial({
             // tslint:disable-next-line: object-literal-shorthand
-            color: color, //0x5761ff,
+            color: color,
             opacity: 0.1,
             transparent: true,
         });
