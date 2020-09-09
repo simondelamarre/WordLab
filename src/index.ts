@@ -26,7 +26,7 @@ import ApiSetup from './types/ApiSetup';
 import Tokenizer from './Words/Tokenizer';
 /* import IndexOrientation from './types/IndexOrientation'; */
 /* import Axis from './types/Axis'; */
-import { Middle } from './Maths/Middle';
+import { Middle, MiddleY } from './Maths/Middle';
 
 class WordLab {
     public _watcher: Watcher;
@@ -130,13 +130,17 @@ class WordLab {
                 return self.findIndex((item: { id: any }) => item.id === value.id) === index;
             }); // reducer is important cause you cannot doublon UID
         // !! remove ID such  as static var from any dataset or llets try its work
-        this.setupIndexes(INDEXES);
+        await this.setupIndexes(INDEXES);
+
         this.wordsReducer();
         this.wordsDispatcher();
+
         this.indexesDispatcher();
+
+        console.log('all indexes ', this.indexes);
         this._watcher('ready', null);
     }
-    private setupIndexes(indexes: IndexEntry[]): void {
+    private async setupIndexes(indexes: IndexEntry[]) {
         let iterator: number = 0;
         const indexAxis = ['X', 'Y', 'Z', 'RX', 'RY', 'RZ'];
         for (const index of indexes) {
@@ -229,8 +233,11 @@ class WordLab {
         }
     }
     private dispatchIndexes(indexes: string[], AXIS: string): void {
-        let angle = 0;
+        let angle: number = 0;
+        let i: number = 0;
+        const radius: number = 3000;
         const step = (2 * Math.PI) / indexes.length;
+
         for (const label of indexes) {
             // todo setup 6 indexes pos x, y, z, rx, ry, rz
             let posX: number = 0;
@@ -240,21 +247,37 @@ class WordLab {
             let posRY: number = 0;
             let posRZ: number = 0;
             // ! everythin is here or how to dipatch vectors...
+            const theta = (i / indexes.length) * Math.PI * 2;
+            /*
+            
+            geometry.vertices.push(
+                new THREE.Vector3(Math.cos(theta) * radius, Math.sin(theta) * radius, 0),
+            );
+            */
             switch (AXIS) {
                 case 'X':
-                    posX = this.scale * Math.cos(angle);
+                    posX = Math.cos(theta) * radius;
+                    /* posY = Math.sin(theta) * radius; */
+                    posZ = Math.sin(angle) * radius;
+                    /* posX = this.scale * Math.cos(angle);
                     posY = this.scale * Math.sin(angle);
-                    // posZ = 0; // Math.sin(angle);
+                    posZ = Math.sin(angle); */
                     break;
                 case 'Y':
-                    posX = this.scale * Math.cos(angle);
+                    // posX = Math.cos(theta) * radius;
+                    posY = i * (radius / indexes.length); // Math.sin(theta) * radius;
+                    /* posZ = Math.sin(theta) * radius; */
+                    /* posX = this.scale * Math.cos(angle);
                     // posY = 0; // Math.sin(angle);
-                    posZ = this.scale * Math.sin(angle);
+                    posZ = this.scale * Math.sin(angle); */
                     break;
                 case 'Z':
+                    /* posX = Math.cos(theta) * radius; */
+                    posY = Math.cos(theta) * radius;
+                    posZ = Math.sin(angle) * radius;
                     // posX = 0; // Math.sin(angle);
-                    posY = this.scale * Math.sin(angle);
-                    posZ = this.scale * Math.cos(angle);
+                    /* posY = this.scale * Math.sin(angle);
+                    posZ = this.scale * Math.cos(angle); */
                     break;
                 case 'RX':
                     posRX = Math.sin(angle);
@@ -280,6 +303,7 @@ class WordLab {
                 weight: 0,
             });
             angle += step;
+            i++;
         }
     }
     private wordsReducer = () => {
@@ -345,11 +369,26 @@ class WordLab {
             for (const word of set.WLwords) {
                 const points: Vector6D[] = [];
                 const WORD = this.words.find((w) => w.token === word); // Word :
+
+                /* let hasIndex;
+                for (const index of this.indexes) {
+                    // console.log('index ', index);
+                    if (JSON.stringify(set).indexOf(index.label) !== -1)
+                        hasIndex = index;
+                } */
+
                 for (const index of this.requestIndex) {
+                    console.log('index ', index);
                     switch (index.type) {
                         case 'string':
                             const indexMove = this.indexes.find((i) => i.label === set[index.key]);
+                            // console.log('indexMove => ', indexMove);
                             if (indexMove) points.push(indexMove.pos);
+                            break;
+                        case 'date':
+                            const dateMove = this.indexes.find((i) => i.label === set[index.key]);
+                            // console.log('indexMove => ', indexMove);
+                            if (dateMove) points.push(dateMove.pos);
                             break;
                         case 'array':
                             if (Array.isArray(set[index.key])) {
@@ -369,7 +408,14 @@ class WordLab {
                             break;
                     }
                 }
-                if (WORD) WORD.pos = Middle(points);
+                if (WORD)
+                    for (const point of points) {
+                        if (point.y !== 0)
+                            WORD.pos.y = MiddleY(WORD.pos, point)
+                        // console.log('set word pos ', point);
+                        else
+                            WORD.pos = Middle([WORD.pos, point]);
+                    }
             }
         }
     }
@@ -383,14 +429,36 @@ class WordLab {
                 if (it)
                     points.push(it.pos)
             }
+            let hasIndex;
+            for (const index of this.indexes) {
+                // console.log('index ', index);
+                if (JSON.stringify(entry).indexOf(index.label) !== -1)
+                    hasIndex = index;
+            }
+            /* const hasIndex = this.indexes.find(id => {
+                console.log('index label ', id);
+                return JSON.stringify(entry).indexOf(id.label) !== -1
+            }); */
+            if (hasIndex) {
+                // console.log('has index ', hasIndex);
+                points.push(hasIndex.pos)
+            }
+            // }
             // if (WORD) WORD.pos = Middle(points);
-            entry.pos = Middle(points);
-
+            for (const point of points) {
+                if (entry.pos) {
+                    if (point.y !== 0)
+                        entry.pos.y = point.y;
+                    else
+                        entry.pos = Middle([entry.pos, point]);
+                } else {
+                    entry.pos = point;
+                }
+            }
         }
         if (this.cleanable)
             this.cleanUntil();
-        // tslint:disable-next-line: no-console
-        console.log('dataset : ', this._dataset, ' indexes : ', this.indexes.length, ' words : ', this.words.length);
+
         this.isTrained = true;
     }
     private cleanUntil() {

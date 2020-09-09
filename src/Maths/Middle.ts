@@ -18,3 +18,6 @@ export const Middle = (points: Vector6D[]) => {
   middle.rz = middle.rz / points.length;
   return middle;
 };
+export const MiddleY = (a: Vector6D, b: Vector6D) => {
+  return (a.y + b.y) / 2;
+}

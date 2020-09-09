@@ -16,14 +16,7 @@
   "scripts": {
     "test": "jest --config jestconfig.json",
     "build": "npx tsc",
-    "demo": "node demo/demo.js",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
-    "browserify": "browserify lib/index.js -o dist/bundle2.js",
-    "brow": "browserify src/index.ts -p [ tsify --noImplicitAny ] > dist/bundle3.js",
-    "browser": "browserify lib/index.js > dist/bundle.js",
-    "minify": "jsmin -o dist/bundle.min.js dist/bundle.js",
-    "uglify": "uglifyjs --compress --mangle --output dist/bundle.min.js lib/bundle.js",
-    "watch": "watchify dist/bundle.js -o dist/bundle.js -v",
     "webpack": "npx webpack"
   },
   "repository": {
@@ -74,10 +67,8 @@
   },
   "dependencies": {
     "es6-promise": "^4.2.8",
-    "gsap": "^3.5.1",
     "gulp": "^4.0.2",
     "isomorphic-fetch": "^2.2.1",
-    "reading-time": "^1.2.0",
-    "three": "^0.120.1"
+    "reading-time": "^1.2.0"
   }
 }

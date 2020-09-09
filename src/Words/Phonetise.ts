@@ -167,10 +167,7 @@ export default (a: string) => {
         // est suivi de
         split = song.split('>');
         const nextLetter = w.slice(w.indexOf(split[0]) + split[0].length, split[1].length);
-        /* if (w.indexOf(split[0]) !== -1 && split[0] === 'ch' && split[1] === "[CONS]") {
-                    console.log(w, ' CH is K ? ', split);
-                    console.log('need replace  as K ? ', isConsonne(nextLetter));
-                } */
+
         if (
           (split[1] === '[CONS]' && isConsonne(nextLetter)) ||
           (split[1] === '[VOY]' && isVoyelle(nextLetter)) ||

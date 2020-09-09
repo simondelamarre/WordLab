@@ -2,14 +2,51 @@
 
 <head>
     <meta charset="utf-8" />
-    <!-- <script src="require.js"></script> -->
-    <script src="../dist/bundle.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- <script type="module" src="../dist/bundle.js"></script> -->
+    <style>
+        html,
+        body,
+        #WL_container {
+            padding: 0;
+            margin: 0;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .searchbox {
+            position: fixed;
+            top: 4px;
+            left: 0;
+            right: 0;
+            margin: auto;
+            width: 97%;
+            max-width: 550px;
+            padding: 5px;
+            background: white;
+            border-radius: 4px;
+            -webkit-box-shadow: 0px 4px 10px -5px rgba(0, 0, 0, 0.3);
+            -moz-box-shadow: 0px 4px 10px -5px rgba(0, 0, 0, 0.3);
+            box-shadow: 0px 4px 10px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        #WL_search,
+        #WL_search:focus {
+            width: 100%;
+            padding: 5px;
+            border: none;
+            outline-color: transparent;
+        }
+    </style>
+    <script src="./dist/bundle.js"></script>
 </head>
 
 <body>
-    <p>no demo at this time</p>
+    <div class="searchbox">
+        <input type="text" id="WL_search" placeholder="Entre un recherche" />
+    </div>
+    <div id="WL_container">
+    </div>
 </body>
 
 </html>

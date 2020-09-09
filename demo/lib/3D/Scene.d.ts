@@ -1,0 +1,30 @@
+import * as THREE from "three";
+import Axis from "../Types/Vector6D";
+import Sphere from "./utilities/Sphere";
+import Cube from "./utilities/Cube";
+import Prisme from "./utilities/Prisme";
+import { Vector3 } from "three";
+declare class WordLabScene {
+    private aspect;
+    private distance;
+    camera: THREE.OrthographicCamera;
+    scene: THREE.Scene;
+    private material;
+    private geometry;
+    private mesh;
+    private grid;
+    private renderer;
+    private controls;
+    PRISMES: Prisme[];
+    SPHERES: Sphere[];
+    ENTRIES: Cube[];
+    private divider;
+    private multiplyer;
+    constructor(TARGET: HTMLElement, DISTANCE: number | null, ASPECT: number | null, DIVIDER: number | null, MULTIPLYER: number | null, GRID: boolean | null, CONTROLS: boolean | null);
+    private render;
+    addWord: (pos: Axis, name: string) => void;
+    addIndex: (pos: Axis, name: string) => void;
+    addEntry: (pos: Axis, name: string) => void;
+    moveCamera: (pos: Vector3) => void;
+}
+export = WordLabScene;

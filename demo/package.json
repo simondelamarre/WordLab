@@ -1,0 +1,33 @@
+{
+  "name": "wordlabdemo",
+  "version": "1.0.0",
+  "description": "wordlab 3D previsualization demo from bige.dev articles sample code",
+  "main": "build/index.js",
+  "scripts": {
+    "test": "npm run test",
+    "build": "npx tsc && npm run browser",
+    "browser": "browserify lib/index.js -o dist/bundle.js && npm run minify",
+    "minify": "jsmin -o dist/bundle.min.js dist/bundle.js",
+    "watch": "watchify dist/bundle.js -o dist/bundle.js -v"
+  },
+  "keywords": [
+    "wordlab",
+    "3D",
+    "demo",
+    "threejs",
+    "bige.dev",
+    "KNN",
+    "previsualization"
+  ],
+  "author": "Simon Delamarre",
+  "license": "ISC",
+  "dependencies": {
+    "gsap": "^3.5.1",
+    "three": "^0.120.1",
+    "three-orbitcontrols-ts": "git+https://git@github.com/nicolaspanel/three-orbitcontrols-ts.git"
+  },
+  "devDependencies": {
+    "jsmin": "^1.0.1",
+    "typescript": "^4.0.2"
+  }
+}
