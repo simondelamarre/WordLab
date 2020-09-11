@@ -3,3 +3,4 @@ demo/node_modules
 test/node_modules
 /lib
 /OLDER
+.DS_Store
