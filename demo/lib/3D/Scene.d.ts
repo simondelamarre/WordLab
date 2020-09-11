@@ -9,7 +9,6 @@ declare class WordLabScene {
     private distance;
     camera: THREE.OrthographicCamera;
     scene: THREE.Scene;
-    private material;
     private geometry;
     private mesh;
     private grid;

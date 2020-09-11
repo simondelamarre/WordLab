@@ -17,10 +17,11 @@ class WordLabScene {
     private distance: number = 200;
     public camera: THREE.OrthographicCamera;
     public scene: THREE.Scene;
-    private material: THREE.MeshBasicMaterial;
+    // private material: THREE.MeshBasicMaterial;
     private geometry: THREE.BoxBufferGeometry;
     private mesh: THREE.LineSegments;
     private grid: Grid;
+    // private gridV: Grid;
     private renderer: THREE.WebGLRenderer;
     private controls: OrbitControls;
 
@@ -70,6 +71,10 @@ class WordLabScene {
         if (GRID) {
             this.grid = new Grid(1000, 20);
             this.scene.add(this.grid.grid);
+
+            /* this.gridV = new Grid(1000, 20);
+            this.scene.add(this.gridV.grid);
+            this.gridV.grid.rotateX(180) */
         }
 
         this.renderer = new THREE.WebGLRenderer({ antialias: true });
