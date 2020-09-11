@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var WordLabDemo_1 = __importDefault(require("./Demos/WordLabDemo"));
 document.addEventListener("DOMContentLoaded", function (event) {
-    var demo = new WordLabDemo_1.default('https://us-central1-bige-start.cloudfunctions.net/api/articles', 'ID', window.document.getElementById('WL_container'), {
+    var demo = new WordLabDemo_1.default('https://us-central1-bige-start.cloudfunctions.net/api/articles', 'id', window.document.getElementById('WL_container'), {
         apiInput: null,
         indexesLabels: false,
         resultscount: 10,

@@ -12,6 +12,7 @@
             margin: 0;
             width: 100vw;
             height: 100vh;
+            font-family: sans-serif;
         }
 
         .searchbox {
@@ -57,11 +58,30 @@
         .result.opened {
             transform: translateX(0);
         }
+
+        .stats {
+            position: fixed;
+            top: 50px;
+            left: 0;
+        }
+
+        .stats ol {}
+
+        .stats ol li {
+            list-style: none;
+        }
     </style>
-    <script src="./dist/bundle.min.js"></script>
+    <script src="./dist/bundle.js"></script>
 </head>
 
 <body>
+    <aside class="stats">
+        <ol>
+            <li>Words : 0</li>
+            <li>Indexes : 0</li>
+            <li>Entries : 0</li>
+        </ol>
+    </aside>
     <div class="searchbox">
         <input type="search" id="WL_search" placeholder="Entre un recherche" />
     </div>

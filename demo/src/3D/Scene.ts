@@ -45,7 +45,6 @@ class WordLabScene {
         if (ASPECT) this.aspect = ASPECT;
         if (DIVIDER) this.divider = DIVIDER;
         if (MULTIPLYER) this.multiplyer = MULTIPLYER;
-        // tslint:disable-next-line: no-console
         this.camera = new THREE.OrthographicCamera(
             -this.distance * this.aspect,
             this.distance * this.aspect,

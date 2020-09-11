@@ -1,12 +1,12 @@
 import 'isomorphic-fetch';
-import WordLab from '../../../lib/index';
+import Wordlab from '../../../lib/index';
 import WLparams from "../Types/WLparams";
 declare type Watcher = (name: string, value: any | null) => void;
 declare class WordLabDemo {
     private container;
     private params;
     _isLoading: boolean;
-    Lab: WordLab;
+    Lab: Wordlab;
     get isLoading(): any;
     set isLoading(value: any);
     private _fetchError;

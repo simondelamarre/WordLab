@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <style>
+    <style lang="scss">
         html,
         body {
             padding: 0;
@@ -9,19 +9,176 @@
             font-family: sans-serif;
         }
 
+        header {
+            width: 100%;
+            height: 320px;
+            background: rgb(255, 58, 96);
+            background: radial-gradient(circle, rgba(255, 58, 96, 1) 0%, rgba(55, 0, 190, 1) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        header h1 {
+            color: white;
+            font-size: 40px;
+            text-align: center;
+            letter-spacing: -6px;
+        }
+
+        .heading {
+            text-align: center;
+        }
+
+        .install {
+            width: 100%;
+            background: hsl(192deg 100% 89%);
+            border: 1px solid #81a8ff;
+            color: #3838c7;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
         .container {
-            max-width: 800px;
+            /* max-width: 800px;
             left: 0;
             right: 0;
-            margin: auto;
+            margin: auto; */
+            display: flex;
+        }
+
+        .content {
+            display: block;
+            padding-left: 20px;
+        }
+
+        aside {
+            padding: 0;
+            margin: 0;
+            border-right: 1px solid #E3E3E3;
+            min-width: 200px;
+            overflow-x: hidden;
+        }
+
+        aside ol {
+            padding: 0;
+            margin: 0;
+
+        }
+
+        aside ol li {
+            padding: 0px;
+            padding-right: 0px;
+            margin: 0;
+            list-style: none;
+            display: block;
+
+        }
+
+        aside ol li a:hover {
+            background-color: rgba(0, 0, 0, .1);
+        }
+
+        aside ol li a {
+            padding: 10px;
+            padding-right: 20px;
+            display: inline-block;
+            width: 100%;
+            line-height: 25px;
+            color: black;
+            text-decoration: none;
+            border-bottom: 1px solid #E3E3E3;
+        }
+
+        aside ol li ol li a {
+            padding-left: 20px;
         }
     </style>
 </head>
 
 <body>
+    <header>
+        <div class="heading">
+            <h1>WORDLab&nbsp;&nbsp;/&nbsp;docs</h1>
+            <code class="install">
+                $ npm i @landscape/wordlab --save
+            </code>
+        </div>
+    </header>
     <div class="container">
-        <h1>WordLab docs</h1>
-        <p>WIP...</p>
+        <aside>
+            <nav>
+                <ol>
+                    <li class="crumb">
+                        <a href="#introduction">introduction</a>
+                    </li>
+                    <li class="crumb">
+                        <a href="#install">Install</a>
+                    </li>
+                    <li class="crumb">
+                        <a href="#getstarted">Get Started</a>
+                    </li>
+                    <li class="crumb">
+                        <a href="#instances">Instances</a>
+                    </li>
+                    <li class="crumb">
+                        <a href="#loaddataset">Load Dataset</a>
+                    </li>
+                    <li class="crumb">
+                        <a href="#params">Params</a>
+                        <ol>
+                            <li>
+                                <a href="#params">Params 1</a>
+                            </li>
+                            <li>
+                                <a href="#params">Params 2</a>
+                            </li>
+                            <li>
+                                <a href="#params">Params 3</a>
+                            </li>
+                            <li>
+                                <a href="#params">Params 4</a>
+                            </li>
+                            <li>
+                                <a href="#params">Params 5</a>
+                            </li>
+                            <li>
+                                <a href="#params">Params 6</a>
+                            </li>
+                        </ol>
+                    </li>
+                </ol>
+            </nav>
+        </aside>
+        <section class="content">
+            <article id="introduction">
+                <h2>WordLab docs</h2>
+                <p>WIP...</p>
+                <!-- <code lang="javascript">
+                    console.log('hello')
+                </code> -->
+            </article>
+            <article id="getstarted">
+                <h2>Install</h2>
+                <p>WIP...</p>
+            </article>
+            <article id="getstarted">
+                <h2>Get Started</h2>
+                <p>WIP...</p>
+            </article>
+            <article id="instances">
+                <h2>Instances</h2>
+                <p>WIP...</p>
+            </article>
+            <article id="loaddataset">
+                <h2>Load Dataset</h2>
+                <p>WIP...</p>
+            </article>
+            <article id="params">
+                <h2>Params</h2>
+                <p>WIP...</p>
+            </article>
+        </section>
     </div>
 </body>
 

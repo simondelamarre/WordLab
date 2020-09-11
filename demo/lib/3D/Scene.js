@@ -68,6 +68,7 @@ var WordLabScene = (function () {
             });
         };
         this.moveTarget = function (pos) {
+            console.log('moveto pos ', pos);
             gsap_1.TweenMax.to(_this.mesh.position, {
                 x: (pos.x / _this.divider) * _this.multiplyer,
                 y: (pos.y / _this.divider) * _this.multiplyer,

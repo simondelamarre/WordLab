@@ -133,7 +133,7 @@ var WordLabDemo = (function () {
             { key: "category", type: "string", nest: null },
             { key: "tags", type: "array", nest: null },
             { key: "publication", type: "date", nest: null },
-        ], [], 1, false, 1, true, true);
+        ], [], 1, false, 1, true, true, false);
     };
     WordLabDemo.prototype.fetchDataset = function (request) {
         return __awaiter(this, void 0, void 0, function () {
@@ -171,8 +171,11 @@ var WordLabDemo = (function () {
         this.display3D();
     };
     WordLabDemo.prototype.search = function () {
-        var results = this.Lab.search(this.params.searchInput.value, 10);
+        var results = this.Lab.DB.search(this.params.searchInput.value, 10);
+        console.log('results ', results);
         if (results.target && results.result.length > 0 && results.result[0]) {
+            console.log('results.target ', results.target);
+            console.log('this.scene.moveTarget ', this.scene.moveTarget);
             this.scene.moveTarget(new three_1.Vector3(results.target.x, results.target.y, results.target.z));
             var articles = [];
             var _loop_1 = function (res) {
@@ -192,22 +195,22 @@ var WordLabDemo = (function () {
         }
     };
     WordLabDemo.prototype.similar = function (id) {
-        var results = this.Lab.similar(id);
+        var results = this.Lab.DB.similar(id);
         console.log('similar result ', results);
     };
     WordLabDemo.prototype.reload = function () {
     };
     WordLabDemo.prototype.display3D = function () {
         this.scene = new Scene_1.default(this.container, null, null, null, null, true, true);
-        for (var _i = 0, _a = this.Lab.indexes; _i < _a.length; _i++) {
+        for (var _i = 0, _a = this.Lab.DB.indexes; _i < _a.length; _i++) {
             var index = _a[_i];
             this.scene.addIndex(index.pos, index.label);
         }
-        for (var _b = 0, _c = this.Lab.words; _b < _c.length; _b++) {
+        for (var _b = 0, _c = this.Lab.DB.words; _b < _c.length; _b++) {
             var index = _c[_b];
             this.scene.addWord(index.pos, index.token);
         }
-        for (var _d = 0, _e = this.Lab.dataset; _d < _e.length; _d++) {
+        for (var _d = 0, _e = this.Lab.DB.dataset; _d < _e.length; _d++) {
             var index = _e[_d];
             this.scene.addEntry(index.pos, index.id);
         }

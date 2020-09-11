@@ -1,5 +1,5 @@
 import 'isomorphic-fetch'; // needed to fetch api from URI setup
-import WordLab from '../../../lib/index';
+import Wordlab from '../../../lib/index';
 import Scene from "../3D/Scene";
 import WLparams from "../Types/WLparams";
 import { Vector3 } from 'three';
@@ -17,7 +17,7 @@ class WordLabDemo {
 
     public _isLoading: boolean = false;
 
-    public Lab: WordLab;
+    public Lab: Wordlab;
 
     get isLoading(): any {
         return this._isLoading;
@@ -63,7 +63,6 @@ class WordLabDemo {
         if (PARAMS) this.params = PARAMS;
         (CONTAINER) ? this.container = CONTAINER : this.container = window.document.getElementsByTagName('body')[0];
         this.build(URL);
-
     }
 
     private async build(URL: string) {
@@ -71,7 +70,7 @@ class WordLabDemo {
         this.createLab();
     }
     private createLab(): void {
-        this.Lab = new WordLab(
+        this.Lab = new Wordlab(
             "", // Array of string : UrL API when you prefere let WordLab load your dataset or empty string
             this.dataset, // precise dataset if you prefere manage the dataset yourself or nullable
             false, // paging let Wordlab load paging from your api URL only without dataset setted
@@ -104,7 +103,8 @@ class WordLabDemo {
             false,
             1,
             true,  // reduce dataset preserve only UID and geenerated Axis
-            true // simplify words remove accents and others special chars translation
+            true, // simplify words remove accents and others special chars translation
+            false // Wordlab Web  Worker  enable or disabled
         )
     }
     private async fetchDataset(request: RequestInfo): Promise<any> {
@@ -127,12 +127,9 @@ class WordLabDemo {
         this.display3D();
     }
     private search(): void {
-        const results: any = this.Lab.search(this.params.searchInput.value, 10);
+        const results: any = this.Lab.DB.search(this.params.searchInput.value, 10);
         if (results.target && results.result.length > 0 && results.result[0]) {
-            // console.log("results.target = ", results.target);
             this.scene.moveTarget(new Vector3(results.target.x, results.target.y, results.target.z));
-            // tslint:disable-next-line: no-console
-            // console.log(results.result[0], this.dataset.find(d => d.id === results.result[0].id));
             const articles = [];
             for (const res of results.result) {
                 articles.push(this.dataset.find(d => d.id === res.id));
@@ -146,7 +143,7 @@ class WordLabDemo {
         // get first => results.result[0]
     }
     private similar(id: string): void {
-        const results = this.Lab.similar(id);
+        const results = this.Lab.DB.similar(id);
         // tslint:disable-next-line: no-console
         console.log('similar result ', results);
     }
@@ -156,13 +153,13 @@ class WordLabDemo {
     }
     private display3D(): void {
         this.scene = new Scene(this.container, null, null, null, null, true, true);
-        for (const index of this.Lab.indexes) {
+        for (const index of this.Lab.DB.indexes) {
             this.scene.addIndex(index.pos, index.label);
         }
-        for (const index of this.Lab.words) {
+        for (const index of this.Lab.DB.words) {
             this.scene.addWord(index.pos, index.token);
         }
-        for (const index of this.Lab.dataset) {
+        for (const index of this.Lab.DB.dataset) {
             this.scene.addEntry(index.pos, index.id);
         }
     }
