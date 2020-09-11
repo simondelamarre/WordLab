@@ -69,7 +69,6 @@ var WordLabScene = (function () {
             });
         };
         this.moveTarget = function (pos) {
-            console.log('moveto pos ', pos);
             gsap_1.TweenMax.to(_this.mesh.position, {
                 x: (pos.x / _this.divider) * _this.multiplyer,
                 y: (pos.y / _this.divider) * _this.multiplyer,
@@ -554,10 +553,7 @@ var WordLabDemo = (function () {
     };
     WordLabDemo.prototype.search = function () {
         var results = this.Lab.DB.search(this.params.searchInput.value, 10);
-        console.log('results ', results);
         if (results.target && results.result.length > 0 && results.result[0]) {
-            console.log('results.target ', results.target);
-            console.log('this.scene.moveTarget ', this.scene.moveTarget);
             this.scene.moveTarget(new three_1.Vector3(results.target.x, results.target.y, results.target.z));
             var articles = [];
             var _loop_1 = function (res) {
