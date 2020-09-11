@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var WordLabDemo_1 = __importDefault(require("./Demos/WordLabDemo"));
 document.addEventListener("DOMContentLoaded", function (event) {
-    var demo = new WordLabDemo_1.default('https://us-central1-bige-start.cloudfunctions.net/api/articles', window.document.getElementById('WL_container'), {
+    var demo = new WordLabDemo_1.default('http://127.0.0.1:5500/OLDER/bubblemag_2000.json', 'ID', window.document.getElementById('WL_container'), {
         apiInput: null,
         indexesLabels: false,
         resultscount: 10,
@@ -28,4 +28,4 @@ document.addEventListener("DOMContentLoaded", function (event) {
         }
     });
 });
-//# sourceMappingURL=index.js.map
+//# sourceMappingURL=index2.js.map

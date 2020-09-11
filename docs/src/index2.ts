@@ -1,12 +1,15 @@
 /**
- * attempt...
+ * 200 articles from WP blog posts
+ * http://api.bubblemag.fr/api/wordpress/articles?page=0&limit=200
  */
+
 
 import WordLabDemo from "./Demos/WordLabDemo";
 
 document.addEventListener("DOMContentLoaded", (event) => {
     const demo = new WordLabDemo(
-        'https://us-central1-bige-start.cloudfunctions.net/api/articles', // demo api get dataset
+        'http://127.0.0.1:5500/OLDER/bubblemag_2000.json', // demo api get dataset
+        'ID',
         window.document.getElementById('WL_container'), // target container
         {
             apiInput: null,

@@ -43,7 +43,7 @@ var index_1 = __importDefault(require("../../../lib/index"));
 var Scene_1 = __importDefault(require("../3D/Scene"));
 var three_1 = require("three");
 var WordLabDemo = (function () {
-    function WordLabDemo(URL, CONTAINER, PARAMS, EMMITER) {
+    function WordLabDemo(URL, UID, CONTAINER, PARAMS, EMMITER) {
         this.params = {
             searchInput: null,
             apiInput: null,
@@ -53,6 +53,7 @@ var WordLabDemo = (function () {
         };
         this._isLoading = false;
         this._dataset = [];
+        this.uid = UID;
         this.emmiter = EMMITER;
         if (PARAMS)
             this.params = PARAMS;
@@ -123,13 +124,14 @@ var WordLabDemo = (function () {
             if (name === "ready") {
                 setTimeout(function () { this.createInterface(); }.bind(_this), 500);
             }
-        }, "id", [
+        }, this.uid, [
             { type: "string", key: "label", nest: null },
-            { type: "string", key: "short_description", nest: null },
             { type: "array", key: "tags", nest: null },
+            { type: "string", key: "short_description", nest: null },
             { key: "publication", type: "date", nest: null },
         ], [
             { key: "category", type: "string", nest: null },
+            { key: "tags", type: "array", nest: null },
             { key: "publication", type: "date", nest: null },
         ], [], 1, false, 1, true, true);
     };

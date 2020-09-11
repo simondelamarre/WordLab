@@ -55,12 +55,15 @@ class WordLabDemo {
         this.emmiter("searchResult", value);
     }
     public emmiter: Watcher;
+    private uid: string;
 
-    constructor(URL: string, CONTAINER: HTMLElement | null, PARAMS: WLparams | null, EMMITER: Watcher) {
+    constructor(URL: string, UID: string, CONTAINER: HTMLElement | null, PARAMS: WLparams | null, EMMITER: Watcher) {
+        this.uid = UID;
         this.emmiter = EMMITER;
         if (PARAMS) this.params = PARAMS;
         (CONTAINER) ? this.container = CONTAINER : this.container = window.document.getElementsByTagName('body')[0];
         this.build(URL);
+
     }
 
     private async build(URL: string) {
@@ -78,18 +81,18 @@ class WordLabDemo {
                     setTimeout(function () { this.createInterface(); }.bind(this), 500);
                 }
             },
-            "id", // uniq identifier key string from your json dataset
+            this.uid, // uniq identifier key string from your json dataset
             [
                 // list of words to parse and dispatch
                 { type: "string", key: "label", nest: null },
-                { type: "string", key: "short_description", nest: null },
                 { type: "array", key: "tags", nest: null },
+                { type: "string", key: "short_description", nest: null },
                 { key: "publication", type: "date", nest: null },
             ],
             [
                 // define indexed keys props : x, y, z, rx, ry, rz
-                /* { key: "tags", type: "array", nest: null }, */
                 { key: "category", type: "string", nest: null },
+                { key: "tags", type: "array", nest: null },
                 { key: "publication", type: "date", nest: null },
                 /* { key: "tags", type: "array", nest: null }, */
                 /* { key: "author", type: "object", nest: { key: "id", type: "string" } }  */ // !important at this time only string and only one level

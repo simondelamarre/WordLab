@@ -20,7 +20,8 @@ declare class WordLabDemo {
     get result(): any;
     set result(value: any);
     emmiter: Watcher;
-    constructor(URL: string, CONTAINER: HTMLElement | null, PARAMS: WLparams | null, EMMITER: Watcher);
+    private uid;
+    constructor(URL: string, UID: string, CONTAINER: HTMLElement | null, PARAMS: WLparams | null, EMMITER: Watcher);
     private build;
     private createLab;
     private fetchDataset;
