@@ -23,7 +23,7 @@
   "license": "ISC",
   "dependencies": {
     "gsap": "^3.5.1",
-    "three": "^0.120.1",
+    "three": "^0.137.0",
     "three-orbitcontrols-ts": "git+https://git@github.com/nicolaspanel/three-orbitcontrols-ts.git"
   },
   "devDependencies": {
